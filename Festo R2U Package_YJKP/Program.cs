@@ -15,7 +15,7 @@ namespace Festo_R2U_Package_YJKP
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Form_Web());
         }
     }
 }
