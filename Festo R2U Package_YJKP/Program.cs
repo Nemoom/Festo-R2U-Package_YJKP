@@ -15,7 +15,26 @@ namespace Festo_R2U_Package_YJKP
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form_Web());
+            Form_Init mForm_Init = new Form_Init();
+            if (mForm_Init.WebLink=="")
+            {
+                Application.Run(mForm_Init);
+            }
+            else
+            {
+                switch (mForm_Init.DefaultWindowIndex)
+                {
+                    case 0:
+                        Application.Run(new Form_Web(mForm_Init.WebLink));
+                        break;
+                    case 1:
+                        Application.Run(new Form_Customized());
+                        break;
+                    default:
+                        Application.Run(new Form_Web(mForm_Init.WebLink));
+                        break;
+                }
+            }            
         }
     }
 }

@@ -11,14 +11,16 @@ namespace Festo_R2U_Package_YJKP
 {
     public partial class Form_Web : Form
     {
-        public Form_Web()
+        string URL;
+        public Form_Web(string WebLink)
         {
             InitializeComponent();
+            URL = WebLink;
         }
 
         private void Form_Web_Load(object sender, EventArgs e)
         {
-            webKitBrowser1.Navigate("http://172.16.141.56:8080/servo_press_kit.htm");
+            webKitBrowser1.Navigate(URL);
         }
     }
 }

@@ -70,10 +70,14 @@
     <Compile Include="Form_Web.Designer.cs">
       <DependentUpon>Form_Web.cs</DependentUpon>
     </Compile>
+    <Compile Include="IniFile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form_Customized.resx">
       <DependentUpon>Form_Customized.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_Init.resx">
+      <DependentUpon>Form_Init.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Web.resx">
       <DependentUpon>Form_Web.cs</DependentUpon>
