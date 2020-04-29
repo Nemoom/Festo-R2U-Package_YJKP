@@ -51,7 +51,7 @@
             this.tableLayoutPanel1.Controls.Add(this.btn_Submit, 2, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(5);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
@@ -90,7 +90,7 @@
             "0",
             "1"});
             this.comboBox1.Location = new System.Drawing.Point(313, 41);
-            this.comboBox1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(5);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(194, 37);
             this.comboBox1.TabIndex = 2;
@@ -99,7 +99,7 @@
             // 
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBox1.Location = new System.Drawing.Point(313, 92);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(5);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(466, 36);
             this.textBox1.TabIndex = 3;
@@ -108,7 +108,7 @@
             // 
             this.btn_Submit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btn_Submit.Location = new System.Drawing.Point(313, 159);
-            this.btn_Submit.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.btn_Submit.Margin = new System.Windows.Forms.Padding(5);
             this.btn_Submit.Name = "btn_Submit";
             this.btn_Submit.Size = new System.Drawing.Size(122, 42);
             this.btn_Submit.TabIndex = 4;
@@ -123,7 +123,7 @@
             this.ClientSize = new System.Drawing.Size(816, 242);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("MetaPlusLF", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form_Init";
