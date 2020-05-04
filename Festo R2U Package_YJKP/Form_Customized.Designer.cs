@@ -29,32 +29,47 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Customized));
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.lbl_Result = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.lbl_CountOK = new System.Windows.Forms.Label();
-            this.lbl_CountNG = new System.Windows.Forms.Label();
-            this.lbl_CountTotal = new System.Windows.Forms.Label();
-            this.panel_Count = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.panel_Count = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lbl_CountOK = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.lbl_CountNG = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lbl_CountTotal = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.lbl_Result = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btn_CurrentCurve = new System.Windows.Forms.Button();
+            this.btn_HIstoricalCurves = new System.Windows.Forms.Button();
+            this.panel_CUR = new System.Windows.Forms.Panel();
+            this.panel_HIST = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel_HIST = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel_ProcessView = new System.Windows.Forms.TableLayoutPanel();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel_Count.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panel_CUR.SuspendLayout();
+            this.panel_HIST.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -76,6 +91,31 @@
             this.splitContainer1.Size = new System.Drawing.Size(868, 509);
             this.splitContainer1.SplitterDistance = 654;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.panel_CUR);
+            this.panel1.Controls.Add(this.panel_HIST);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(650, 437);
+            this.panel1.TabIndex = 1;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.btn_CurrentCurve, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btn_HIstoricalCurves, 1, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 437);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(650, 68);
+            this.tableLayoutPanel1.TabIndex = 0;
             // 
             // splitContainer2
             // 
@@ -102,113 +142,6 @@
             this.splitContainer2.SplitterDistance = 435;
             this.splitContainer2.TabIndex = 0;
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.White;
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(9, 10);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(188, 46);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
-            // 
-            // lbl_Result
-            // 
-            this.lbl_Result.BackColor = System.Drawing.Color.ForestGreen;
-            this.lbl_Result.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lbl_Result.Font = new System.Drawing.Font("MetaPlusLF", 22.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl_Result.ForeColor = System.Drawing.Color.Black;
-            this.lbl_Result.Location = new System.Drawing.Point(0, 0);
-            this.lbl_Result.Name = "lbl_Result";
-            this.lbl_Result.Size = new System.Drawing.Size(206, 67);
-            this.lbl_Result.TabIndex = 0;
-            this.lbl_Result.Text = "OK";
-            this.lbl_Result.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(154, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(28, 17);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "pcs";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(154, 48);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(28, 17);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "pcs";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(154, 81);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(28, 17);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "pcs";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(24, 15);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(29, 17);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "OK:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(24, 48);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(30, 17);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "NG:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(24, 81);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(49, 17);
-            this.label6.TabIndex = 5;
-            this.label6.Text = "TOTAL:";
-            // 
-            // lbl_CountOK
-            // 
-            this.lbl_CountOK.Location = new System.Drawing.Point(107, 15);
-            this.lbl_CountOK.Name = "lbl_CountOK";
-            this.lbl_CountOK.Size = new System.Drawing.Size(50, 17);
-            this.lbl_CountOK.TabIndex = 6;
-            this.lbl_CountOK.Text = "0";
-            this.lbl_CountOK.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // lbl_CountNG
-            // 
-            this.lbl_CountNG.Location = new System.Drawing.Point(107, 48);
-            this.lbl_CountNG.Name = "lbl_CountNG";
-            this.lbl_CountNG.Size = new System.Drawing.Size(50, 17);
-            this.lbl_CountNG.TabIndex = 7;
-            this.lbl_CountNG.Text = "0";
-            this.lbl_CountNG.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // lbl_CountTotal
-            // 
-            this.lbl_CountTotal.Location = new System.Drawing.Point(107, 81);
-            this.lbl_CountTotal.Name = "lbl_CountTotal";
-            this.lbl_CountTotal.Size = new System.Drawing.Size(50, 17);
-            this.lbl_CountTotal.TabIndex = 8;
-            this.lbl_CountTotal.Text = "0";
-            this.lbl_CountTotal.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
             // panel_Count
             // 
             this.panel_Count.Controls.Add(this.label4);
@@ -226,26 +159,198 @@
             this.panel_Count.Size = new System.Drawing.Size(206, 113);
             this.panel_Count.TabIndex = 9;
             // 
-            // tableLayoutPanel1
+            // label4
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 437);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(650, 68);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(24, 15);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(29, 17);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "OK:";
             // 
-            // panel1
+            // label1
             // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(650, 437);
-            this.panel1.TabIndex = 1;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(154, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(28, 17);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "pcs";
+            // 
+            // lbl_CountOK
+            // 
+            this.lbl_CountOK.Location = new System.Drawing.Point(107, 15);
+            this.lbl_CountOK.Name = "lbl_CountOK";
+            this.lbl_CountOK.Size = new System.Drawing.Size(50, 17);
+            this.lbl_CountOK.TabIndex = 6;
+            this.lbl_CountOK.Text = "0";
+            this.lbl_CountOK.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(154, 48);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(28, 17);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "pcs";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(24, 81);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(49, 17);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "TOTAL:";
+            // 
+            // lbl_CountNG
+            // 
+            this.lbl_CountNG.Location = new System.Drawing.Point(107, 48);
+            this.lbl_CountNG.Name = "lbl_CountNG";
+            this.lbl_CountNG.Size = new System.Drawing.Size(50, 17);
+            this.lbl_CountNG.TabIndex = 7;
+            this.lbl_CountNG.Text = "0";
+            this.lbl_CountNG.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(154, 81);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(28, 17);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "pcs";
+            // 
+            // lbl_CountTotal
+            // 
+            this.lbl_CountTotal.Location = new System.Drawing.Point(107, 81);
+            this.lbl_CountTotal.Name = "lbl_CountTotal";
+            this.lbl_CountTotal.Size = new System.Drawing.Size(50, 17);
+            this.lbl_CountTotal.TabIndex = 8;
+            this.lbl_CountTotal.Text = "0";
+            this.lbl_CountTotal.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(24, 48);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(30, 17);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "NG:";
+            // 
+            // lbl_Result
+            // 
+            this.lbl_Result.BackColor = System.Drawing.Color.ForestGreen;
+            this.lbl_Result.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lbl_Result.Font = new System.Drawing.Font("MetaPlusLF", 22.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbl_Result.ForeColor = System.Drawing.Color.Black;
+            this.lbl_Result.Location = new System.Drawing.Point(0, 0);
+            this.lbl_Result.Name = "lbl_Result";
+            this.lbl_Result.Size = new System.Drawing.Size(206, 67);
+            this.lbl_Result.TabIndex = 0;
+            this.lbl_Result.Text = "OK";
+            this.lbl_Result.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.White;
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(9, 10);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(188, 46);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
+            // btn_CurrentCurve
+            // 
+            this.btn_CurrentCurve.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.btn_CurrentCurve.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_CurrentCurve.Location = new System.Drawing.Point(3, 3);
+            this.btn_CurrentCurve.Name = "btn_CurrentCurve";
+            this.btn_CurrentCurve.Size = new System.Drawing.Size(319, 62);
+            this.btn_CurrentCurve.TabIndex = 0;
+            this.btn_CurrentCurve.Text = "当前曲线";
+            this.btn_CurrentCurve.UseVisualStyleBackColor = false;
+            this.btn_CurrentCurve.Click += new System.EventHandler(this.btn_CurrentCurve_Click);
+            this.btn_CurrentCurve.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.btn_CurrentCurve_KeyPress);
+            // 
+            // btn_HIstoricalCurves
+            // 
+            this.btn_HIstoricalCurves.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_HIstoricalCurves.Location = new System.Drawing.Point(328, 3);
+            this.btn_HIstoricalCurves.Name = "btn_HIstoricalCurves";
+            this.btn_HIstoricalCurves.Size = new System.Drawing.Size(319, 62);
+            this.btn_HIstoricalCurves.TabIndex = 1;
+            this.btn_HIstoricalCurves.Text = "历史曲线";
+            this.btn_HIstoricalCurves.UseVisualStyleBackColor = true;
+            this.btn_HIstoricalCurves.Click += new System.EventHandler(this.btn_HIstoricalCurves_Click);
+            // 
+            // panel_CUR
+            // 
+            this.panel_CUR.Controls.Add(this.chart1);
+            this.panel_CUR.Controls.Add(this.tableLayoutPanel_ProcessView);
+            this.panel_CUR.Location = new System.Drawing.Point(135, 26);
+            this.panel_CUR.Name = "panel_CUR";
+            this.panel_CUR.Size = new System.Drawing.Size(512, 248);
+            this.panel_CUR.TabIndex = 0;
+            // 
+            // panel_HIST
+            // 
+            this.panel_HIST.Controls.Add(this.tableLayoutPanel_HIST);
+            this.panel_HIST.Location = new System.Drawing.Point(31, 82);
+            this.panel_HIST.Name = "panel_HIST";
+            this.panel_HIST.Size = new System.Drawing.Size(512, 248);
+            this.panel_HIST.TabIndex = 1;
+            // 
+            // tableLayoutPanel_HIST
+            // 
+            this.tableLayoutPanel_HIST.ColumnCount = 1;
+            this.tableLayoutPanel_HIST.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel_HIST.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel_HIST.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel_HIST.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel_HIST.Name = "tableLayoutPanel_HIST";
+            this.tableLayoutPanel_HIST.RowCount = 3;
+            this.tableLayoutPanel_HIST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tableLayoutPanel_HIST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel_HIST.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+            this.tableLayoutPanel_HIST.Size = new System.Drawing.Size(512, 248);
+            this.tableLayoutPanel_HIST.TabIndex = 0;
+            // 
+            // tableLayoutPanel_ProcessView
+            // 
+            this.tableLayoutPanel_ProcessView.ColumnCount = 2;
+            this.tableLayoutPanel_ProcessView.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel_ProcessView.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel_ProcessView.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.tableLayoutPanel_ProcessView.Location = new System.Drawing.Point(0, 210);
+            this.tableLayoutPanel_ProcessView.Name = "tableLayoutPanel_ProcessView";
+            this.tableLayoutPanel_ProcessView.RowCount = 1;
+            this.tableLayoutPanel_ProcessView.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel_ProcessView.Size = new System.Drawing.Size(512, 38);
+            this.tableLayoutPanel_ProcessView.TabIndex = 0;
+            // 
+            // chart1
+            // 
+            chartArea4.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea4);
+            this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend4.Name = "Legend1";
+            this.chart1.Legends.Add(legend4);
+            this.chart1.Location = new System.Drawing.Point(0, 0);
+            this.chart1.Name = "chart1";
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.chart1.Series.Add(series4);
+            this.chart1.Size = new System.Drawing.Size(512, 210);
+            this.chart1.TabIndex = 1;
+            this.chart1.Text = "chart1";
             // 
             // Form_Customized
             // 
@@ -262,13 +367,18 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel_Count.ResumeLayout(false);
             this.panel_Count.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panel_CUR.ResumeLayout(false);
+            this.panel_HIST.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -291,5 +401,12 @@
         private System.Windows.Forms.Panel panel_Count;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Button btn_CurrentCurve;
+        private System.Windows.Forms.Button btn_HIstoricalCurves;
+        private System.Windows.Forms.Panel panel_CUR;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel_ProcessView;
+        private System.Windows.Forms.Panel panel_HIST;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel_HIST;
     }
 }
