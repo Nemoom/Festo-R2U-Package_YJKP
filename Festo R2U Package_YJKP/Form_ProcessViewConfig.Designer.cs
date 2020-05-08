@@ -1,6 +1,6 @@
 ﻿namespace Festo_R2U_Package_YJKP
 {
-    partial class Form_Init
+    partial class Form_ProcessViewConfig
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btn_Submit = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -43,6 +43,7 @@
             this.nUD_Continuity = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.nUD_MinX_Value = new System.Windows.Forms.NumericUpDown();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -79,6 +80,16 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(816, 426);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(313, 86);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(5);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(384, 37);
+            this.comboBox1.TabIndex = 5;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -107,6 +118,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(466, 36);
             this.textBox1.TabIndex = 3;
+            this.textBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.textBox1_MouseDoubleClick);
             // 
             // btn_Submit
             // 
@@ -119,19 +131,6 @@
             this.btn_Submit.Text = "Submit";
             this.btn_Submit.UseVisualStyleBackColor = true;
             this.btn_Submit.Click += new System.EventHandler(this.btn_Submit_Click);
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "0",
-            "1"});
-            this.comboBox1.Location = new System.Drawing.Point(313, 86);
-            this.comboBox1.Margin = new System.Windows.Forms.Padding(5);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(384, 37);
-            this.comboBox1.TabIndex = 5;
             // 
             // groupBox1
             // 
@@ -258,7 +257,7 @@
             0,
             0});
             // 
-            // Form_Init
+            // Form_ProcessViewConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 29F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -268,9 +267,9 @@
             this.Margin = new System.Windows.Forms.Padding(5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form_Init";
+            this.Name = "Form_ProcessViewConfig";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form_Init_Load);
+            this.Load += new System.EventHandler(this.Form_ProcessViewConfig_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -301,6 +300,7 @@
         private System.Windows.Forms.NumericUpDown nUD_Continuity;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.NumericUpDown nUD_MinX_Value;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
     }
 }
 

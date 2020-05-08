@@ -30,7 +30,6 @@
         {
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Customized));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -52,16 +51,20 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.panel_Count = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.lbl_CountOK = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.lbl_CountNG = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.lbl_CountTotal = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.lbl_CountOK = new System.Windows.Forms.Label();
+            this.lbl_CountTotal = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.panel_ProgramName = new System.Windows.Forms.Panel();
+            this.txt_CurRecordName = new System.Windows.Forms.TextBox();
             this.lbl_Result = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
+            this.lbl_Value = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -77,7 +80,9 @@
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.panel_Count.SuspendLayout();
+            this.panel_ProgramName.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -112,6 +117,7 @@
             // 
             // panel_CUR
             // 
+            this.panel_CUR.Controls.Add(this.lbl_Value);
             this.panel_CUR.Controls.Add(this.chart1);
             this.panel_CUR.Controls.Add(this.panel_Tools);
             this.panel_CUR.Controls.Add(this.tableLayoutPanel_ProcessView);
@@ -122,6 +128,10 @@
             // 
             // chart1
             // 
+            chartArea1.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea1.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea1.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea1.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
             chartArea1.Name = "ChartArea1";
             this.chart1.ChartAreas.Add(chartArea1);
             this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -129,13 +139,11 @@
             this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(0, 0);
             this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(493, 313);
             this.chart1.TabIndex = 2;
             this.chart1.Text = "chart1";
+            this.chart1.Click += new System.EventHandler(this.chart1_Click);
+            this.chart1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart1_MouseMove);
             // 
             // panel_Tools
             // 
@@ -162,6 +170,8 @@
             this.btn_CaptureDIsplay.Size = new System.Drawing.Size(51, 51);
             this.btn_CaptureDIsplay.TabIndex = 5;
             this.btn_CaptureDIsplay.UseVisualStyleBackColor = true;
+            this.btn_CaptureDIsplay.Visible = false;
+            this.btn_CaptureDIsplay.Click += new System.EventHandler(this.btn_CaptureDIsplay_Click);
             // 
             // btn_BundlePlot
             // 
@@ -173,6 +183,7 @@
             this.btn_BundlePlot.Size = new System.Drawing.Size(51, 51);
             this.btn_BundlePlot.TabIndex = 4;
             this.btn_BundlePlot.UseVisualStyleBackColor = true;
+            this.btn_BundlePlot.Click += new System.EventHandler(this.btn_BundlePlot_Click);
             // 
             // btn_Move
             // 
@@ -184,6 +195,8 @@
             this.btn_Move.Size = new System.Drawing.Size(51, 51);
             this.btn_Move.TabIndex = 3;
             this.btn_Move.UseVisualStyleBackColor = true;
+            this.btn_Move.Visible = false;
+            this.btn_Move.Click += new System.EventHandler(this.btn_Move_Click);
             // 
             // btn_Reduce
             // 
@@ -195,6 +208,7 @@
             this.btn_Reduce.Size = new System.Drawing.Size(51, 51);
             this.btn_Reduce.TabIndex = 2;
             this.btn_Reduce.UseVisualStyleBackColor = true;
+            this.btn_Reduce.Click += new System.EventHandler(this.btn_Reduce_Click);
             // 
             // btn_Enlarge
             // 
@@ -206,6 +220,7 @@
             this.btn_Enlarge.Size = new System.Drawing.Size(51, 51);
             this.btn_Enlarge.TabIndex = 1;
             this.btn_Enlarge.UseVisualStyleBackColor = true;
+            this.btn_Enlarge.Click += new System.EventHandler(this.btn_Enlarge_Click);
             // 
             // btn_AutoZoom
             // 
@@ -217,6 +232,7 @@
             this.btn_AutoZoom.Size = new System.Drawing.Size(51, 51);
             this.btn_AutoZoom.TabIndex = 0;
             this.btn_AutoZoom.UseVisualStyleBackColor = true;
+            this.btn_AutoZoom.Click += new System.EventHandler(this.btn_AutoZoom_Click);
             // 
             // tableLayoutPanel_ProcessView
             // 
@@ -258,15 +274,15 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
             this.tableLayoutPanel1.Controls.Add(this.btn_CurrentCurve, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.btn_HIstoricalCurves, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 437);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(650, 68);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -276,7 +292,7 @@
             this.btn_CurrentCurve.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btn_CurrentCurve.Location = new System.Drawing.Point(3, 3);
             this.btn_CurrentCurve.Name = "btn_CurrentCurve";
-            this.btn_CurrentCurve.Size = new System.Drawing.Size(319, 62);
+            this.btn_CurrentCurve.Size = new System.Drawing.Size(643, 62);
             this.btn_CurrentCurve.TabIndex = 0;
             this.btn_CurrentCurve.Text = "当前曲线";
             this.btn_CurrentCurve.UseVisualStyleBackColor = false;
@@ -286,9 +302,9 @@
             // btn_HIstoricalCurves
             // 
             this.btn_HIstoricalCurves.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_HIstoricalCurves.Location = new System.Drawing.Point(328, 3);
+            this.btn_HIstoricalCurves.Location = new System.Drawing.Point(652, 3);
             this.btn_HIstoricalCurves.Name = "btn_HIstoricalCurves";
-            this.btn_HIstoricalCurves.Size = new System.Drawing.Size(319, 62);
+            this.btn_HIstoricalCurves.Size = new System.Drawing.Size(1, 62);
             this.btn_HIstoricalCurves.TabIndex = 1;
             this.btn_HIstoricalCurves.Text = "历史曲线";
             this.btn_HIstoricalCurves.UseVisualStyleBackColor = true;
@@ -306,6 +322,7 @@
             // splitContainer2.Panel1
             // 
             this.splitContainer2.Panel1.Controls.Add(this.panel_Count);
+            this.splitContainer2.Panel1.Controls.Add(this.panel_ProgramName);
             this.splitContainer2.Panel1.Controls.Add(this.lbl_Result);
             this.splitContainer2.Panel1.Padding = new System.Windows.Forms.Padding(0, 0, 0, 30);
             // 
@@ -321,105 +338,132 @@
             // 
             // panel_Count
             // 
+            this.panel_Count.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.panel_Count.Controls.Add(this.label4);
-            this.panel_Count.Controls.Add(this.label1);
-            this.panel_Count.Controls.Add(this.lbl_CountOK);
-            this.panel_Count.Controls.Add(this.label2);
-            this.panel_Count.Controls.Add(this.label6);
             this.panel_Count.Controls.Add(this.lbl_CountNG);
-            this.panel_Count.Controls.Add(this.label3);
-            this.panel_Count.Controls.Add(this.lbl_CountTotal);
+            this.panel_Count.Controls.Add(this.label1);
             this.panel_Count.Controls.Add(this.label5);
+            this.panel_Count.Controls.Add(this.lbl_CountOK);
+            this.panel_Count.Controls.Add(this.lbl_CountTotal);
+            this.panel_Count.Controls.Add(this.label2);
+            this.panel_Count.Controls.Add(this.label3);
+            this.panel_Count.Controls.Add(this.label6);
             this.panel_Count.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_Count.Location = new System.Drawing.Point(0, 67);
+            this.panel_Count.Location = new System.Drawing.Point(0, 123);
             this.panel_Count.Name = "panel_Count";
-            this.panel_Count.Size = new System.Drawing.Size(206, 113);
-            this.panel_Count.TabIndex = 9;
+            this.panel_Count.Size = new System.Drawing.Size(206, 106);
+            this.panel_Count.TabIndex = 10;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(24, 15);
+            this.label4.Location = new System.Drawing.Point(25, 12);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(29, 17);
             this.label4.TabIndex = 3;
             this.label4.Text = "OK:";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(154, 15);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(28, 17);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "pcs";
-            // 
-            // lbl_CountOK
-            // 
-            this.lbl_CountOK.Location = new System.Drawing.Point(107, 15);
-            this.lbl_CountOK.Name = "lbl_CountOK";
-            this.lbl_CountOK.Size = new System.Drawing.Size(50, 17);
-            this.lbl_CountOK.TabIndex = 6;
-            this.lbl_CountOK.Text = "0";
-            this.lbl_CountOK.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(154, 48);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(28, 17);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "pcs";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(24, 81);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(49, 17);
-            this.label6.TabIndex = 5;
-            this.label6.Text = "TOTAL:";
-            // 
             // lbl_CountNG
             // 
-            this.lbl_CountNG.Location = new System.Drawing.Point(107, 48);
+            this.lbl_CountNG.Location = new System.Drawing.Point(108, 45);
             this.lbl_CountNG.Name = "lbl_CountNG";
             this.lbl_CountNG.Size = new System.Drawing.Size(50, 17);
             this.lbl_CountNG.TabIndex = 7;
             this.lbl_CountNG.Text = "0";
             this.lbl_CountNG.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // label3
+            // label1
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(154, 81);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(28, 17);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "pcs";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(155, 12);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(28, 17);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "pcs";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(25, 45);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(30, 17);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "NG:";
+            // 
+            // lbl_CountOK
+            // 
+            this.lbl_CountOK.Location = new System.Drawing.Point(108, 12);
+            this.lbl_CountOK.Name = "lbl_CountOK";
+            this.lbl_CountOK.Size = new System.Drawing.Size(50, 17);
+            this.lbl_CountOK.TabIndex = 6;
+            this.lbl_CountOK.Text = "0";
+            this.lbl_CountOK.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lbl_CountTotal
             // 
-            this.lbl_CountTotal.Location = new System.Drawing.Point(107, 81);
+            this.lbl_CountTotal.Location = new System.Drawing.Point(108, 78);
             this.lbl_CountTotal.Name = "lbl_CountTotal";
             this.lbl_CountTotal.Size = new System.Drawing.Size(50, 17);
             this.lbl_CountTotal.TabIndex = 8;
             this.lbl_CountTotal.Text = "0";
             this.lbl_CountTotal.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // label5
+            // label2
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(24, 48);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(30, 17);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "NG:";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(155, 45);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(28, 17);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "pcs";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(155, 78);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(28, 17);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "pcs";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(25, 78);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(49, 17);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "TOTAL:";
+            // 
+            // panel_ProgramName
+            // 
+            this.panel_ProgramName.BackColor = System.Drawing.SystemColors.Window;
+            this.panel_ProgramName.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel_ProgramName.Controls.Add(this.txt_CurRecordName);
+            this.panel_ProgramName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel_ProgramName.Location = new System.Drawing.Point(0, 67);
+            this.panel_ProgramName.Name = "panel_ProgramName";
+            this.panel_ProgramName.Size = new System.Drawing.Size(206, 56);
+            this.panel_ProgramName.TabIndex = 9;
+            // 
+            // txt_CurRecordName
+            // 
+            this.txt_CurRecordName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt_CurRecordName.BackColor = System.Drawing.SystemColors.Window;
+            this.txt_CurRecordName.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_CurRecordName.Location = new System.Drawing.Point(14, 10);
+            this.txt_CurRecordName.Multiline = true;
+            this.txt_CurRecordName.Name = "txt_CurRecordName";
+            this.txt_CurRecordName.Size = new System.Drawing.Size(173, 30);
+            this.txt_CurRecordName.TabIndex = 0;
+            this.txt_CurRecordName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // lbl_Result
             // 
             this.lbl_Result.BackColor = System.Drawing.Color.ForestGreen;
+            this.lbl_Result.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbl_Result.Dock = System.Windows.Forms.DockStyle.Top;
             this.lbl_Result.Font = new System.Drawing.Font("MetaPlusLF", 22.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbl_Result.ForeColor = System.Drawing.Color.Black;
@@ -443,6 +487,22 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
+            // fileSystemWatcher1
+            // 
+            this.fileSystemWatcher1.EnableRaisingEvents = true;
+            this.fileSystemWatcher1.SynchronizingObject = this;
+            // 
+            // lbl_Value
+            // 
+            this.lbl_Value.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbl_Value.BackColor = System.Drawing.Color.White;
+            this.lbl_Value.ForeColor = System.Drawing.Color.Orange;
+            this.lbl_Value.Location = new System.Drawing.Point(267, 3);
+            this.lbl_Value.Name = "lbl_Value";
+            this.lbl_Value.Size = new System.Drawing.Size(220, 17);
+            this.lbl_Value.TabIndex = 3;
+            this.lbl_Value.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // Form_Customized
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -454,6 +514,7 @@
             this.Name = "Form_Customized";
             this.Text = "Festo servo press kit";
             this.Load += new System.EventHandler(this.Form_Customized_Load);
+            this.Resize += new System.EventHandler(this.Form_Customized_Resize);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -470,7 +531,10 @@
             this.splitContainer2.ResumeLayout(false);
             this.panel_Count.ResumeLayout(false);
             this.panel_Count.PerformLayout();
+            this.panel_ProgramName.ResumeLayout(false);
+            this.panel_ProgramName.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -490,7 +554,7 @@
         private System.Windows.Forms.Label lbl_CountOK;
         private System.Windows.Forms.Label lbl_CountNG;
         private System.Windows.Forms.Label lbl_CountTotal;
-        private System.Windows.Forms.Panel panel_Count;
+        private System.Windows.Forms.Panel panel_ProgramName;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button btn_CurrentCurve;
@@ -507,5 +571,9 @@
         private System.Windows.Forms.Button btn_Move;
         private System.Windows.Forms.Button btn_Reduce;
         private System.Windows.Forms.Button btn_Enlarge;
+        public System.IO.FileSystemWatcher fileSystemWatcher1;
+        private System.Windows.Forms.Panel panel_Count;
+        private System.Windows.Forms.TextBox txt_CurRecordName;
+        private System.Windows.Forms.Label lbl_Value;
     }
 }
