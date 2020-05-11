@@ -209,49 +209,52 @@ namespace Festo_R2U_Package_YJKP
 
         void fileSystemWatcher1_Created(object sender, FileSystemEventArgs e)
         {
-            txt_CurRecordName.Text = e.Name;
-            CurProgramName = e.Name.Split('_')[0];
-            CurResult = e.Name.Split('_')[e.Name.Split('_').Length - 1].Substring(0, e.Name.Split('_')[e.Name.Split('_').Length - 1].Length - 4);
-            lbl_Result.Text = CurResult;
-            if (CurResult == "OK" || CurResult == "Ok" || CurResult == "ok")
+            if (System.IO.Path.GetExtension(e.Name) == ".log" || System.IO.Path.GetExtension(e.Name) == ".LOG" || System.IO.Path.GetExtension(e.Name) == ".Log")
             {
-                lbl_Result.BackColor = Color.ForestGreen;
-                Count_OK = Count_OK + 1;
-                Count_Total = Count_Total + 1;
-            }
-            else
-            {
-                lbl_Result.BackColor = Color.Red;
-                Count_NOK = Count_NOK + 1;
-                Count_Total = Count_Total + 1;
-            }
-            lbl_CountNG.Text = Count_NOK.ToString();
-            lbl_CountOK.Text = Count_OK.ToString();
-            lbl_CountTotal.Text = Count_Total.ToString();
-            lbl_Value.Text = "";
-            get_Points(e.FullPath);
-            if (btn_BundlePlot.BackColor != FestoBlue_Light)
-            {
-                //清除历史曲线
-                chart1.Series.Clear();
-                //清除之前的最值
-                X_Min = 100000;
-                X_Max = 0;
-                Y_Min = 100000;
-                Y_Max = 0;
-            }
-            //有时记录了多条曲线，绘制部分曲线（例如下压过程中的曲线）
-            switch (ConcernedRecordIndex)
-            {
-                case 1:
-                    DrawCurve(mPoints1);
-                    break;
-                case 2:
-                    DrawCurve(mPoints2);
-                    break;
-                default:
-                    break;
-            }
+                txt_CurRecordName.Text = e.Name;
+                CurProgramName = e.Name.Split('_')[0];
+                CurResult = e.Name.Split('_')[e.Name.Split('_').Length - 1].Substring(0, e.Name.Split('_')[e.Name.Split('_').Length - 1].Length - 4);
+                lbl_Result.Text = CurResult;
+                if (CurResult == "OK" || CurResult == "Ok" || CurResult == "ok")
+                {
+                    lbl_Result.BackColor = Color.ForestGreen;
+                    Count_OK = Count_OK + 1;
+                    Count_Total = Count_Total + 1;
+                }
+                else
+                {
+                    lbl_Result.BackColor = Color.Red;
+                    Count_NOK = Count_NOK + 1;
+                    Count_Total = Count_Total + 1;
+                }
+                lbl_CountNG.Text = Count_NOK.ToString();
+                lbl_CountOK.Text = Count_OK.ToString();
+                lbl_CountTotal.Text = Count_Total.ToString();
+                lbl_Value.Text = "";
+                get_Points(e.FullPath);
+                if (btn_BundlePlot.BackColor != FestoBlue_Light)
+                {
+                    //清除历史曲线
+                    chart1.Series.Clear();
+                    //清除之前的最值
+                    X_Min = 100000;
+                    X_Max = 0;
+                    Y_Min = 100000;
+                    Y_Max = 0;
+                }
+                //有时记录了多条曲线，绘制部分曲线（例如下压过程中的曲线）
+                switch (ConcernedRecordIndex)
+                {
+                    case 1:
+                        DrawCurve(mPoints1);
+                        break;
+                    case 2:
+                        DrawCurve(mPoints2);
+                        break;
+                    default:
+                        break;
+                }
+            }            
         }
 
         public void get_Points(string FileName)
