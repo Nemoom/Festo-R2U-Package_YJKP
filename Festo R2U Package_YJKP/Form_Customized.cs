@@ -389,7 +389,7 @@ namespace Festo_R2U_Package_YJKP
             if (e.KeyChar=='s')
             {
                 //弹出当前曲线设置窗口
-                Form_ProcessViewConfig mForm_ProcessViewConfig = new Form_ProcessViewConfig(this,CurProgramName);
+                Form_ProcessViewConfig1 mForm_ProcessViewConfig = new Form_ProcessViewConfig1(this,CurProgramName);
                 mForm_ProcessViewConfig.Show();
                 mForm_ProcessViewConfig.BringToFront();
             }
