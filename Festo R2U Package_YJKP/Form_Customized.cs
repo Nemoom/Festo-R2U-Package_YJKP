@@ -31,6 +31,47 @@ namespace Festo_R2U_Package_YJKP
         double Y_Min = 100000;
         double Y_Max = 0;
 
+        double Position_Max;
+        double Force_Max;
+        double Position_Min;
+        double Force_Min;
+
+        public class Window 
+        {
+            public double Intersection;
+
+            public double Position_U;
+            public double Force_U;
+            public double Position_D;
+            public double Force_D;
+            public double Position_L;
+            public double Force_L;
+            public double Position_R;
+            public double Force_R;
+
+            public double Position_Max;
+            public double Position_Min;
+            public double Force_Max;
+            public double Force_Min;
+        }
+
+        public class Threshold 
+        {
+            public double Intersection;
+            public double Position;
+            public double Force;
+        }
+
+        public class Envelope 
+        {
+            public double Intersection;
+
+            public double Position_U;
+            public double Force_U;
+            public double Position_D;
+            public double Force_D;            
+        }
+
         int Count_OK = 0;
         int Count_NOK = 0;
         int Count_Total = 0;
