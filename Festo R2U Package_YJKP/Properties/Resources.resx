@@ -118,6 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="曲线对比 (2)" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icon\曲线对比 (2).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="移动位置 (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\移动位置 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -136,7 +139,10 @@
   <data name="适应屏幕 (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\适应屏幕 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="曲线对比 (2)" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icon\曲线对比 (2).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="解锁" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icon\解锁.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="锁定" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icon\锁定.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

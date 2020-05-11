@@ -107,7 +107,7 @@ namespace Festo_R2U_Package_YJKP
             if (WatchPath=="")
             {
                  MessageBox.Show("未设置监控路径，请设置");
-                 new Form_ProcessViewConfig(this,CurProgramName).Show();
+                 new Form_ProcessViewConfig1(this,CurProgramName).Show();
             }
             else if (Directory.Exists(WatchPath))
             {
@@ -117,7 +117,7 @@ namespace Festo_R2U_Package_YJKP
             else
             {
                 MessageBox.Show("不存在的监控路径,请确认");
-                new Form_ProcessViewConfig(this,CurProgramName).Show();
+                new Form_ProcessViewConfig1(this,CurProgramName).Show();
             }
 
             chart1.ChartAreas[0].AxisX.Title = "Position[mm]";
@@ -143,7 +143,7 @@ namespace Festo_R2U_Package_YJKP
             chart1.ChartAreas[0].AxisX.ScaleView.SmallScrollMinSize = 1;
             #endregion
             btn_AutoZoom_Click(sender, e);
-            chart1.MouseWheel += new MouseEventHandler(chart1_MouseWheel);
+            btn_Lock_Click(sender, e);        
 
         }
 
@@ -412,6 +412,7 @@ namespace Festo_R2U_Package_YJKP
             btn_CurrentCurve.Focus();
         }
 
+        //【互斥】自动缩放模式
         private void btn_AutoZoom_Click(object sender, EventArgs e)
         {
             if (btn_AutoZoom.BackColor == System.Drawing.SystemColors.Control)
@@ -423,12 +424,41 @@ namespace Festo_R2U_Package_YJKP
             }
             else
             {
-                btn_AutoZoom.BackColor = System.Drawing.SystemColors.Control;
+                //已经是自动缩放模式，显示手动上下限设置的框
+                try
+                {
+                    txt_MinX.Text = chart1.ChartAreas[0].AxisX.Minimum.ToString();
+                    txt_MaxX.Text = chart1.ChartAreas[0].AxisX.Maximum.ToString();
+                    txt_MinY.Text = chart1.ChartAreas[0].AxisY.Minimum.ToString();
+                    txt_MaxY.Text = chart1.ChartAreas[0].AxisY.Maximum.ToString();
+                }
+                catch (Exception)
+                {
+
+                }
+                txt_MinX.Location = new Point(txt_MinX.Location.X, chart1.Size.Height - txt_MinX.Size.Height - 5);
+                txt_MaxX.Location = new Point(txt_MaxX.Location.X, chart1.Size.Height - txt_MinX.Size.Height - 5);
+                txt_MinX.Visible = true;
+                txt_MaxX.Visible = true;
+                txt_MinY.Visible = true;
+                txt_MaxY.Visible = true;
             }
             chart1.ChartAreas[0].AxisX.ScaleView.ZoomReset();
+            chart1.ChartAreas[0].AxisY.ScaleView.ZoomReset();
+            //if (txt_MinX.Text==""||txt_MaxX.Text==""||txt_MinY.Text==""||txt_MaxY.Text=="")
+            //{
+            //    chart1.ChartAreas[0].AxisX.ScaleView.ZoomReset();
+            //    chart1.ChartAreas[0].AxisY.ScaleView.ZoomReset();
+            //}
+            //else
+            //{
+            //    chart1.ChartAreas[0].AxisX.ScaleView.Zoom(Convert.ToDouble(txt_MinX.Text), Convert.ToDouble(txt_MaxX.Text));
+            //    chart1.ChartAreas[0].AxisY.ScaleView.Zoom(Convert.ToDouble(txt_MinY.Text), Convert.ToDouble(txt_MaxY.Text));
+            //}
             btn_CurrentCurve.Focus();
         }
 
+        //【互斥】放大模式
         private void btn_Enlarge_Click(object sender, EventArgs e)
         {
             if (btn_Enlarge.BackColor == System.Drawing.SystemColors.Control)
@@ -437,14 +467,19 @@ namespace Festo_R2U_Package_YJKP
                 btn_AutoZoom.BackColor = System.Drawing.SystemColors.Control;
                 btn_Reduce.BackColor = System.Drawing.SystemColors.Control;
                 btn_Move.BackColor = System.Drawing.SystemColors.Control;
+                txt_MinX.Visible = false;
+                txt_MaxX.Visible = false;
+                txt_MinY.Visible = false;
+                txt_MaxY.Visible = false;
             }
             else
             {
-                btn_Enlarge.BackColor = System.Drawing.SystemColors.Control;
+                //btn_Enlarge.BackColor = System.Drawing.SystemColors.Control;
             }
             btn_CurrentCurve.Focus();
         }
 
+        //【互斥】缩小模式
         private void btn_Reduce_Click(object sender, EventArgs e)
         {
             if (btn_Reduce.BackColor == System.Drawing.SystemColors.Control)
@@ -453,14 +488,19 @@ namespace Festo_R2U_Package_YJKP
                 btn_Enlarge.BackColor = System.Drawing.SystemColors.Control;
                 btn_AutoZoom.BackColor = System.Drawing.SystemColors.Control;
                 btn_Move.BackColor = System.Drawing.SystemColors.Control;
+                txt_MinX.Visible = false;
+                txt_MaxX.Visible = false;
+                txt_MinY.Visible = false;
+                txt_MaxY.Visible = false;
             }
             else
             {
-                btn_Reduce.BackColor = System.Drawing.SystemColors.Control;
+                //btn_Reduce.BackColor = System.Drawing.SystemColors.Control;
             }
             btn_CurrentCurve.Focus();
         }
 
+        //【互斥】移动模式
         private void btn_Move_Click(object sender, EventArgs e)
         {
             if (btn_Move.BackColor == System.Drawing.SystemColors.Control)
@@ -469,10 +509,14 @@ namespace Festo_R2U_Package_YJKP
                 btn_Enlarge.BackColor = System.Drawing.SystemColors.Control;
                 btn_Reduce.BackColor = System.Drawing.SystemColors.Control;
                 btn_AutoZoom.BackColor = System.Drawing.SystemColors.Control;
+                txt_MinX.Visible = false;
+                txt_MaxX.Visible = false;
+                txt_MinY.Visible = false;
+                txt_MaxY.Visible = false;
             }
             else
             {
-                btn_Move.BackColor = System.Drawing.SystemColors.Control;
+                //btn_Move.BackColor = System.Drawing.SystemColors.Control;
             }
             btn_CurrentCurve.Focus();
         }
@@ -512,10 +556,16 @@ namespace Festo_R2U_Package_YJKP
             {
                 var xValue = hit.Series.Points[hit.PointIndex].XValue;
                 var yValue = hit.Series.Points[hit.PointIndex].YValues.First();
-                lbl_Value.Text = string.Format("{0:F0},{1:F0}", "Position:" + xValue, "(mm),Force:" + yValue + "(N)");
+                lbl_Value.ForeColor = Color.Orange;
+                lbl_Value.Text = string.Format("{0:F0}{1:F0}", "Position:" + xValue, "(mm),Force:" + yValue + "(N)");
             }
             else
             {
+                var area = chart1.ChartAreas[0];
+                double xValue = area.AxisX.PixelPositionToValue(e.X);
+                double yValue = area.AxisY.PixelPositionToValue(e.Y);
+                lbl_Value.ForeColor = Color.Black;
+                lbl_Value.Text = string.Format("{0:F0}{1:F0}", "Position:" + Math.Round(xValue,2), "(mm),Force:" + Math.Round(yValue,3) + "(N)");
 
             }
         }
@@ -529,6 +579,73 @@ namespace Festo_R2U_Package_YJKP
             else
             {
                 btn_HIstoricalCurves_Click(sender, e);
+            }
+        }
+
+        private void txt_MaxY_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar=='\r')
+            {
+                chart1.ChartAreas[0].AxisY.Maximum = Convert.ToDouble(txt_MaxY.Text);
+                //chart1.ChartAreas[0].AxisY.ScaleView.Zoom(Convert.ToDouble(txt_MinY.Text),Convert.ToDouble(txt_MaxY.Text));
+            }
+        }
+
+        private void txt_MinY_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\r')
+            {
+                chart1.ChartAreas[0].AxisY.Minimum = Convert.ToDouble(txt_MinY.Text);
+                //chart1.ChartAreas[0].AxisY.ScaleView.Zoom(Convert.ToDouble(txt_MinY.Text), Convert.ToDouble(txt_MaxY.Text));
+            }
+        }
+
+        private void txt_MinX_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\r')
+            {
+                chart1.ChartAreas[0].AxisX.Minimum = Convert.ToDouble(txt_MinX.Text);
+                //chart1.ChartAreas[0].AxisX.ScaleView.Zoom(Convert.ToDouble(txt_MinX.Text), Convert.ToDouble(txt_MaxX.Text));
+            }
+        }
+
+        private void txt_MaxX_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\r')
+            {
+                chart1.ChartAreas[0].AxisX.Maximum = Convert.ToDouble(txt_MaxX.Text);
+                //chart1.ChartAreas[0].AxisX.ScaleView.Zoom(Convert.ToDouble(txt_MinX.Text), Convert.ToDouble(txt_MaxX.Text));
+            }
+        }
+
+        private void btn_Lock_Click(object sender, EventArgs e)
+        {
+            if (btn_Lock.ImageIndex == 0)
+            {                
+                btn_Lock.ImageIndex = 1;//解锁
+                btn_AutoZoom.Enabled = true;
+                btn_BundlePlot.Enabled = true;
+                btn_CaptureDIsplay.Enabled = true;
+                btn_Enlarge.Enabled = true;
+                btn_Move.Enabled = true;
+                btn_Reduce.Enabled = true;
+                chart1.Click += new System.EventHandler(this.chart1_Click);
+                chart1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart1_MouseMove);
+                chart1.MouseWheel += new MouseEventHandler(chart1_MouseWheel);
+            }
+            else
+            {
+                btn_Lock.ImageIndex = 0;//锁定
+                btn_AutoZoom.Enabled = false;
+                btn_BundlePlot.Enabled = false;
+                btn_CaptureDIsplay.Enabled = false;
+                btn_Enlarge.Enabled = false;
+                btn_Move.Enabled = false;
+                btn_Reduce.Enabled = false;
+                chart1.Click -= new System.EventHandler(this.chart1_Click);
+                chart1.MouseMove -= new System.Windows.Forms.MouseEventHandler(this.chart1_MouseMove);
+                chart1.MouseWheel -= new MouseEventHandler(chart1_MouseWheel);
+                lbl_Value.Text = "";
             }
         }
     }

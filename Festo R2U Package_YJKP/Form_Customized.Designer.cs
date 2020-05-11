@@ -28,14 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Customized));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel_CUR = new System.Windows.Forms.Panel();
+            this.txt_MaxY = new System.Windows.Forms.TextBox();
+            this.txt_MinY = new System.Windows.Forms.TextBox();
+            this.txt_MaxX = new System.Windows.Forms.TextBox();
+            this.txt_MinX = new System.Windows.Forms.TextBox();
+            this.lbl_Value = new System.Windows.Forms.Label();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.panel_Tools = new System.Windows.Forms.Panel();
+            this.btn_Lock = new System.Windows.Forms.Button();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.btn_CaptureDIsplay = new System.Windows.Forms.Button();
             this.btn_BundlePlot = new System.Windows.Forms.Button();
             this.btn_Move = new System.Windows.Forms.Button();
@@ -64,7 +72,6 @@
             this.lbl_Result = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
-            this.lbl_Value = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -117,14 +124,68 @@
             // 
             // panel_CUR
             // 
+            this.panel_CUR.Controls.Add(this.txt_MaxY);
+            this.panel_CUR.Controls.Add(this.txt_MinY);
+            this.panel_CUR.Controls.Add(this.txt_MaxX);
+            this.panel_CUR.Controls.Add(this.txt_MinX);
             this.panel_CUR.Controls.Add(this.lbl_Value);
             this.panel_CUR.Controls.Add(this.chart1);
             this.panel_CUR.Controls.Add(this.panel_Tools);
             this.panel_CUR.Controls.Add(this.tableLayoutPanel_ProcessView);
             this.panel_CUR.Location = new System.Drawing.Point(72, 21);
             this.panel_CUR.Name = "panel_CUR";
-            this.panel_CUR.Size = new System.Drawing.Size(544, 351);
+            this.panel_CUR.Size = new System.Drawing.Size(544, 410);
             this.panel_CUR.TabIndex = 0;
+            // 
+            // txt_MaxY
+            // 
+            this.txt_MaxY.Location = new System.Drawing.Point(2, 10);
+            this.txt_MaxY.Name = "txt_MaxY";
+            this.txt_MaxY.Size = new System.Drawing.Size(69, 23);
+            this.txt_MaxY.TabIndex = 7;
+            this.txt_MaxY.Visible = false;
+            this.txt_MaxY.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MaxY_KeyPress);
+            // 
+            // txt_MinY
+            // 
+            this.txt_MinY.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.txt_MinY.Location = new System.Drawing.Point(2, 314);
+            this.txt_MinY.Name = "txt_MinY";
+            this.txt_MinY.Size = new System.Drawing.Size(69, 23);
+            this.txt_MinY.TabIndex = 6;
+            this.txt_MinY.Visible = false;
+            this.txt_MinY.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MinY_KeyPress);
+            // 
+            // txt_MaxX
+            // 
+            this.txt_MaxX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt_MaxX.Location = new System.Drawing.Point(415, 349);
+            this.txt_MaxX.Name = "txt_MaxX";
+            this.txt_MaxX.Size = new System.Drawing.Size(69, 23);
+            this.txt_MaxX.TabIndex = 5;
+            this.txt_MaxX.Visible = false;
+            this.txt_MaxX.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MaxX_KeyPress);
+            // 
+            // txt_MinX
+            // 
+            this.txt_MinX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.txt_MinX.Location = new System.Drawing.Point(60, 349);
+            this.txt_MinX.Name = "txt_MinX";
+            this.txt_MinX.Size = new System.Drawing.Size(69, 23);
+            this.txt_MinX.TabIndex = 4;
+            this.txt_MinX.Visible = false;
+            this.txt_MinX.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MinX_KeyPress);
+            // 
+            // lbl_Value
+            // 
+            this.lbl_Value.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbl_Value.BackColor = System.Drawing.Color.White;
+            this.lbl_Value.ForeColor = System.Drawing.Color.Orange;
+            this.lbl_Value.Location = new System.Drawing.Point(267, 3);
+            this.lbl_Value.Name = "lbl_Value";
+            this.lbl_Value.Size = new System.Drawing.Size(220, 17);
+            this.lbl_Value.TabIndex = 3;
+            this.lbl_Value.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // chart1
             // 
@@ -139,15 +200,14 @@
             this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(0, 0);
             this.chart1.Name = "chart1";
-            this.chart1.Size = new System.Drawing.Size(493, 313);
+            this.chart1.Size = new System.Drawing.Size(493, 372);
             this.chart1.TabIndex = 2;
             this.chart1.Text = "chart1";
-            this.chart1.Click += new System.EventHandler(this.chart1_Click);
-            this.chart1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart1_MouseMove);
             // 
             // panel_Tools
             // 
             this.panel_Tools.AutoScroll = true;
+            this.panel_Tools.Controls.Add(this.btn_Lock);
             this.panel_Tools.Controls.Add(this.btn_CaptureDIsplay);
             this.panel_Tools.Controls.Add(this.btn_BundlePlot);
             this.panel_Tools.Controls.Add(this.btn_Move);
@@ -157,8 +217,28 @@
             this.panel_Tools.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel_Tools.Location = new System.Drawing.Point(493, 0);
             this.panel_Tools.Name = "panel_Tools";
-            this.panel_Tools.Size = new System.Drawing.Size(51, 313);
+            this.panel_Tools.Size = new System.Drawing.Size(51, 372);
             this.panel_Tools.TabIndex = 1;
+            // 
+            // btn_Lock
+            // 
+            this.btn_Lock.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_Lock.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btn_Lock.ImageIndex = 1;
+            this.btn_Lock.ImageList = this.imageList1;
+            this.btn_Lock.Location = new System.Drawing.Point(0, 340);
+            this.btn_Lock.Name = "btn_Lock";
+            this.btn_Lock.Size = new System.Drawing.Size(51, 32);
+            this.btn_Lock.TabIndex = 6;
+            this.btn_Lock.UseVisualStyleBackColor = true;
+            this.btn_Lock.Click += new System.EventHandler(this.btn_Lock_Click);
+            // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "锁定.png");
+            this.imageList1.Images.SetKeyName(1, "解锁.png");
             // 
             // btn_CaptureDIsplay
             // 
@@ -240,7 +320,7 @@
             this.tableLayoutPanel_ProcessView.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel_ProcessView.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel_ProcessView.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tableLayoutPanel_ProcessView.Location = new System.Drawing.Point(0, 313);
+            this.tableLayoutPanel_ProcessView.Location = new System.Drawing.Point(0, 372);
             this.tableLayoutPanel_ProcessView.Name = "tableLayoutPanel_ProcessView";
             this.tableLayoutPanel_ProcessView.RowCount = 1;
             this.tableLayoutPanel_ProcessView.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -492,17 +572,6 @@
             this.fileSystemWatcher1.EnableRaisingEvents = true;
             this.fileSystemWatcher1.SynchronizingObject = this;
             // 
-            // lbl_Value
-            // 
-            this.lbl_Value.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbl_Value.BackColor = System.Drawing.Color.White;
-            this.lbl_Value.ForeColor = System.Drawing.Color.Orange;
-            this.lbl_Value.Location = new System.Drawing.Point(267, 3);
-            this.lbl_Value.Name = "lbl_Value";
-            this.lbl_Value.Size = new System.Drawing.Size(220, 17);
-            this.lbl_Value.TabIndex = 3;
-            this.lbl_Value.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
             // Form_Customized
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -521,6 +590,7 @@
             this.splitContainer1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel_CUR.ResumeLayout(false);
+            this.panel_CUR.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.panel_Tools.ResumeLayout(false);
             this.panel_HIST.ResumeLayout(false);
@@ -575,5 +645,11 @@
         private System.Windows.Forms.Panel panel_Count;
         private System.Windows.Forms.TextBox txt_CurRecordName;
         private System.Windows.Forms.Label lbl_Value;
+        private System.Windows.Forms.TextBox txt_MaxY;
+        private System.Windows.Forms.TextBox txt_MinY;
+        private System.Windows.Forms.TextBox txt_MaxX;
+        private System.Windows.Forms.TextBox txt_MinX;
+        private System.Windows.Forms.Button btn_Lock;
+        private System.Windows.Forms.ImageList imageList1;
     }
 }

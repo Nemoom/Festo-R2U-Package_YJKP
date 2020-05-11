@@ -123,9 +123,29 @@ namespace Festo_R2U_Package_YJKP.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap 解锁 {
+            get {
+                object obj = ResourceManager.GetObject("解锁", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap 适应屏幕__1_ {
             get {
                 object obj = ResourceManager.GetObject("适应屏幕 (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap 锁定 {
+            get {
+                object obj = ResourceManager.GetObject("锁定", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
