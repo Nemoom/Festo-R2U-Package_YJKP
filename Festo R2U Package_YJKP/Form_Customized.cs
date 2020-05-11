@@ -20,6 +20,7 @@ namespace Festo_R2U_Package_YJKP
             InitializeComponent();
             InitLog4Net();
         }
+        int MaxCurves = 10;
         private string CurProgramName = "";
         private string CurResult = "";
         Color FestoBlue_Light = Color.FromArgb(200, 200, 230, 250);//第1个参数为透明度(alpha)参数,其后为红,绿和蓝.
@@ -232,7 +233,7 @@ namespace Festo_R2U_Package_YJKP
                 lbl_CountTotal.Text = Count_Total.ToString();
                 lbl_Value.Text = "";
                 get_Points(e.FullPath);
-                if (btn_BundlePlot.BackColor != FestoBlue_Light)
+                if (btn_BundlePlot.BackColor != FestoBlue_Light)//仅显示最近一条记录
                 {
                     //清除历史曲线
                     chart1.Series.Clear();
@@ -353,7 +354,14 @@ namespace Festo_R2U_Package_YJKP
                     Y_Min = PointsList[i].Force;
                 }
             }
-            chart1.Series.Add(mSeries);
+            if (chart1.Series.Count > MaxCurves)
+            {
+                chart1.Series[chart1.Series.Count % MaxCurves] = mSeries;
+            }
+            else
+            {
+                chart1.Series.Add(mSeries);
+            }            
         }
 
         //显示Festo网页界面
