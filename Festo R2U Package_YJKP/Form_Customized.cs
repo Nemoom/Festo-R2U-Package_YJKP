@@ -103,6 +103,9 @@ namespace Festo_R2U_Package_YJKP
         int ConcernedRecordIndex = 1;//Record1 or Record2
         List<mPoint> mPoints1 = new List<mPoint>();
         List<mPoint> mPoints2 = new List<mPoint>();
+        List<mPoint> mPoints3 = new List<mPoint>();
+        List<mPoint> mPoints4 = new List<mPoint>();
+        List<mPoint> mPoints5 = new List<mPoint>();
 
 
         public string WatchPath
@@ -189,60 +192,6 @@ namespace Festo_R2U_Package_YJKP
 
         }
 
-        void chart1_MouseWheel(object sender, MouseEventArgs e)
-        {
-            //按住Ctrl，缩放
-            if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
-            {
-
-                if (chart1.ChartAreas[0].AxisX.ScaleView.Size.ToString() == "NaN")
-                {
-                    chart1.ChartAreas[0].AxisX.ScaleView.Size = 1;
-                }
-                else
-                {
-                    if (e.Delta < 0)
-                        chart1.ChartAreas[0].AxisX.ScaleView.Size += 4;
-                    else
-                    {
-                        try
-                        {
-                            if (chart1.ChartAreas[0].AxisX.ScaleView.Size > 4)
-                            {
-                                chart1.ChartAreas[0].AxisX.ScaleView.Size -= 4;
-                            }
-                            else
-                            {
-                                //MessageBox.Show("MIN");
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            chart1.ChartAreas[0].AxisX.ScaleView.Size = 0;
-                        }
-                    }
-                }
-
-            }
-            //不按Ctrl，滚动
-            else
-            {
-                if (e.Delta < 0)
-                {
-                    if (chart1.ChartAreas[0].AxisX.ScaleView.Position + chart1.ChartAreas[0].AxisX.ScaleView.Size< X_Max)
-                    {
-                        chart1.ChartAreas[0].AxisX.ScaleView.Position += 2;
-                    }
-                }
-                else
-                {
-                    if (chart1.ChartAreas[0].AxisX.ScaleView.Position > X_Min)
-                    {
-                        chart1.ChartAreas[0].AxisX.ScaleView.Position -= 2;
-                    }
-                }
-            }
-        }
 
         void fileSystemWatcher1_Changed(object sender, FileSystemEventArgs e)
         {
@@ -293,6 +242,15 @@ namespace Festo_R2U_Package_YJKP
                     case 2:
                         DrawCurve(mPoints2);
                         break;
+                    case 3:
+                        DrawCurve(mPoints3);
+                        break;
+                    case 4:
+                        DrawCurve(mPoints4);
+                        break;
+                    case 5:
+                        DrawCurve(mPoints5);
+                        break;
                     default:
                         break;
                 }
@@ -326,6 +284,9 @@ namespace Festo_R2U_Package_YJKP
                 {
                     mPoints1 = new List<mPoint>();
                     mPoints2 = new List<mPoint>();
+                    mPoints3 = new List<mPoint>();
+                    mPoints4 = new List<mPoint>();
+                    mPoints5 = new List<mPoint>();
                     while (sReader.Peek() >= 0)
                     {
                         string mStr = sReader.ReadLine();
@@ -348,6 +309,15 @@ namespace Festo_R2U_Package_YJKP
                                             break;
                                         case 2:
                                             mPoints2.Add(new mPoint(mStr.Split(';')[0], mStr.Split(';')[1], mStr.Split(';')[2]));
+                                            break;
+                                        case 3:
+                                            mPoints3.Add(new mPoint(mStr.Split(';')[0], mStr.Split(';')[1], mStr.Split(';')[2]));
+                                            break;
+                                        case 4:
+                                            mPoints4.Add(new mPoint(mStr.Split(';')[0], mStr.Split(';')[1], mStr.Split(';')[2]));
+                                            break;
+                                        case 5:
+                                            mPoints5.Add(new mPoint(mStr.Split(';')[0], mStr.Split(';')[1], mStr.Split(';')[2]));
                                             break;
                                         default:
                                             break;
@@ -403,6 +373,27 @@ namespace Festo_R2U_Package_YJKP
             {
                 chart1.Series.Add(mSeries);
             }            
+        }
+
+        private void DrawRectangular(double x1, double y1, double x2, double y2)
+        {
+            //Methods a
+            //Graphics dc = chart1.CreateGraphics();
+            //Show();
+            //Pen bluePen = new Pen(Color.Blue, 3);
+            //dc.DrawRectangle(bluePen, 100, 100, 50, 50);
+
+            //Methods b area.AxisX.PixelPositionToValue(e.X);
+            Bitmap b = new Bitmap(chart1.Width, chart1.Height);
+            Graphics g = Graphics.FromImage(b);
+            Rectangle rect = new Rectangle((chart1.Width / 2) - 128, (chart1.Height / 2) - 152, 256, 304);
+            g.DrawRectangle(new Pen(Color.Blue, 2), (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(x1), 
+                (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(y1),
+                (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(Math.Abs(x1-x2)),
+                (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(Math.Abs(y1-y2)));
+            g.Dispose();
+            b.Save("Capture.bmp");
+            chart1.ChartAreas[0].BackImage = "Capture.bmp";
         }
 
         //显示Festo网页界面
@@ -584,6 +575,7 @@ namespace Festo_R2U_Package_YJKP
         }   
         #endregion     
 
+        #region chart事件
         private void chart1_Click(object sender, EventArgs e)
         {
             if (btn_Enlarge.BackColor == FestoBlue_Light)
@@ -614,10 +606,66 @@ namespace Festo_R2U_Package_YJKP
                 double xValue = area.AxisX.PixelPositionToValue(e.X);
                 double yValue = area.AxisY.PixelPositionToValue(e.Y);
                 lbl_Value.ForeColor = Color.Black;
-                lbl_Value.Text = string.Format("{0:F0}{1:F0}", "Position:" + Math.Round(xValue,2), "(mm),Force:" + Math.Round(yValue,3) + "(N)");
+                lbl_Value.Text = string.Format("{0:F0}{1:F0}", "Position:" + Math.Round(xValue, 2), "(mm),Force:" + Math.Round(yValue, 3) + "(N)");
 
             }
         }
+
+        void chart1_MouseWheel(object sender, MouseEventArgs e)
+        {
+            //按住Ctrl，缩放
+            if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+            {
+
+                if (chart1.ChartAreas[0].AxisX.ScaleView.Size.ToString() == "NaN")
+                {
+                    chart1.ChartAreas[0].AxisX.ScaleView.Size = 1;
+                }
+                else
+                {
+                    if (e.Delta < 0)
+                        chart1.ChartAreas[0].AxisX.ScaleView.Size += 4;
+                    else
+                    {
+                        try
+                        {
+                            if (chart1.ChartAreas[0].AxisX.ScaleView.Size > 4)
+                            {
+                                chart1.ChartAreas[0].AxisX.ScaleView.Size -= 4;
+                            }
+                            else
+                            {
+                                //MessageBox.Show("MIN");
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            chart1.ChartAreas[0].AxisX.ScaleView.Size = 0;
+                        }
+                    }
+                }
+
+            }
+            //不按Ctrl，滚动
+            else
+            {
+                if (e.Delta < 0)
+                {
+                    if (chart1.ChartAreas[0].AxisX.ScaleView.Position + chart1.ChartAreas[0].AxisX.ScaleView.Size < X_Max)
+                    {
+                        chart1.ChartAreas[0].AxisX.ScaleView.Position += 2;
+                    }
+                }
+                else
+                {
+                    if (chart1.ChartAreas[0].AxisX.ScaleView.Position > X_Min)
+                    {
+                        chart1.ChartAreas[0].AxisX.ScaleView.Position -= 2;
+                    }
+                }
+            }
+        }        
+        #endregion
 
         private void Form_Customized_Resize(object sender, EventArgs e)
         {
@@ -631,9 +679,10 @@ namespace Festo_R2U_Package_YJKP
             }
         }
 
+        #region 指定上下限
         private void txt_MaxY_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar=='\r')
+            if (e.KeyChar == '\r')
             {
                 chart1.ChartAreas[0].AxisY.Maximum = Convert.ToDouble(txt_MaxY.Text);
                 //chart1.ChartAreas[0].AxisY.ScaleView.Zoom(Convert.ToDouble(txt_MinY.Text),Convert.ToDouble(txt_MaxY.Text));
@@ -665,7 +714,8 @@ namespace Festo_R2U_Package_YJKP
                 chart1.ChartAreas[0].AxisX.Maximum = Convert.ToDouble(txt_MaxX.Text);
                 //chart1.ChartAreas[0].AxisX.ScaleView.Zoom(Convert.ToDouble(txt_MinX.Text), Convert.ToDouble(txt_MaxX.Text));
             }
-        }
+        }        
+        #endregion
 
         private void btn_Lock_Click(object sender, EventArgs e)
         {
