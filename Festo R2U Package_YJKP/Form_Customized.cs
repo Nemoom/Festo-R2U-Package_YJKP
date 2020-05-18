@@ -10,6 +10,7 @@ using log4net.Config;
 using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Reflection;
+using System.Drawing.Imaging;
 
 namespace Festo_R2U_Package_YJKP
 {
@@ -21,6 +22,7 @@ namespace Festo_R2U_Package_YJKP
             InitLog4Net();
         }
         int MaxCurves = 10;
+        string bmpName;//chart的背景bmp
         private string CurProgramName = "";
         private string CurResult = "";
         Color FestoBlue_Light = Color.FromArgb(200, 200, 230, 250);//第1个参数为透明度(alpha)参数,其后为红,绿和蓝.
@@ -144,6 +146,17 @@ namespace Festo_R2U_Package_YJKP
 
         private void Form_Customized_Load(object sender, EventArgs e)
         {
+            DirectoryInfo folder = new DirectoryInfo(System.IO.Directory.GetCurrentDirectory());
+            //获取文件夹下所有的文件
+            FileInfo[] fileList = folder.GetFiles();
+            foreach (FileInfo file in fileList)
+            {
+                //判断文件的扩展名是否为 .gif
+                if (file.Extension == ".bmp")
+                {
+                    file.Delete();  // 删除
+                }
+            }
             this.Text = this.Text + "   V" + Assembly.GetExecutingAssembly().GetName().Version + "";
             btn_CurrentCurve_Click(sender, e);
             fileSystemWatcher1.IncludeSubdirectories = false;
@@ -167,6 +180,10 @@ namespace Festo_R2U_Package_YJKP
 
             chart1.ChartAreas[0].AxisX.Title = "Position[mm]";
             chart1.ChartAreas[0].AxisY.Title = "Force[N]";
+            chart1.ChartAreas[0].AxisX.Minimum = 10;
+            chart1.ChartAreas[0].AxisX.Maximum = 22;
+            chart1.ChartAreas[0].AxisY.Minimum = -5;
+            chart1.ChartAreas[0].AxisY.Maximum = 350;
             #region.......chart缩放功能.........
 
             // Enable range selection and zooming end user interface
@@ -233,6 +250,7 @@ namespace Festo_R2U_Package_YJKP
                     Y_Min = 100000;
                     Y_Max = 0;
                 }
+
                 //有时记录了多条曲线，绘制部分曲线（例如下压过程中的曲线）
                 switch (ConcernedRecordIndex)
                 {
@@ -254,6 +272,8 @@ namespace Festo_R2U_Package_YJKP
                     default:
                         break;
                 }
+                DrawRectangular(19.7, 172.09, 20.88, 104.43);
+                
             }            
         }
 
@@ -386,14 +406,37 @@ namespace Festo_R2U_Package_YJKP
             //Methods b area.AxisX.PixelPositionToValue(e.X);
             Bitmap b = new Bitmap(chart1.Width, chart1.Height);
             Graphics g = Graphics.FromImage(b);
-            Rectangle rect = new Rectangle((chart1.Width / 2) - 128, (chart1.Height / 2) - 152, 256, 304);
-            g.DrawRectangle(new Pen(Color.Blue, 2), (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(x1), 
-                (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(y1),
-                (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(Math.Abs(x1-x2)),
-                (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(Math.Abs(y1-y2)));
+            float RectangularX, RectangularY, RectangularWidth, RectangularHeight;
+            if ((float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(x1)<(float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(x2))
+            {
+                RectangularX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(x1);
+                RectangularWidth = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(x2) - (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(x1);
+            }
+            else
+            {
+                RectangularX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(x2);
+                RectangularWidth = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(x1) - (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(x2);
+            }
+            if ((float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(y1) < (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(y2))
+            {
+                RectangularY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(y1);
+                RectangularHeight = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(y2) - RectangularY;
+            }
+            else
+            {
+                RectangularY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(y2);
+                RectangularHeight = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(y1) - RectangularY;
+            }
+            g.DrawRectangle(new Pen(Color.Blue, 2), RectangularX, RectangularY, RectangularWidth, RectangularHeight);
             g.Dispose();
-            b.Save("Capture.bmp");
-            chart1.ChartAreas[0].BackImage = "Capture.bmp";
+            chart1.ChartAreas[0].BackImage = "";
+            bmpName = "Capture" + DateTime.Now.ToString("HHmmss") + ".bmp";
+            b.Save(bmpName);
+            if (btn_CaptureDIsplay.BackColor == FestoBlue_Light)
+            {
+                chart1.ChartAreas[0].BackImage = bmpName;
+            }
+            
         }
 
         //显示Festo网页界面
@@ -566,10 +609,13 @@ namespace Festo_R2U_Package_YJKP
             if (btn_CaptureDIsplay.BackColor == System.Drawing.SystemColors.Control)
             {
                 btn_CaptureDIsplay.BackColor = FestoBlue_Light;
+                DrawRectangular(19.7, 172.09, 20.88, 104.43);
+                //chart1.ChartAreas[0].BackImage = bmpName;
             }
             else
             {
                 btn_CaptureDIsplay.BackColor = System.Drawing.SystemColors.Control;
+                chart1.ChartAreas[0].BackImage = "";
             }
             btn_CurrentCurve.Focus();
         }   
@@ -746,6 +792,11 @@ namespace Festo_R2U_Package_YJKP
                 chart1.MouseWheel -= new MouseEventHandler(chart1_MouseWheel);
                 lbl_Value.Text = "";
             }
+        }
+
+        private void Form_Customized_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            
         }
     }
 }

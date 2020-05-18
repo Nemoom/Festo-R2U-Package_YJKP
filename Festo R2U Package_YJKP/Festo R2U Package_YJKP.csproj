@@ -93,6 +93,7 @@
     </Compile>
     <EmbeddedResource Include="Form_Customized.resx">
       <DependentUpon>Form_Customized.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Init.resx">
       <DependentUpon>Form_Init.cs</DependentUpon>
