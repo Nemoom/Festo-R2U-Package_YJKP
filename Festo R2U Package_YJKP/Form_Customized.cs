@@ -138,6 +138,34 @@ namespace Festo_R2U_Package_YJKP
             }           
         }
 
+        public string FileControl
+        {
+            get
+            {
+                if (File.Exists("config.ini"))
+                {
+                    IniParser ini = new IniParser("config.ini");
+                    if (!ini.KeyExists("FileControl"))
+                    {
+                        return "";
+                    }
+                    string s_Path = ini.GetSetting("FileControl");
+                    try
+                    {
+                        return s_Path;
+                    }
+                    catch (Exception)
+                    {
+                        return "";
+                    }
+                }
+                else
+                {
+                    return "";
+                }
+            }            
+        }
+
         private static void InitLog4Net()
         {
             var logCfg = new FileInfo(AppDomain.CurrentDomain.BaseDirectory + "log4net.config");
@@ -209,7 +237,6 @@ namespace Festo_R2U_Package_YJKP
 
         }
 
-
         void fileSystemWatcher1_Changed(object sender, FileSystemEventArgs e)
         {
             //throw new NotImplementedException();
@@ -219,6 +246,7 @@ namespace Festo_R2U_Package_YJKP
         {
             if (System.IO.Path.GetExtension(e.Name) == ".log" || System.IO.Path.GetExtension(e.Name) == ".LOG" || System.IO.Path.GetExtension(e.Name) == ".Log")
             {
+                #region 画图
                 txt_CurRecordName.Text = e.Name;
                 CurProgramName = e.Name.Split('_')[0];
                 CurResult = e.Name.Split('_')[e.Name.Split('_').Length - 1].Substring(0, e.Name.Split('_')[e.Name.Split('_').Length - 1].Length - 4);
@@ -272,9 +300,44 @@ namespace Festo_R2U_Package_YJKP
                     default:
                         break;
                 }
-                DrawRectangular(19.7, 172.09, 20.88, 104.43);
-                
-            }            
+                DrawRectangular(19.7, 172.09, 20.88, 104.43); 
+                #endregion
+                #region 整理文件夹
+                FileInfo fif = new FileInfo(e.FullPath);
+                switch (FileControl)
+                {
+                    case "Month":
+                        if (!Directory.Exists(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMM")))
+                        {
+                            Directory.CreateDirectory(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMM"));
+                        }
+                        break;
+                    case "Program":
+                        if (!Directory.Exists(fif.Directory + "//" + CurProgramName))
+                        {
+                            Directory.CreateDirectory(fif.Directory + "//" + CurProgramName);
+                        }
+                        break;
+                    default:
+                        try
+                        {
+                            if (FileControl.Split(' ')[1] == "Days")
+                            {
+
+                            }
+                            else if (FileControl.Split(' ')[1] == "Files")
+                            {
+
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                        break;
+                }
+                #endregion
+            }
         }
 
         public void get_Points(string FileName)

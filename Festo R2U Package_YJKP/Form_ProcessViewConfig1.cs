@@ -56,6 +56,39 @@ namespace Festo_R2U_Package_YJKP
             }
         }
 
+        public string FileControl
+        {
+            get
+            {
+                if (File.Exists("config.ini"))
+                {
+                    IniParser ini = new IniParser("config.ini");
+                    if (!ini.KeyExists("FileControl"))
+                    {
+                        return "";
+                    }
+                    string s_Path = ini.GetSetting("FileControl");
+                    try
+                    {
+                        return s_Path;
+                    }
+                    catch (Exception)
+                    {
+                        return "";
+                    }
+                }
+                else
+                {
+                    return "";
+                }
+            }
+            set
+            {
+                IniParser ini = new IniParser("config.ini");
+                ini.AddSetting("FileControl", value.ToString());
+            }
+        }
+
         public double K_Threshold
         {
             get
@@ -161,6 +194,23 @@ namespace Festo_R2U_Package_YJKP
             
             MainForm.fileSystemWatcher1.Path = WatchPath;    
             MainForm.fileSystemWatcher1.EnableRaisingEvents = true;
+
+            if (rbtn_byCount.Checked)
+            {
+                FileControl = txt_Files.Text + " Files";
+            }
+            else if (rbtn_byDays.Checked)
+            {
+                FileControl = txt_Days.Text + " Days";
+            }
+            else if (rbtn_byMonth.Checked)
+            {
+                FileControl = "Month";
+            }
+            else if (rbtn_byProgramName.Checked)
+            {
+                FileControl = "Program";
+            }
         }        
 
         private void textBox1_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -172,13 +222,96 @@ namespace Festo_R2U_Package_YJKP
             }
         }
 
-
         private void Form_ProcessViewConfig_Load(object sender, EventArgs e)
         {
             ProgramNames = new IniParser("config.ini").EnumSection("Programs");
             
             textBox1.Text = WatchPath;
-            
+
+            switch (FileControl)
+            {
+                case "Month":
+                    rbtn_byMonth.Checked = true;
+                    rbtn_byProgramName.Checked = false;
+                    rbtn_byDays.Checked = false;
+                    rbtn_byCount.Checked = false;
+                    break;
+                case "Program":
+                    rbtn_byProgramName.Checked = true;
+                    rbtn_byMonth.Checked = false;
+                    rbtn_byDays.Checked = false;
+                    rbtn_byCount.Checked = false;
+                    break;                
+                default:
+                    try
+                    {
+                        if (FileControl.Split(' ')[1] == "Days")
+                        {
+                            txt_Days.Text = FileControl.Split(' ')[0];
+                            rbtn_byDays.Checked = true;
+                            rbtn_byMonth.Checked = false;
+                            rbtn_byProgramName.Checked = false;
+                            rbtn_byCount.Checked = false;
+                        }
+                        else if (FileControl.Split(' ')[1] == "Files")
+                        {
+                            txt_Files.Text = FileControl.Split(' ')[0];
+                            rbtn_byCount.Checked = true;
+                            rbtn_byMonth.Checked = false;
+                            rbtn_byDays.Checked = false;
+                            rbtn_byProgramName.Checked = false;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        
+                    }
+                    break;
+            }
+        }
+
+        private void rbtn_byDays_Click(object sender, EventArgs e)
+        {
+            if (!rbtn_byDays.Checked)
+            {
+                rbtn_byDays.Checked = true;
+                rbtn_byMonth.Checked = false;
+                rbtn_byProgramName.Checked = false;
+                rbtn_byCount.Checked = false;
+            }
+        }
+
+        private void rbtn_byMonth_Click(object sender, EventArgs e)
+        {
+            if (!rbtn_byMonth.Checked)
+            {
+                rbtn_byMonth.Checked = true;
+                rbtn_byProgramName.Checked = false;
+                rbtn_byDays.Checked = false;
+                rbtn_byCount.Checked = false;
+            }
+        }
+
+        private void rbtn_byProgramName_Click(object sender, EventArgs e)
+        {
+            if (!rbtn_byProgramName.Checked)
+            {
+                rbtn_byProgramName.Checked = true;
+                rbtn_byMonth.Checked = false;
+                rbtn_byDays.Checked = false;
+                rbtn_byCount.Checked = false;
+            }
+        }
+
+        private void rbtn_byCount_Click(object sender, EventArgs e)
+        {
+            if (!rbtn_byCount.Checked)
+            {
+                rbtn_byCount.Checked = true;
+                rbtn_byMonth.Checked = false;
+                rbtn_byDays.Checked = false;
+                rbtn_byProgramName.Checked = false;
+            }
         }
     }
 }
