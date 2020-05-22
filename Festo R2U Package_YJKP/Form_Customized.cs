@@ -21,10 +21,9 @@ namespace Festo_R2U_Package_YJKP
             InitializeComponent();
             InitLog4Net();
         }
-        int MaxCurves = 10;
-        string bmpName;//chart的背景bmp
-        private string CurProgramName = "";
-        private string CurResult = "";
+        int MaxCurves = 10;//堆叠显示最多可以显示多少条
+        string bmpName;//chart的背景bmp的文件名
+        
         Color FestoBlue_Light = Color.FromArgb(200, 200, 230, 250);//第1个参数为透明度(alpha)参数,其后为红,绿和蓝.
         Color FestoBlue = Color.FromArgb(200, 0, 145, 220);//第1个参数为透明度(alpha)参数,其后为红,绿和蓝.
         Color FestoBlue_Dark = Color.FromArgb(200, 114, 196, 239);//第1个参数为透明度(alpha)参数,其后为红,绿和蓝.
@@ -33,45 +32,149 @@ namespace Festo_R2U_Package_YJKP
         double Y_Min = 100000;
         double Y_Max = 0;
 
-        double Position_Max;
-        double Force_Max;
-        double Position_Min;
-        double Force_Min;
+        YJKP_Log CurLog = new YJKP_Log();
+
+        public class YJKP_Log 
+        {
+            public int PartNo;
+            public string CurProgramName = "";
+            public string CurResult = "";
+            public double Position_Max;
+            public double Force_Max;
+            public Curve[] Curves = new Curve[5];
+            public VariablesHost[] VariablesHosts = new VariablesHost[100];
+            public Recipes Recipes_Cur = new Recipes();
+        }
 
         public class Window 
         {
-            public double Intersection;
+            public bool b_Active;
 
-            public double Position_U;
-            public double Force_U;
-            public double Position_D;
-            public double Force_D;
-            public double Position_L;
-            public double Force_L;
-            public double Position_R;
-            public double Force_R;
+            public bool b_Config;
 
-            public double Position_Max;
-            public double Position_Min;
-            public double Force_Max;
-            public double Force_Min;
+            public bool b_Config_MinPosition;
+            public double MinPosition;
+            public int MinPosition_Index;
+
+            public bool b_Config_MaxPosition;
+            public double MaxPosition;
+            public int MaxPosition_Index;
+
+            public bool b_Config_MinForce;
+            public double MinForce;
+            public int MinForce_Index;
+
+            public bool b_Config_MaxForce;
+            public double MaxForce;
+            public int MaxForce_Index;
+
+            public EdgeStatus_Window EdgeStatus_D;
+            public EdgeStatus_Window EdgeStatus_U;
+            public EdgeStatus_Window EdgeStatus_L;
+            public EdgeStatus_Window EdgeStatus_R;
         }
+
+        public enum EdgeStatus_Window { NotCare, Forbidden, In, Out }
 
         public class Threshold 
         {
-            public double Intersection;
+            public bool b_Active;
+
+            public bool b_Config;
+
+            public bool b_Mode;
+
+            public bool b_Config_Position;
             public double Position;
+            public int Position_Index;
+
+            public bool b_Config_MinPosition;
+            public double MinPosition;
+            public int MinPosition_Index;
+
+            public bool b_Config_MaxPosition;
+            public double MaxPosition;
+            public int MaxPosition_Index;
+
+            public bool b_Config_Force;
             public double Force;
+            public int Force_Index;
+
+            public bool b_Config_MinForce;
+            public double MinForce;
+            public int MinForce_Index;
+
+            public bool b_Config_MaxForce;
+            public double MaxForce;
+            public int MaxForce_Index;
+
+            public int EdgeStatus_Threshold;            
         }
 
         public class Envelope 
         {
-            public double Intersection;
+            public bool b_Active;
 
-            public double Position_U;
-            public double Force_U;
-            public double Position_D;
-            public double Force_D;            
+            public bool b_Config;
+
+            public int Count_Up;
+
+            public EnvelopePoint[] EnvelopePoints_U;
+
+            public int Count_Down;
+
+            public EnvelopePoint[] EnvelopePoints_D;
+        }
+
+        public struct EnvelopePoint
+        {
+            public bool b_Config_Position;
+            public double Position;
+            public int Position_Index;
+            public bool b_Config_Force;
+            public double Force;
+            public int Force_Index;
+        }
+
+        public struct Curve 
+        {
+            public double Position_Max;
+            public double Force_Max;
+            public double Position_Min;
+            public double Force_Min;
+            public double Position_Start;
+        }
+
+        public struct VariablesHost
+        {
+            public int No;
+            public double Value;
+        }
+
+        public class Windowing
+        {
+            public bool b_Active;
+            public Window[] Windows = new Window[5];
+        }
+
+        public class Thresholding
+        {
+            public bool b_Active;
+            public Threshold[] Thresholds = new Threshold[5];
+        }
+
+        public class Envelopeing
+        {
+            public bool b_Active;
+            public Envelope[] Envelopes = new Envelope[5];
+        }
+
+        public class Recipes
+        {
+            public int No;
+            public Windowing mWindow = new Windowing();
+            public Thresholding mThreshold = new Thresholding();
+            public Envelopeing mEnvelope = new Envelopeing();
         }
 
         int Count_OK = 0;
@@ -193,7 +296,7 @@ namespace Festo_R2U_Package_YJKP
             if (WatchPath=="")
             {
                  MessageBox.Show("未设置监控路径，请设置");
-                 new Form_ProcessViewConfig1(this,CurProgramName).Show();
+                 new Form_ProcessViewConfig1(this,CurLog.CurProgramName).Show();
             }
             else if (Directory.Exists(WatchPath))
             {
@@ -203,7 +306,7 @@ namespace Festo_R2U_Package_YJKP
             else
             {
                 MessageBox.Show("不存在的监控路径,请确认");
-                new Form_ProcessViewConfig1(this,CurProgramName).Show();
+                new Form_ProcessViewConfig1(this, CurLog.CurProgramName).Show();
             }
 
             chart1.ChartAreas[0].AxisX.Title = "Position[mm]";
@@ -246,12 +349,14 @@ namespace Festo_R2U_Package_YJKP
         {
             if (System.IO.Path.GetExtension(e.Name) == ".log" || System.IO.Path.GetExtension(e.Name) == ".LOG" || System.IO.Path.GetExtension(e.Name) == ".Log")
             {
-                #region 画图
                 txt_CurRecordName.Text = e.Name;
-                CurProgramName = e.Name.Split('_')[0];
-                CurResult = e.Name.Split('_')[e.Name.Split('_').Length - 1].Substring(0, e.Name.Split('_')[e.Name.Split('_').Length - 1].Length - 4);
-                lbl_Result.Text = CurResult;
-                if (CurResult == "OK" || CurResult == "Ok" || CurResult == "ok")
+                #region 解析Log文件
+                CurLog = new YJKP_Log();
+
+                CurLog.CurProgramName = e.Name.Split('_')[0];
+                CurLog.CurResult = e.Name.Split('_')[e.Name.Split('_').Length - 1].Substring(0, e.Name.Split('_')[e.Name.Split('_').Length - 1].Length - 4);
+                lbl_Result.Text = CurLog.CurResult;
+                if (CurLog.CurResult == "OK" || CurLog.CurResult == "Ok" || CurLog.CurResult == "ok")
                 {
                     lbl_Result.BackColor = Color.ForestGreen;
                     Count_OK = Count_OK + 1;
@@ -313,9 +418,9 @@ namespace Festo_R2U_Package_YJKP
                         }
                         break;
                     case "Program":
-                        if (!Directory.Exists(fif.Directory + "//" + CurProgramName))
+                        if (!Directory.Exists(fif.Directory + "//" + CurLog.CurProgramName))
                         {
-                            Directory.CreateDirectory(fif.Directory + "//" + CurProgramName);
+                            Directory.CreateDirectory(fif.Directory + "//" + CurLog.CurProgramName);
                         }
                         break;
                     default:
@@ -340,6 +445,7 @@ namespace Festo_R2U_Package_YJKP
             }
         }
 
+        //加载log日志解析
         public void get_Points(string FileName)
         {
             #region 等文件写入完成
@@ -373,41 +479,196 @@ namespace Festo_R2U_Package_YJKP
                     while (sReader.Peek() >= 0)
                     {
                         string mStr = sReader.ReadLine();
-                        if (mStr.Length > 8)
+                        if (mStr.StartsWith("[Part no.];"))
                         {
-                            if (mStr.Substring(0, 8) == "[Record ")
+                            mStr = sReader.ReadLine();
+                            string[] Array_mStr = mStr.Split(';');
+                            CurLog.PartNo = Convert.ToInt32(Array_mStr[0]);
+                            CurLog.CurProgramName = Array_mStr[1];
+                            if (Array_mStr[4] == "FALSE" || Array_mStr[4] == "False" || Array_mStr[4] == "false")
                             {
-                                int recordIndex = Convert.ToInt32(mStr.Split(' ')[1].Substring(0, mStr.Split(' ')[1].Length - 1));
-                                mStr = sReader.ReadLine();//No. points:;1923
-                                int recordLength = Convert.ToInt32(mStr.Split(';')[1]);
-                                mStr = sReader.ReadLine();//[Point];[Position];[Force]
-                                #region 将所有的点录入List
-                                for (int i = 0; i < recordLength; i++)
-                                {
-                                    mStr = sReader.ReadLine();
-                                    switch (recordIndex)
-                                    {
-                                        case 1:
-                                            mPoints1.Add(new mPoint(mStr.Split(';')[0], mStr.Split(';')[1], mStr.Split(';')[2]));
-                                            break;
-                                        case 2:
-                                            mPoints2.Add(new mPoint(mStr.Split(';')[0], mStr.Split(';')[1], mStr.Split(';')[2]));
-                                            break;
-                                        case 3:
-                                            mPoints3.Add(new mPoint(mStr.Split(';')[0], mStr.Split(';')[1], mStr.Split(';')[2]));
-                                            break;
-                                        case 4:
-                                            mPoints4.Add(new mPoint(mStr.Split(';')[0], mStr.Split(';')[1], mStr.Split(';')[2]));
-                                            break;
-                                        case 5:
-                                            mPoints5.Add(new mPoint(mStr.Split(';')[0], mStr.Split(';')[1], mStr.Split(';')[2]));
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                }
-                                #endregion
+                                CurLog.CurResult = "NOK";
                             }
+                            else
+                            {
+                                CurLog.CurResult = "OK";
+                            }
+                            CurLog.Position_Max = Convert.ToDouble(Array_mStr[5]);
+                            CurLog.Force_Max = Convert.ToDouble(Array_mStr[6]);
+                        }
+                        else if (mStr.StartsWith("[Variables]"))
+                        {
+                            for (int i = 0; i < 100; i++)
+                            {
+                                 mStr = sReader.ReadLine();
+                                 string[] Array_mStr = mStr.Split(';');
+                                 CurLog.VariablesHosts[i].No = Convert.ToInt16(Array_mStr[0]);
+                                 try
+                                 {
+                                     CurLog.VariablesHosts[i].Value = Convert.ToDouble(Array_mStr[1]);
+                                 }
+                                 catch (Exception)
+                                 {
+                                 }                                 
+                            }
+                        }
+                        else if (mStr.StartsWith("[Recipes]"))
+                        {
+                            mStr = sReader.ReadLine();
+                            CurLog.Recipes_Cur.No = Convert.ToInt16(mStr.Split(';')[1]);
+                        }
+                        else if (mStr.StartsWith("[Windowing]"))
+                        {
+                            mStr = sReader.ReadLine();
+                            CurLog.Recipes_Cur.mWindow.b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
+                            for (int i = 0; i < 5; i++)
+                            {
+                                CurLog.Recipes_Cur.mWindow.Windows[i] = new Window();
+                                mStr = sReader.ReadLine();//[Window i]
+                                mStr = sReader.ReadLine();//Active:;FALSE
+                                CurLog.Recipes_Cur.mWindow.Windows[i].b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
+                                mStr = sReader.ReadLine();//[Config.]....
+                                mStr = sReader.ReadLine();
+                                string[] Array_mStr = mStr.Split(';');
+                                CurLog.Recipes_Cur.mWindow.Windows[i].b_Config = Convert.ToBoolean(Array_mStr[0]);
+                               
+                                CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MinPosition = Convert.ToBoolean(Array_mStr[1]);
+                                CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition = Convert.ToDouble(Array_mStr[2]);
+                                CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition_Index = Convert.ToInt16(Array_mStr[3]);
+                                CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MaxPosition = Convert.ToBoolean(Array_mStr[4]);
+                                CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition = Convert.ToDouble(Array_mStr[5]);
+                                CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition_Index = Convert.ToInt16(Array_mStr[6]);
+                                
+                                CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MinForce = Convert.ToBoolean(Array_mStr[7]);
+                                CurLog.Recipes_Cur.mWindow.Windows[i].MinForce = Convert.ToDouble(Array_mStr[8]);
+                                CurLog.Recipes_Cur.mWindow.Windows[i].MinForce_Index = Convert.ToInt16(Array_mStr[9]);
+                                CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MaxForce = Convert.ToBoolean(Array_mStr[10]);
+                                CurLog.Recipes_Cur.mWindow.Windows[i].MaxForce = Convert.ToDouble(Array_mStr[11]);
+                                CurLog.Recipes_Cur.mWindow.Windows[i].MaxForce_Index = Convert.ToInt16(Array_mStr[12]);
+
+                                mStr = sReader.ReadLine();//[Config.]....
+                                mStr = sReader.ReadLine();
+                                Array_mStr = mStr.Split(';');
+                                CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_D = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[0]);
+                                CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_U = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[1]);
+                                CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_L = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[2]);
+                                CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_R = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[3]);
+                            }
+                        }
+                        else if (mStr.StartsWith("[Threshold]"))
+                        {
+                            mStr = sReader.ReadLine();
+                            CurLog.Recipes_Cur.mThreshold.b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
+                            for (int i = 0; i < 5; i++)
+                            {
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i] = new Threshold();
+                                mStr = sReader.ReadLine();//[Threshold i]
+                                mStr = sReader.ReadLine();//Active:;FALSE
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
+                                mStr = sReader.ReadLine();//[Config.]....
+                                mStr = sReader.ReadLine();
+                                string[] Array_mStr = mStr.Split(';');
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config = Convert.ToBoolean(Array_mStr[0]);
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Mode = Convert.ToBoolean(Array_mStr[1]);
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_Position = Convert.ToBoolean(Array_mStr[2]);
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position = Convert.ToDouble(Array_mStr[3]);
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position_Index = Convert.ToInt16(Array_mStr[4]);
+
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MinPosition = Convert.ToBoolean(Array_mStr[5]);
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition = Convert.ToDouble(Array_mStr[6]);
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition_Index = Convert.ToInt16(Array_mStr[7]);
+
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MaxPosition = Convert.ToBoolean(Array_mStr[8]);
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition = Convert.ToDouble(Array_mStr[9]);
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition_Index = Convert.ToInt16(Array_mStr[10]);
+
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_Force = Convert.ToBoolean(Array_mStr[11]);
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].Force = Convert.ToDouble(Array_mStr[12]);
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].Force_Index = Convert.ToInt16(Array_mStr[13]);
+
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MinForce = Convert.ToBoolean(Array_mStr[14]);
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinForce = Convert.ToDouble(Array_mStr[15]);
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinForce_Index = Convert.ToInt16(Array_mStr[16]);
+
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MaxForce = Convert.ToBoolean(Array_mStr[17]);
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxForce = Convert.ToDouble(Array_mStr[18]);
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxForce_Index = Convert.ToInt16(Array_mStr[19]);
+
+                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].EdgeStatus_Threshold = Convert.ToInt16(Array_mStr[20]);
+                            }
+                        }
+                        else if (mStr.StartsWith("[Envelope]"))
+                        {
+                            mStr = sReader.ReadLine();
+                            CurLog.Recipes_Cur.mEnvelope.b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
+                            for (int i = 0; i < 5; i++)
+                            {
+                                mStr = sReader.ReadLine();//[Envelope i]
+                                mStr = sReader.ReadLine();//Active:;FALSE
+                                CurLog.Recipes_Cur.mEnvelope.Envelopes[i].b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
+                                mStr = sReader.ReadLine();//[Config.];FALSE
+                                CurLog.Recipes_Cur.mEnvelope.Envelopes[i].b_Config = Convert.ToBoolean(mStr.Split(';')[1]);
+                                mStr = sReader.ReadLine();//Points up side:;2
+                                CurLog.Recipes_Cur.mEnvelope.Envelopes[i].Count_Up = Convert.ToInt16(mStr.Split(';')[1]);
+                                for (int j = 0; j < 5; j++)
+                                {
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i] = new Envelope();
+                                    mStr = sReader.ReadLine();//j;FALSE;0.0;1;FALSE;0.0;1
+                                    string[] Array_mStr = mStr.Split(';');
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].b_Config_Position = Convert.ToBoolean(Array_mStr[1]);
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position = Convert.ToDouble(Array_mStr[2]);
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position_Index = Convert.ToInt16(Array_mStr[3]);
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].b_Config_Force = Convert.ToBoolean(Array_mStr[4]);
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force = Convert.ToDouble(Array_mStr[5]);
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force_Index = Convert.ToInt16(Array_mStr[6]);
+                                }
+                                mStr = sReader.ReadLine();//Points down side:;2
+                                CurLog.Recipes_Cur.mEnvelope.Envelopes[i].Count_Down = Convert.ToInt16(mStr.Split(';')[1]);
+                                for (int j = 0; j < 5; j++)
+                                {
+                                    mStr = sReader.ReadLine();//j;FALSE;0.0;1;FALSE;0.0;1
+                                    string[] Array_mStr = mStr.Split(';');
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].b_Config_Position = Convert.ToBoolean(Array_mStr[1]);
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Position = Convert.ToDouble(Array_mStr[2]);
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Position_Index = Convert.ToInt16(Array_mStr[3]);
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].b_Config_Force = Convert.ToBoolean(Array_mStr[4]);
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Force = Convert.ToDouble(Array_mStr[5]);
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Force_Index = Convert.ToInt16(Array_mStr[6]);
+                                }
+                            }
+                        }
+                        else if (mStr.StartsWith("[Record "))
+                        {
+                            int recordIndex = Convert.ToInt32(mStr.Split(' ')[1].Substring(0, mStr.Split(' ')[1].Length - 1));
+                            mStr = sReader.ReadLine();//No. points:;1923
+                            int recordLength = Convert.ToInt32(mStr.Split(';')[1]);
+                            mStr = sReader.ReadLine();//[Point];[Position];[Force]
+                            #region 将所有的点录入List
+                            for (int i = 0; i < recordLength; i++)
+                            {
+                                mStr = sReader.ReadLine();
+                                switch (recordIndex)
+                                {
+                                    case 1:
+                                        mPoints1.Add(new mPoint(mStr.Split(';')[0], mStr.Split(';')[1], mStr.Split(';')[2]));
+                                        break;
+                                    case 2:
+                                        mPoints2.Add(new mPoint(mStr.Split(';')[0], mStr.Split(';')[1], mStr.Split(';')[2]));
+                                        break;
+                                    case 3:
+                                        mPoints3.Add(new mPoint(mStr.Split(';')[0], mStr.Split(';')[1], mStr.Split(';')[2]));
+                                        break;
+                                    case 4:
+                                        mPoints4.Add(new mPoint(mStr.Split(';')[0], mStr.Split(';')[1], mStr.Split(';')[2]));
+                                        break;
+                                    case 5:
+                                        mPoints5.Add(new mPoint(mStr.Split(';')[0], mStr.Split(';')[1], mStr.Split(';')[2]));
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            #endregion
                         }
                     }
                 }
@@ -538,7 +799,7 @@ namespace Festo_R2U_Package_YJKP
             if (e.KeyChar=='s')
             {
                 //弹出当前曲线设置窗口
-                Form_ProcessViewConfig1 mForm_ProcessViewConfig = new Form_ProcessViewConfig1(this,CurProgramName);
+                Form_ProcessViewConfig1 mForm_ProcessViewConfig = new Form_ProcessViewConfig1(this, CurLog.CurProgramName);
                 mForm_ProcessViewConfig.Show();
                 mForm_ProcessViewConfig.BringToFront();
             }
