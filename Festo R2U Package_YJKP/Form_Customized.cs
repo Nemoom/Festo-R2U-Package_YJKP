@@ -111,7 +111,7 @@ namespace Festo_R2U_Package_YJKP
             public int EdgeStatus_Threshold;            
         }
 
-        public class Envelope 
+        public class Envelope
         {
             public bool b_Active;
 
@@ -119,11 +119,11 @@ namespace Festo_R2U_Package_YJKP
 
             public int Count_Up;
 
-            public EnvelopePoint[] EnvelopePoints_U;
+            public EnvelopePoint[] EnvelopePoints_U = new EnvelopePoint[5];
 
             public int Count_Down;
 
-            public EnvelopePoint[] EnvelopePoints_D;
+            public EnvelopePoint[] EnvelopePoints_D = new EnvelopePoint[5];
         }
 
         public struct EnvelopePoint
@@ -520,81 +520,85 @@ namespace Festo_R2U_Package_YJKP
                         else if (mStr.StartsWith("[Windowing]"))
                         {
                             mStr = sReader.ReadLine();
-                            CurLog.Recipes_Cur.mWindow.b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
-                            for (int i = 0; i < 5; i++)
+                            if (CurLog.Recipes_Cur.mWindow.b_Active = Convert.ToBoolean(mStr.Split(';')[1]))
                             {
-                                CurLog.Recipes_Cur.mWindow.Windows[i] = new Window();
-                                mStr = sReader.ReadLine();//[Window i]
-                                mStr = sReader.ReadLine();//Active:;FALSE
-                                CurLog.Recipes_Cur.mWindow.Windows[i].b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
-                                mStr = sReader.ReadLine();//[Config.]....
-                                mStr = sReader.ReadLine();
-                                string[] Array_mStr = mStr.Split(';');
-                                CurLog.Recipes_Cur.mWindow.Windows[i].b_Config = Convert.ToBoolean(Array_mStr[0]);
-                               
-                                CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MinPosition = Convert.ToBoolean(Array_mStr[1]);
-                                CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition = Convert.ToDouble(Array_mStr[2]);
-                                CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition_Index = Convert.ToInt16(Array_mStr[3]);
-                                CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MaxPosition = Convert.ToBoolean(Array_mStr[4]);
-                                CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition = Convert.ToDouble(Array_mStr[5]);
-                                CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition_Index = Convert.ToInt16(Array_mStr[6]);
-                                
-                                CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MinForce = Convert.ToBoolean(Array_mStr[7]);
-                                CurLog.Recipes_Cur.mWindow.Windows[i].MinForce = Convert.ToDouble(Array_mStr[8]);
-                                CurLog.Recipes_Cur.mWindow.Windows[i].MinForce_Index = Convert.ToInt16(Array_mStr[9]);
-                                CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MaxForce = Convert.ToBoolean(Array_mStr[10]);
-                                CurLog.Recipes_Cur.mWindow.Windows[i].MaxForce = Convert.ToDouble(Array_mStr[11]);
-                                CurLog.Recipes_Cur.mWindow.Windows[i].MaxForce_Index = Convert.ToInt16(Array_mStr[12]);
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    CurLog.Recipes_Cur.mWindow.Windows[i] = new Window();
+                                    mStr = sReader.ReadLine();//[Window i]
+                                    mStr = sReader.ReadLine();//Active:;FALSE
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
+                                    mStr = sReader.ReadLine();//[Config.]....
+                                    mStr = sReader.ReadLine();
+                                    string[] Array_mStr = mStr.Split(';');
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].b_Config = Convert.ToBoolean(Array_mStr[0]);
 
-                                mStr = sReader.ReadLine();//[Config.]....
-                                mStr = sReader.ReadLine();
-                                Array_mStr = mStr.Split(';');
-                                CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_D = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[0]);
-                                CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_U = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[1]);
-                                CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_L = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[2]);
-                                CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_R = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[3]);
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MinPosition = Convert.ToBoolean(Array_mStr[1]);
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition = Convert.ToDouble(Array_mStr[2]);
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition_Index = Convert.ToInt16(Array_mStr[3]);
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MaxPosition = Convert.ToBoolean(Array_mStr[4]);
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition = Convert.ToDouble(Array_mStr[5]);
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition_Index = Convert.ToInt16(Array_mStr[6]);
+
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MinForce = Convert.ToBoolean(Array_mStr[7]);
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].MinForce = Convert.ToDouble(Array_mStr[8]);
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].MinForce_Index = Convert.ToInt16(Array_mStr[9]);
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MaxForce = Convert.ToBoolean(Array_mStr[10]);
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].MaxForce = Convert.ToDouble(Array_mStr[11]);
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].MaxForce_Index = Convert.ToInt16(Array_mStr[12]);
+
+                                    mStr = sReader.ReadLine();//[Config.]....
+                                    mStr = sReader.ReadLine();
+                                    Array_mStr = mStr.Split(';');
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_D = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[0]);
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_U = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[1]);
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_L = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[2]);
+                                    CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_R = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[3]);
+                                }
                             }
                         }
                         else if (mStr.StartsWith("[Threshold]"))
                         {
                             mStr = sReader.ReadLine();
-                            CurLog.Recipes_Cur.mThreshold.b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
-                            for (int i = 0; i < 5; i++)
+                            if (CurLog.Recipes_Cur.mThreshold.b_Active = Convert.ToBoolean(mStr.Split(';')[1]))
                             {
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i] = new Threshold();
-                                mStr = sReader.ReadLine();//[Threshold i]
-                                mStr = sReader.ReadLine();//Active:;FALSE
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
-                                mStr = sReader.ReadLine();//[Config.]....
-                                mStr = sReader.ReadLine();
-                                string[] Array_mStr = mStr.Split(';');
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config = Convert.ToBoolean(Array_mStr[0]);
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Mode = Convert.ToBoolean(Array_mStr[1]);
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_Position = Convert.ToBoolean(Array_mStr[2]);
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position = Convert.ToDouble(Array_mStr[3]);
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position_Index = Convert.ToInt16(Array_mStr[4]);
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i] = new Threshold();
+                                    mStr = sReader.ReadLine();//[Threshold i]
+                                    mStr = sReader.ReadLine();//Active:;FALSE
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
+                                    mStr = sReader.ReadLine();//[Config.]....
+                                    mStr = sReader.ReadLine();
+                                    string[] Array_mStr = mStr.Split(';');
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config = Convert.ToBoolean(Array_mStr[0]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Mode = Convert.ToBoolean(Array_mStr[1]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_Position = Convert.ToBoolean(Array_mStr[2]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position = Convert.ToDouble(Array_mStr[3]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position_Index = Convert.ToInt16(Array_mStr[4]);
 
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MinPosition = Convert.ToBoolean(Array_mStr[5]);
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition = Convert.ToDouble(Array_mStr[6]);
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition_Index = Convert.ToInt16(Array_mStr[7]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MinPosition = Convert.ToBoolean(Array_mStr[5]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition = Convert.ToDouble(Array_mStr[6]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition_Index = Convert.ToInt16(Array_mStr[7]);
 
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MaxPosition = Convert.ToBoolean(Array_mStr[8]);
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition = Convert.ToDouble(Array_mStr[9]);
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition_Index = Convert.ToInt16(Array_mStr[10]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MaxPosition = Convert.ToBoolean(Array_mStr[8]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition = Convert.ToDouble(Array_mStr[9]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition_Index = Convert.ToInt16(Array_mStr[10]);
 
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_Force = Convert.ToBoolean(Array_mStr[11]);
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].Force = Convert.ToDouble(Array_mStr[12]);
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].Force_Index = Convert.ToInt16(Array_mStr[13]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_Force = Convert.ToBoolean(Array_mStr[11]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].Force = Convert.ToDouble(Array_mStr[12]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].Force_Index = Convert.ToInt16(Array_mStr[13]);
 
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MinForce = Convert.ToBoolean(Array_mStr[14]);
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinForce = Convert.ToDouble(Array_mStr[15]);
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinForce_Index = Convert.ToInt16(Array_mStr[16]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MinForce = Convert.ToBoolean(Array_mStr[14]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinForce = Convert.ToDouble(Array_mStr[15]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinForce_Index = Convert.ToInt16(Array_mStr[16]);
 
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MaxForce = Convert.ToBoolean(Array_mStr[17]);
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxForce = Convert.ToDouble(Array_mStr[18]);
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxForce_Index = Convert.ToInt16(Array_mStr[19]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MaxForce = Convert.ToBoolean(Array_mStr[17]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxForce = Convert.ToDouble(Array_mStr[18]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxForce_Index = Convert.ToInt16(Array_mStr[19]);
 
-                                CurLog.Recipes_Cur.mThreshold.Thresholds[i].EdgeStatus_Threshold = Convert.ToInt16(Array_mStr[20]);
+                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].EdgeStatus_Threshold = Convert.ToInt16(Array_mStr[20]);
+                                }
                             }
                         }
                         else if (mStr.StartsWith("[Envelope]"))
@@ -603,6 +607,7 @@ namespace Festo_R2U_Package_YJKP
                             CurLog.Recipes_Cur.mEnvelope.b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
                             for (int i = 0; i < 5; i++)
                             {
+                                CurLog.Recipes_Cur.mEnvelope.Envelopes[i] = new Envelope();
                                 mStr = sReader.ReadLine();//[Envelope i]
                                 mStr = sReader.ReadLine();//Active:;FALSE
                                 CurLog.Recipes_Cur.mEnvelope.Envelopes[i].b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
@@ -612,7 +617,7 @@ namespace Festo_R2U_Package_YJKP
                                 CurLog.Recipes_Cur.mEnvelope.Envelopes[i].Count_Up = Convert.ToInt16(mStr.Split(';')[1]);
                                 for (int j = 0; j < 5; j++)
                                 {
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i] = new Envelope();
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j] = new EnvelopePoint();
                                     mStr = sReader.ReadLine();//j;FALSE;0.0;1;FALSE;0.0;1
                                     string[] Array_mStr = mStr.Split(';');
                                     CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].b_Config_Position = Convert.ToBoolean(Array_mStr[1]);
@@ -626,6 +631,7 @@ namespace Festo_R2U_Package_YJKP
                                 CurLog.Recipes_Cur.mEnvelope.Envelopes[i].Count_Down = Convert.ToInt16(mStr.Split(';')[1]);
                                 for (int j = 0; j < 5; j++)
                                 {
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j] = new EnvelopePoint();
                                     mStr = sReader.ReadLine();//j;FALSE;0.0;1;FALSE;0.0;1
                                     string[] Array_mStr = mStr.Split(';');
                                     CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].b_Config_Position = Convert.ToBoolean(Array_mStr[1]);
