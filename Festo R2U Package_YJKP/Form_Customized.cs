@@ -416,19 +416,26 @@ namespace Festo_R2U_Package_YJKP
                         {
                             Directory.CreateDirectory(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMM"));
                         }
+                        File.Move(e.FullPath, System.IO.Path.GetDirectoryName(e.FullPath) + "//" + fif.CreationTime.ToString("yyyyMM") + "//" + e.Name);
                         break;
                     case "Program":
-                        if (!Directory.Exists(fif.Directory + "//" + CurLog.CurProgramName))
+                        if (!Directory.Exists(fif.Directory + "\\" + CurLog.CurProgramName))
                         {
-                            Directory.CreateDirectory(fif.Directory + "//" + CurLog.CurProgramName);
+                            Directory.CreateDirectory(fif.Directory + "\\" + CurLog.CurProgramName);
                         }
+                        File.Move(e.FullPath, System.IO.Path.GetDirectoryName(e.FullPath) + "\\" + CurLog.CurProgramName + "\\" + e.Name);
                         break;
                     default:
                         try
                         {
                             if (FileControl.Split(' ')[1] == "Days")
                             {
+                                DirectoryInfo di = new DirectoryInfo(System.IO.Path.GetDirectoryName(e.FullPath));
 
+                                FileInfo[] arrFi = di.GetFiles("*.log");
+                                SortAsFileCreationTime(ref arrFi);
+
+                                DateTime OldFileCreateTime = arrFi[0].CreationTime;
                             }
                             else if (FileControl.Split(' ')[1] == "Files")
                             {
@@ -443,6 +450,16 @@ namespace Festo_R2U_Package_YJKP
                 }
                 #endregion
             }
+        }
+
+        /// <summary>
+        /// C#按创建时间排序
+        /// </summary>
+        /// <param name="arrFi">待排序数组</param>
+        private void SortAsFileCreationTime(ref FileInfo[] arrFi)
+        {
+            //Array.Sort(arrFi, delegate(FileInfo x, FileInfo y) { return y.CreationTime.CompareTo(x.CreationTime); });//（倒序）
+            Array.Sort(arrFi, delegate(FileInfo x, FileInfo y) { return x.CreationTime.CompareTo(y.CreationTime); });//（顺序）
         }
 
         //加载log日志解析
