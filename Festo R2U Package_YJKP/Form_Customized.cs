@@ -212,6 +212,7 @@ namespace Festo_R2U_Package_YJKP
         List<mPoint> mPoints4 = new List<mPoint>();
         List<mPoint> mPoints5 = new List<mPoint>();
 
+        Bitmap chart1BackImage;
 
         public string WatchPath
         {
@@ -316,11 +317,14 @@ namespace Festo_R2U_Package_YJKP
             chart1.ChartAreas[0].AxisY.Minimum = -5;
             chart1.ChartAreas[0].AxisY.Maximum = 350;
             #region.......chart缩放功能.........
-
-            // Enable range selection and zooming end user interface
-            chart1.ChartAreas[0].CursorX.IsUserEnabled = true;
-            chart1.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;            
-            chart1.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+            //会导致界面单击后出现不明红线
+            ////// Enable range selection and zooming end user interface
+            ////chart1.ChartAreas[0].CursorX.IsUserEnabled = true;
+            ////chart1.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
+            ////chart1.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+            ////chart1.ChartAreas[0].CursorY.IsUserEnabled = true;
+            ////chart1.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
+            ////chart1.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
 
             //将滚动内嵌到坐标轴中
             chart1.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = true;
@@ -493,6 +497,7 @@ namespace Festo_R2U_Package_YJKP
                     mPoints3 = new List<mPoint>();
                     mPoints4 = new List<mPoint>();
                     mPoints5 = new List<mPoint>();
+                    chart1BackImage = new Bitmap(chart1.Width, chart1.Height);
                     while (sReader.Peek() >= 0)
                     {
                         string mStr = sReader.ReadLine();
@@ -544,33 +549,42 @@ namespace Festo_R2U_Package_YJKP
                                     CurLog.Recipes_Cur.mWindow.Windows[i] = new Window();
                                     mStr = sReader.ReadLine();//[Window i]
                                     mStr = sReader.ReadLine();//Active:;FALSE
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
-                                    mStr = sReader.ReadLine();//[Config.]....
-                                    mStr = sReader.ReadLine();
-                                    string[] Array_mStr = mStr.Split(';');
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].b_Config = Convert.ToBoolean(Array_mStr[0]);
+                                    if (CurLog.Recipes_Cur.mWindow.Windows[i].b_Active = Convert.ToBoolean(mStr.Split(';')[1]))
+                                    {
+                                        mStr = sReader.ReadLine();//[Config.]....
+                                        mStr = sReader.ReadLine();
+                                        string[] Array_mStr = mStr.Split(';');
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].b_Config = Convert.ToBoolean(Array_mStr[0]);
 
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MinPosition = Convert.ToBoolean(Array_mStr[1]);
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition = Convert.ToDouble(Array_mStr[2]);
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition_Index = Convert.ToInt16(Array_mStr[3]);
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MaxPosition = Convert.ToBoolean(Array_mStr[4]);
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition = Convert.ToDouble(Array_mStr[5]);
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition_Index = Convert.ToInt16(Array_mStr[6]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MinPosition = Convert.ToBoolean(Array_mStr[1]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition = Convert.ToDouble(Array_mStr[2]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition_Index = Convert.ToInt16(Array_mStr[3]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MaxPosition = Convert.ToBoolean(Array_mStr[4]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition = Convert.ToDouble(Array_mStr[5]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition_Index = Convert.ToInt16(Array_mStr[6]);
 
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MinForce = Convert.ToBoolean(Array_mStr[7]);
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].MinForce = Convert.ToDouble(Array_mStr[8]);
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].MinForce_Index = Convert.ToInt16(Array_mStr[9]);
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MaxForce = Convert.ToBoolean(Array_mStr[10]);
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].MaxForce = Convert.ToDouble(Array_mStr[11]);
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].MaxForce_Index = Convert.ToInt16(Array_mStr[12]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MinForce = Convert.ToBoolean(Array_mStr[7]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].MinForce = Convert.ToDouble(Array_mStr[8]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].MinForce_Index = Convert.ToInt16(Array_mStr[9]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].b_Config_MaxForce = Convert.ToBoolean(Array_mStr[10]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].MaxForce = Convert.ToDouble(Array_mStr[11]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].MaxForce_Index = Convert.ToInt16(Array_mStr[12]);
 
-                                    mStr = sReader.ReadLine();//[Config.]....
-                                    mStr = sReader.ReadLine();
-                                    Array_mStr = mStr.Split(';');
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_D = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[0]);
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_U = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[1]);
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_L = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[2]);
-                                    CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_R = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[3]);
+                                        mStr = sReader.ReadLine();//[Config.]....
+                                        mStr = sReader.ReadLine();
+                                        Array_mStr = mStr.Split(';');
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_D = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[0]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_U = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[1]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_L = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[2]);
+                                        CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_R = (EdgeStatus_Window)Convert.ToInt16(Array_mStr[3]);
+                                    }
+                                    else
+                                    {
+                                        mStr = sReader.ReadLine();//[Config.]....
+                                        mStr = sReader.ReadLine();
+                                        mStr = sReader.ReadLine();//[Config.]....
+                                        mStr = sReader.ReadLine();
+                                    }
                                 }
                             }
                         }
@@ -584,79 +598,105 @@ namespace Festo_R2U_Package_YJKP
                                     CurLog.Recipes_Cur.mThreshold.Thresholds[i] = new Threshold();
                                     mStr = sReader.ReadLine();//[Threshold i]
                                     mStr = sReader.ReadLine();//Active:;FALSE
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
-                                    mStr = sReader.ReadLine();//[Config.]....
-                                    mStr = sReader.ReadLine();
-                                    string[] Array_mStr = mStr.Split(';');
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config = Convert.ToBoolean(Array_mStr[0]);
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Mode = Convert.ToBoolean(Array_mStr[1]);
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_Position = Convert.ToBoolean(Array_mStr[2]);
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position = Convert.ToDouble(Array_mStr[3]);
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position_Index = Convert.ToInt16(Array_mStr[4]);
+                                    if (CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Active = Convert.ToBoolean(mStr.Split(';')[1]))
+                                    {
+                                        mStr = sReader.ReadLine();//[Config.]....
+                                        mStr = sReader.ReadLine();
+                                        string[] Array_mStr = mStr.Split(';');
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config = Convert.ToBoolean(Array_mStr[0]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Mode = Convert.ToBoolean(Array_mStr[1]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_Position = Convert.ToBoolean(Array_mStr[2]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position = Convert.ToDouble(Array_mStr[3]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position_Index = Convert.ToInt16(Array_mStr[4]);
 
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MinPosition = Convert.ToBoolean(Array_mStr[5]);
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition = Convert.ToDouble(Array_mStr[6]);
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition_Index = Convert.ToInt16(Array_mStr[7]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MinPosition = Convert.ToBoolean(Array_mStr[5]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition = Convert.ToDouble(Array_mStr[6]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition_Index = Convert.ToInt16(Array_mStr[7]);
 
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MaxPosition = Convert.ToBoolean(Array_mStr[8]);
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition = Convert.ToDouble(Array_mStr[9]);
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition_Index = Convert.ToInt16(Array_mStr[10]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MaxPosition = Convert.ToBoolean(Array_mStr[8]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition = Convert.ToDouble(Array_mStr[9]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition_Index = Convert.ToInt16(Array_mStr[10]);
 
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_Force = Convert.ToBoolean(Array_mStr[11]);
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].Force = Convert.ToDouble(Array_mStr[12]);
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].Force_Index = Convert.ToInt16(Array_mStr[13]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_Force = Convert.ToBoolean(Array_mStr[11]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].Force = Convert.ToDouble(Array_mStr[12]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].Force_Index = Convert.ToInt16(Array_mStr[13]);
 
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MinForce = Convert.ToBoolean(Array_mStr[14]);
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinForce = Convert.ToDouble(Array_mStr[15]);
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinForce_Index = Convert.ToInt16(Array_mStr[16]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MinForce = Convert.ToBoolean(Array_mStr[14]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinForce = Convert.ToDouble(Array_mStr[15]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinForce_Index = Convert.ToInt16(Array_mStr[16]);
 
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MaxForce = Convert.ToBoolean(Array_mStr[17]);
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxForce = Convert.ToDouble(Array_mStr[18]);
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxForce_Index = Convert.ToInt16(Array_mStr[19]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config_MaxForce = Convert.ToBoolean(Array_mStr[17]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxForce = Convert.ToDouble(Array_mStr[18]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxForce_Index = Convert.ToInt16(Array_mStr[19]);
 
-                                    CurLog.Recipes_Cur.mThreshold.Thresholds[i].EdgeStatus_Threshold = Convert.ToInt16(Array_mStr[20]);
+                                        CurLog.Recipes_Cur.mThreshold.Thresholds[i].EdgeStatus_Threshold = Convert.ToInt16(Array_mStr[20]);
+                                    }
+                                    else
+                                    {
+                                        mStr = sReader.ReadLine();//[Config.]....
+                                        mStr = sReader.ReadLine();
+                                    }
                                 }
                             }
                         }
                         else if (mStr.StartsWith("[Envelope]"))
                         {
                             mStr = sReader.ReadLine();
-                            CurLog.Recipes_Cur.mEnvelope.b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
-                            for (int i = 0; i < 5; i++)
+                            if (CurLog.Recipes_Cur.mEnvelope.b_Active = Convert.ToBoolean(mStr.Split(';')[1]))
                             {
-                                CurLog.Recipes_Cur.mEnvelope.Envelopes[i] = new Envelope();
-                                mStr = sReader.ReadLine();//[Envelope i]
-                                mStr = sReader.ReadLine();//Active:;FALSE
-                                CurLog.Recipes_Cur.mEnvelope.Envelopes[i].b_Active = Convert.ToBoolean(mStr.Split(';')[1]);
-                                mStr = sReader.ReadLine();//[Config.];FALSE
-                                CurLog.Recipes_Cur.mEnvelope.Envelopes[i].b_Config = Convert.ToBoolean(mStr.Split(';')[1]);
-                                mStr = sReader.ReadLine();//Points up side:;2
-                                CurLog.Recipes_Cur.mEnvelope.Envelopes[i].Count_Up = Convert.ToInt16(mStr.Split(';')[1]);
-                                for (int j = 0; j < 5; j++)
+                                for (int i = 0; i < 5; i++)
                                 {
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j] = new EnvelopePoint();
-                                    mStr = sReader.ReadLine();//j;FALSE;0.0;1;FALSE;0.0;1
-                                    string[] Array_mStr = mStr.Split(';');
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].b_Config_Position = Convert.ToBoolean(Array_mStr[1]);
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position = Convert.ToDouble(Array_mStr[2]);
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position_Index = Convert.ToInt16(Array_mStr[3]);
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].b_Config_Force = Convert.ToBoolean(Array_mStr[4]);
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force = Convert.ToDouble(Array_mStr[5]);
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force_Index = Convert.ToInt16(Array_mStr[6]);
-                                }
-                                mStr = sReader.ReadLine();//Points down side:;2
-                                CurLog.Recipes_Cur.mEnvelope.Envelopes[i].Count_Down = Convert.ToInt16(mStr.Split(';')[1]);
-                                for (int j = 0; j < 5; j++)
-                                {
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j] = new EnvelopePoint();
-                                    mStr = sReader.ReadLine();//j;FALSE;0.0;1;FALSE;0.0;1
-                                    string[] Array_mStr = mStr.Split(';');
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].b_Config_Position = Convert.ToBoolean(Array_mStr[1]);
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Position = Convert.ToDouble(Array_mStr[2]);
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Position_Index = Convert.ToInt16(Array_mStr[3]);
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].b_Config_Force = Convert.ToBoolean(Array_mStr[4]);
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Force = Convert.ToDouble(Array_mStr[5]);
-                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Force_Index = Convert.ToInt16(Array_mStr[6]);
+                                    CurLog.Recipes_Cur.mEnvelope.Envelopes[i] = new Envelope();
+                                    mStr = sReader.ReadLine();//[Envelope i]
+                                    mStr = sReader.ReadLine();//Active:;FALSE
+                                    if (CurLog.Recipes_Cur.mEnvelope.Envelopes[i].b_Active = Convert.ToBoolean(mStr.Split(';')[1]))
+                                    {
+                                        mStr = sReader.ReadLine();//[Config.];FALSE
+                                        CurLog.Recipes_Cur.mEnvelope.Envelopes[i].b_Config = Convert.ToBoolean(mStr.Split(';')[1]);
+                                        mStr = sReader.ReadLine();//Points up side:;2
+                                        CurLog.Recipes_Cur.mEnvelope.Envelopes[i].Count_Up = Convert.ToInt16(mStr.Split(';')[1]);
+                                        for (int j = 0; j < 5; j++)
+                                        {
+                                            CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j] = new EnvelopePoint();
+                                            mStr = sReader.ReadLine();//j;FALSE;0.0;1;FALSE;0.0;1
+                                            string[] Array_mStr = mStr.Split(';');
+                                            CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].b_Config_Position = Convert.ToBoolean(Array_mStr[1]);
+                                            CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position = Convert.ToDouble(Array_mStr[2]);
+                                            CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position_Index = Convert.ToInt16(Array_mStr[3]);
+                                            CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].b_Config_Force = Convert.ToBoolean(Array_mStr[4]);
+                                            CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force = Convert.ToDouble(Array_mStr[5]);
+                                            CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force_Index = Convert.ToInt16(Array_mStr[6]);
+                                        }
+                                        mStr = sReader.ReadLine();//Points down side:;2
+                                        CurLog.Recipes_Cur.mEnvelope.Envelopes[i].Count_Down = Convert.ToInt16(mStr.Split(';')[1]);
+                                        for (int j = 0; j < 5; j++)
+                                        {
+                                            CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j] = new EnvelopePoint();
+                                            mStr = sReader.ReadLine();//j;FALSE;0.0;1;FALSE;0.0;1
+                                            string[] Array_mStr = mStr.Split(';');
+                                            CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].b_Config_Position = Convert.ToBoolean(Array_mStr[1]);
+                                            CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Position = Convert.ToDouble(Array_mStr[2]);
+                                            CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Position_Index = Convert.ToInt16(Array_mStr[3]);
+                                            CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].b_Config_Force = Convert.ToBoolean(Array_mStr[4]);
+                                            CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Force = Convert.ToDouble(Array_mStr[5]);
+                                            CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Force_Index = Convert.ToInt16(Array_mStr[6]);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        mStr = sReader.ReadLine();
+                                        mStr = sReader.ReadLine();
+                                        mStr = sReader.ReadLine();
+                                        mStr = sReader.ReadLine();
+                                        mStr = sReader.ReadLine();
+                                        mStr = sReader.ReadLine();
+                                        mStr = sReader.ReadLine();
+                                        mStr = sReader.ReadLine();
+                                        mStr = sReader.ReadLine();
+                                        mStr = sReader.ReadLine();
+                                        mStr = sReader.ReadLine();
+                                        mStr = sReader.ReadLine();
+                                    }
                                 }
                             }
                         }
@@ -696,10 +736,9 @@ namespace Festo_R2U_Package_YJKP
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                
-                throw;
+                MessageBox.Show(ex.ToString());
             }
         }
 
@@ -740,6 +779,152 @@ namespace Festo_R2U_Package_YJKP
             {
                 chart1.Series.Add(mSeries);
             }            
+        }
+
+        private void DrawThresholds()
+        {
+            if (CurLog.Recipes_Cur.mThreshold.b_Active)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    if (CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Active)
+                    {
+                        DrawThreshold(i);
+                    }
+                }
+            }
+        }
+
+        private void DrawThreshold(int i)
+        {
+            Graphics g = Graphics.FromImage(chart1BackImage);
+            if (CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Mode)
+            {
+                //force
+            }
+            else
+            {
+                //position
+                float StartX, StartY, EndX, EndY;
+                EndX = StartX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position);
+                StartY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinForce);
+                EndY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxForce);
+                g.DrawLine(new Pen(Color.Blue, 2), StartX, StartY, EndX, EndY);
+                g.DrawLine(new Pen(Color.Blue, 2), StartX - 3, StartY, StartX + 3, StartY);
+                g.DrawLine(new Pen(Color.Blue, 2), EndX - 3, EndY, EndX + 3, EndY);
+            }
+        }
+
+        private void DrawWindows()
+        {
+            if (CurLog.Recipes_Cur.mWindow.b_Active)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    if (CurLog.Recipes_Cur.mWindow.Windows[i].b_Active)
+                    {
+                        DrawWindow(i);
+                    }
+                }
+            }
+        }
+
+        private void DrawWindow(int i)
+        {
+            //Methods a
+            //Graphics dc = chart1.CreateGraphics();
+            //Show();
+            //Pen bluePen = new Pen(Color.Blue, 3);
+            //dc.DrawRectangle(bluePen, 100, 100, 50, 50);
+
+            //Methods b area.AxisX.PixelPositionToValue(e.X);
+            Graphics g = Graphics.FromImage(chart1BackImage);
+            float RectangularX, RectangularY, RectangularWidth, RectangularHeight;
+
+            RectangularX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition);
+            RectangularWidth = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition) - RectangularX;
+            RectangularY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MaxForce);
+            RectangularHeight = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MinForce) - RectangularY;
+
+            g.DrawRectangle(new Pen(Color.Blue, 2), RectangularX, RectangularY, RectangularWidth, RectangularHeight);
+            switch (CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_L)
+            {
+                case EdgeStatus_Window.NotCare:
+                    break;
+                case EdgeStatus_Window.Forbidden:
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX - 8, RectangularY + RectangularHeight / 2 - 8, RectangularX + 8, RectangularY + RectangularHeight / 2 + 8);
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX - 8, RectangularY + RectangularHeight / 2 + 8, RectangularX + 8, RectangularY + RectangularHeight / 2 - 8);
+                    break;
+                case EdgeStatus_Window.In:
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX, RectangularY + RectangularHeight / 2 - 5, RectangularX + 10, RectangularY + RectangularHeight / 2);
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX, RectangularY + RectangularHeight / 2 + 5, RectangularX + 10, RectangularY + RectangularHeight / 2);
+                    break;
+                case EdgeStatus_Window.Out:
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX, RectangularY + RectangularHeight / 2 - 5, RectangularX - 10, RectangularY + RectangularHeight / 2);
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX, RectangularY + RectangularHeight / 2 + 5, RectangularX - 10, RectangularY + RectangularHeight / 2);
+                    break;
+                default:
+                    break;
+            }
+            switch (CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_U)
+            {
+                case EdgeStatus_Window.NotCare:
+                    break;
+                case EdgeStatus_Window.Forbidden:
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 8, RectangularY - 8, RectangularX + RectangularWidth / 2 + 8, RectangularY + 8);
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 8, RectangularY + 8, RectangularX + RectangularWidth / 2 + 8, RectangularY - 8);
+                    break;
+                case EdgeStatus_Window.In:
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 5, RectangularY, RectangularX + RectangularWidth / 2, RectangularY + 10);
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 + 5, RectangularY, RectangularX + RectangularWidth / 2, RectangularY + 10);
+                    break;
+                case EdgeStatus_Window.Out:
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 5, RectangularY, RectangularX + RectangularWidth / 2, RectangularY - 10);
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 + 5, RectangularY, RectangularX + RectangularWidth / 2, RectangularY - 10);
+                    break;
+                default:
+                    break;
+            }
+            switch (CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_R)
+            {
+                case EdgeStatus_Window.NotCare:
+                    break;
+                case EdgeStatus_Window.Forbidden:
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth - 8, RectangularY + RectangularHeight / 2 - 8, RectangularX + RectangularWidth + 8, RectangularY + RectangularHeight / 2 + 8);
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth - 8, RectangularY + RectangularHeight / 2 + 8, RectangularX + RectangularWidth + 8, RectangularY + RectangularHeight / 2 - 8);
+                    break;
+                case EdgeStatus_Window.In:
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth, RectangularY + RectangularHeight / 2 - 5, RectangularX + RectangularWidth - 10, RectangularY + RectangularHeight / 2);
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth, RectangularY + RectangularHeight / 2 + 5, RectangularX + RectangularWidth - 10, RectangularY + RectangularHeight / 2);
+                    break;
+                case EdgeStatus_Window.Out:
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth, RectangularY + RectangularHeight / 2 - 5, RectangularX + RectangularWidth + 10, RectangularY + RectangularHeight / 2);
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth, RectangularY + RectangularHeight / 2 + 5, RectangularX + RectangularWidth + 10, RectangularY + RectangularHeight / 2);
+                    break;
+                default:
+                    break;
+            }
+            switch (CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_D)
+            {
+                case EdgeStatus_Window.NotCare:
+                    break;
+                case EdgeStatus_Window.Forbidden:
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 8, RectangularY + RectangularHeight - 8, RectangularX + RectangularWidth / 2 + 8, RectangularY + RectangularHeight + 8);
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 8, RectangularY + RectangularHeight + 8, RectangularX + RectangularWidth / 2 + 8, RectangularY + RectangularHeight - 8);
+                    break;
+                case EdgeStatus_Window.In:
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 5, RectangularY + RectangularHeight, RectangularX + RectangularWidth / 2, RectangularY + RectangularHeight - 10);
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 + 5, RectangularY + RectangularHeight, RectangularX + RectangularWidth / 2, RectangularY + RectangularHeight - 10);
+                    break;
+                case EdgeStatus_Window.Out:
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 5, RectangularY + RectangularHeight, RectangularX + RectangularWidth / 2, RectangularY + RectangularHeight + 10);
+                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 + 5, RectangularY + RectangularHeight, RectangularX + RectangularWidth / 2, RectangularY + RectangularHeight + 10);
+                    break;
+                default:
+                    break;
+            }
+            g.Dispose();
+
         }
 
         private void DrawRectangular(double x1, double y1, double x2, double y2)
