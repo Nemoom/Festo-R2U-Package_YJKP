@@ -312,10 +312,10 @@ namespace Festo_R2U_Package_YJKP
 
             chart1.ChartAreas[0].AxisX.Title = "Position[mm]";
             chart1.ChartAreas[0].AxisY.Title = "Force[N]";
-            chart1.ChartAreas[0].AxisX.Minimum = 10;
-            chart1.ChartAreas[0].AxisX.Maximum = 22;
-            chart1.ChartAreas[0].AxisY.Minimum = -5;
-            chart1.ChartAreas[0].AxisY.Maximum = 350;
+            //chart1.ChartAreas[0].AxisX.Minimum = 10;
+            //chart1.ChartAreas[0].AxisX.Maximum = 22;
+            //chart1.ChartAreas[0].AxisY.Minimum = -5;
+            //chart1.ChartAreas[0].AxisY.Maximum = 350;
             #region.......chart缩放功能.........
             //会导致界面单击后出现不明红线
             ////// Enable range selection and zooming end user interface
@@ -357,8 +357,13 @@ namespace Festo_R2U_Package_YJKP
                 #region 解析Log文件
                 CurLog = new YJKP_Log();
 
-                CurLog.CurProgramName = e.Name.Split('_')[0];
-                CurLog.CurResult = e.Name.Split('_')[e.Name.Split('_').Length - 1].Substring(0, e.Name.Split('_')[e.Name.Split('_').Length - 1].Length - 4);
+                //文件可能被重命名，无法提取信息
+                //CurLog.CurProgramName = e.Name.Split('_')[0];
+                //CurLog.CurResult = e.Name.Split('_')[e.Name.Split('_').Length - 1].Substring(0, e.Name.Split('_')[e.Name.Split('_').Length - 1].Length - 4);
+                
+                lbl_Value.Text = "";//当前位置值清空
+                get_Points(e.FullPath);//解析Log日志
+
                 lbl_Result.Text = CurLog.CurResult;
                 if (CurLog.CurResult == "OK" || CurLog.CurResult == "Ok" || CurLog.CurResult == "ok")
                 {
@@ -375,8 +380,7 @@ namespace Festo_R2U_Package_YJKP
                 lbl_CountNG.Text = Count_NOK.ToString();
                 lbl_CountOK.Text = Count_OK.ToString();
                 lbl_CountTotal.Text = Count_Total.ToString();
-                lbl_Value.Text = "";
-                get_Points(e.FullPath);
+
                 if (btn_BundlePlot.BackColor != FestoBlue_Light)//仅显示最近一条记录
                 {
                     //清除历史曲线
@@ -409,7 +413,11 @@ namespace Festo_R2U_Package_YJKP
                     default:
                         break;
                 }
-                DrawRectangular(19.7, 172.09, 20.88, 104.43); 
+                chart1.ChartAreas[0].AxisX.Minimum = Math.Floor(X_Min);
+                chart1.ChartAreas[0].AxisX.Maximum = Math.Ceiling(X_Max);
+                chart1.ChartAreas[0].AxisY.Minimum = Math.Floor(Y_Min) < 0 ? Math.Floor(Y_Min) : 0;
+                chart1.ChartAreas[0].AxisY.Maximum = Math.Ceiling(Y_Max);
+                DrawCaptures();
                 #endregion
                 #region 整理文件夹
                 FileInfo fif = new FileInfo(e.FullPath);
@@ -520,19 +528,21 @@ namespace Festo_R2U_Package_YJKP
                         }
                         else if (mStr.StartsWith("[Variables]"))
                         {
+                            #region Variables
                             for (int i = 0; i < 100; i++)
                             {
-                                 mStr = sReader.ReadLine();
-                                 string[] Array_mStr = mStr.Split(';');
-                                 CurLog.VariablesHosts[i].No = Convert.ToInt16(Array_mStr[0]);
-                                 try
-                                 {
-                                     CurLog.VariablesHosts[i].Value = Convert.ToDouble(Array_mStr[1]);
-                                 }
-                                 catch (Exception)
-                                 {
-                                 }                                 
-                            }
+                                mStr = sReader.ReadLine();
+                                string[] Array_mStr = mStr.Split(';');
+                                CurLog.VariablesHosts[i].No = Convert.ToInt16(Array_mStr[0]);
+                                try
+                                {
+                                    CurLog.VariablesHosts[i].Value = Convert.ToDouble(Array_mStr[1]);
+                                }
+                                catch (Exception)
+                                {
+                                }
+                            } 
+                            #endregion
                         }
                         else if (mStr.StartsWith("[Recipes]"))
                         {
@@ -541,6 +551,7 @@ namespace Festo_R2U_Package_YJKP
                         }
                         else if (mStr.StartsWith("[Windowing]"))
                         {
+                            #region Windowing
                             mStr = sReader.ReadLine();
                             if (CurLog.Recipes_Cur.mWindow.b_Active = Convert.ToBoolean(mStr.Split(';')[1]))
                             {
@@ -586,10 +597,12 @@ namespace Festo_R2U_Package_YJKP
                                         mStr = sReader.ReadLine();
                                     }
                                 }
-                            }
+                            } 
+                            #endregion
                         }
                         else if (mStr.StartsWith("[Threshold]"))
                         {
+                            #region Threshold
                             mStr = sReader.ReadLine();
                             if (CurLog.Recipes_Cur.mThreshold.b_Active = Convert.ToBoolean(mStr.Split(';')[1]))
                             {
@@ -637,10 +650,12 @@ namespace Festo_R2U_Package_YJKP
                                         mStr = sReader.ReadLine();
                                     }
                                 }
-                            }
+                            } 
+                            #endregion
                         }
                         else if (mStr.StartsWith("[Envelope]"))
                         {
+                            #region Envelope
                             mStr = sReader.ReadLine();
                             if (CurLog.Recipes_Cur.mEnvelope.b_Active = Convert.ToBoolean(mStr.Split(';')[1]))
                             {
@@ -696,9 +711,11 @@ namespace Festo_R2U_Package_YJKP
                                         mStr = sReader.ReadLine();
                                         mStr = sReader.ReadLine();
                                         mStr = sReader.ReadLine();
+                                        mStr = sReader.ReadLine();
                                     }
                                 }
-                            }
+                            } 
+                            #endregion
                         }
                         else if (mStr.StartsWith("[Record "))
                         {
@@ -731,7 +748,7 @@ namespace Festo_R2U_Package_YJKP
                                         break;
                                 }
                             }
-                            #endregion
+                            #endregion                            
                         }
                     }
                 }
@@ -801,6 +818,26 @@ namespace Festo_R2U_Package_YJKP
             if (CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Mode)
             {
                 //force
+                float StartX, StartY, EndX, EndY;
+                EndY = StartY = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].Force);
+                StartX = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition);
+                EndX = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition);
+                g.DrawLine(new Pen(Color.Blue, 1), StartX, StartY, EndX, EndY);
+                g.DrawLine(new Pen(Color.Blue, 1), StartX, StartY - 3, StartX, StartY + 3);
+                g.DrawLine(new Pen(Color.Blue, 1), EndX, EndY - 3, EndX, EndY + 3);
+                switch (CurLog.Recipes_Cur.mThreshold.Thresholds[i].EdgeStatus_Threshold)
+                {
+                    case 1:
+                        g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 - 5, StartY, (StartX + EndX) / 2, StartY + 10);
+                        g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 + 5, StartY, (StartX + EndX) / 2, StartY + 10);
+                        break;
+                    case 2:
+                        g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 - 5, StartY, (StartX + EndX) / 2, StartY - 10);
+                        g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 + 5, StartY, (StartX + EndX) / 2, StartY - 10);
+                        break;
+                    default:
+                        break;
+                }
             }
             else
             {
@@ -809,10 +846,62 @@ namespace Festo_R2U_Package_YJKP
                 EndX = StartX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position);
                 StartY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinForce);
                 EndY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxForce);
-                g.DrawLine(new Pen(Color.Blue, 2), StartX, StartY, EndX, EndY);
-                g.DrawLine(new Pen(Color.Blue, 2), StartX - 3, StartY, StartX + 3, StartY);
-                g.DrawLine(new Pen(Color.Blue, 2), EndX - 3, EndY, EndX + 3, EndY);
+                g.DrawLine(new Pen(Color.Blue, 1), StartX, StartY, EndX, EndY);
+                g.DrawLine(new Pen(Color.Blue, 1), StartX - 3, StartY, StartX + 3, StartY);
+                g.DrawLine(new Pen(Color.Blue, 1), EndX - 3, EndY, EndX + 3, EndY);
+                switch (CurLog.Recipes_Cur.mThreshold.Thresholds[i].EdgeStatus_Threshold)
+                {
+                    case 1:
+                        g.DrawLine(new Pen(Color.Blue, 1), StartX, (StartY + EndY) / 2 - 5, StartX + 10, (StartY + EndY) / 2);
+                        g.DrawLine(new Pen(Color.Blue, 1), StartX, (StartY + EndY) / 2 + 5, StartX + 10, (StartY + EndY) / 2);
+                        break;
+                    case 2:
+                        g.DrawLine(new Pen(Color.Blue, 1), StartX, (StartY + EndY) / 2 - 5, StartX - 10, (StartY + EndY) / 2);
+                        g.DrawLine(new Pen(Color.Blue, 1), StartX, (StartY + EndY) / 2 + 5, StartX - 10, (StartY + EndY) / 2);
+                        break;
+                    default:
+                        break;
+                }
             }
+            g.Dispose();
+        }
+
+        private void DrawEnvelopes()
+        {
+            if (CurLog.Recipes_Cur.mEnvelope.b_Active)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    if (CurLog.Recipes_Cur.mEnvelope.Envelopes[i].b_Active)
+                    {
+                        DrawEnvelope(i);
+                    }
+                }
+            }
+        }
+
+        private void DrawEnvelope(int i)
+        {
+            Graphics g = Graphics.FromImage(chart1BackImage);
+            for (int j = 1; j < CurLog.Recipes_Cur.mEnvelope.Envelopes[i].Count_Up; j++)
+            {
+                float StartX, StartY, EndX, EndY;
+                StartX = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Position);
+                StartY = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Force);
+                EndX = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position);
+                EndY = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force);
+                g.DrawLine(new Pen(Color.Blue, 1), StartX, StartY, EndX, EndY);                
+            }
+            for (int j = 1; j < CurLog.Recipes_Cur.mEnvelope.Envelopes[i].Count_Down; j++)
+            {
+                float StartX, StartY, EndX, EndY;
+                StartX = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j - 1].Position);
+                StartY = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j - 1].Force);
+                EndX = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Position);
+                EndY = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Force);
+                g.DrawLine(new Pen(Color.Blue, 1), StartX, StartY, EndX, EndY);
+            }
+            g.Dispose();
         }
 
         private void DrawWindows()
@@ -846,22 +935,22 @@ namespace Festo_R2U_Package_YJKP
             RectangularY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MaxForce);
             RectangularHeight = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MinForce) - RectangularY;
 
-            g.DrawRectangle(new Pen(Color.Blue, 2), RectangularX, RectangularY, RectangularWidth, RectangularHeight);
+            g.DrawRectangle(new Pen(Color.Blue, 1), RectangularX, RectangularY, RectangularWidth, RectangularHeight);
             switch (CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_L)
             {
                 case EdgeStatus_Window.NotCare:
                     break;
                 case EdgeStatus_Window.Forbidden:
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX - 8, RectangularY + RectangularHeight / 2 - 8, RectangularX + 8, RectangularY + RectangularHeight / 2 + 8);
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX - 8, RectangularY + RectangularHeight / 2 + 8, RectangularX + 8, RectangularY + RectangularHeight / 2 - 8);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX - 3, RectangularY + RectangularHeight / 2 - 3, RectangularX + 3, RectangularY + RectangularHeight / 2 + 3);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX - 3, RectangularY + RectangularHeight / 2 + 3, RectangularX + 3, RectangularY + RectangularHeight / 2 - 3);
                     break;
                 case EdgeStatus_Window.In:
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX, RectangularY + RectangularHeight / 2 - 5, RectangularX + 10, RectangularY + RectangularHeight / 2);
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX, RectangularY + RectangularHeight / 2 + 5, RectangularX + 10, RectangularY + RectangularHeight / 2);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX, RectangularY + RectangularHeight / 2 - 5, RectangularX + 10, RectangularY + RectangularHeight / 2);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX, RectangularY + RectangularHeight / 2 + 5, RectangularX + 10, RectangularY + RectangularHeight / 2);
                     break;
                 case EdgeStatus_Window.Out:
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX, RectangularY + RectangularHeight / 2 - 5, RectangularX - 10, RectangularY + RectangularHeight / 2);
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX, RectangularY + RectangularHeight / 2 + 5, RectangularX - 10, RectangularY + RectangularHeight / 2);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX, RectangularY + RectangularHeight / 2 - 5, RectangularX - 10, RectangularY + RectangularHeight / 2);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX, RectangularY + RectangularHeight / 2 + 5, RectangularX - 10, RectangularY + RectangularHeight / 2);
                     break;
                 default:
                     break;
@@ -871,16 +960,16 @@ namespace Festo_R2U_Package_YJKP
                 case EdgeStatus_Window.NotCare:
                     break;
                 case EdgeStatus_Window.Forbidden:
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 8, RectangularY - 8, RectangularX + RectangularWidth / 2 + 8, RectangularY + 8);
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 8, RectangularY + 8, RectangularX + RectangularWidth / 2 + 8, RectangularY - 8);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth / 2 - 3, RectangularY - 3, RectangularX + RectangularWidth / 2 + 3, RectangularY + 3);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth / 2 - 3, RectangularY + 3, RectangularX + RectangularWidth / 2 + 3, RectangularY - 3);
                     break;
                 case EdgeStatus_Window.In:
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 5, RectangularY, RectangularX + RectangularWidth / 2, RectangularY + 10);
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 + 5, RectangularY, RectangularX + RectangularWidth / 2, RectangularY + 10);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth / 2 - 5, RectangularY, RectangularX + RectangularWidth / 2, RectangularY + 10);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth / 2 + 5, RectangularY, RectangularX + RectangularWidth / 2, RectangularY + 10);
                     break;
                 case EdgeStatus_Window.Out:
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 5, RectangularY, RectangularX + RectangularWidth / 2, RectangularY - 10);
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 + 5, RectangularY, RectangularX + RectangularWidth / 2, RectangularY - 10);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth / 2 - 5, RectangularY, RectangularX + RectangularWidth / 2, RectangularY - 10);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth / 2 + 5, RectangularY, RectangularX + RectangularWidth / 2, RectangularY - 10);
                     break;
                 default:
                     break;
@@ -890,16 +979,16 @@ namespace Festo_R2U_Package_YJKP
                 case EdgeStatus_Window.NotCare:
                     break;
                 case EdgeStatus_Window.Forbidden:
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth - 8, RectangularY + RectangularHeight / 2 - 8, RectangularX + RectangularWidth + 8, RectangularY + RectangularHeight / 2 + 8);
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth - 8, RectangularY + RectangularHeight / 2 + 8, RectangularX + RectangularWidth + 8, RectangularY + RectangularHeight / 2 - 8);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth - 3, RectangularY + RectangularHeight / 2 - 3, RectangularX + RectangularWidth + 3, RectangularY + RectangularHeight / 2 + 3);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth - 3, RectangularY + RectangularHeight / 2 + 3, RectangularX + RectangularWidth + 3, RectangularY + RectangularHeight / 2 - 3);
                     break;
                 case EdgeStatus_Window.In:
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth, RectangularY + RectangularHeight / 2 - 5, RectangularX + RectangularWidth - 10, RectangularY + RectangularHeight / 2);
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth, RectangularY + RectangularHeight / 2 + 5, RectangularX + RectangularWidth - 10, RectangularY + RectangularHeight / 2);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth, RectangularY + RectangularHeight / 2 - 5, RectangularX + RectangularWidth - 10, RectangularY + RectangularHeight / 2);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth, RectangularY + RectangularHeight / 2 + 5, RectangularX + RectangularWidth - 10, RectangularY + RectangularHeight / 2);
                     break;
                 case EdgeStatus_Window.Out:
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth, RectangularY + RectangularHeight / 2 - 5, RectangularX + RectangularWidth + 10, RectangularY + RectangularHeight / 2);
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth, RectangularY + RectangularHeight / 2 + 5, RectangularX + RectangularWidth + 10, RectangularY + RectangularHeight / 2);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth, RectangularY + RectangularHeight / 2 - 5, RectangularX + RectangularWidth + 10, RectangularY + RectangularHeight / 2);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth, RectangularY + RectangularHeight / 2 + 5, RectangularX + RectangularWidth + 10, RectangularY + RectangularHeight / 2);
                     break;
                 default:
                     break;
@@ -909,22 +998,36 @@ namespace Festo_R2U_Package_YJKP
                 case EdgeStatus_Window.NotCare:
                     break;
                 case EdgeStatus_Window.Forbidden:
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 8, RectangularY + RectangularHeight - 8, RectangularX + RectangularWidth / 2 + 8, RectangularY + RectangularHeight + 8);
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 8, RectangularY + RectangularHeight + 8, RectangularX + RectangularWidth / 2 + 8, RectangularY + RectangularHeight - 8);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth / 2 - 3, RectangularY + RectangularHeight - 3, RectangularX + RectangularWidth / 2 + 3, RectangularY + RectangularHeight + 3);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth / 2 - 3, RectangularY + RectangularHeight + 3, RectangularX + RectangularWidth / 2 + 3, RectangularY + RectangularHeight - 3);
                     break;
                 case EdgeStatus_Window.In:
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 5, RectangularY + RectangularHeight, RectangularX + RectangularWidth / 2, RectangularY + RectangularHeight - 10);
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 + 5, RectangularY + RectangularHeight, RectangularX + RectangularWidth / 2, RectangularY + RectangularHeight - 10);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth / 2 - 5, RectangularY + RectangularHeight, RectangularX + RectangularWidth / 2, RectangularY + RectangularHeight - 10);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth / 2 + 5, RectangularY + RectangularHeight, RectangularX + RectangularWidth / 2, RectangularY + RectangularHeight - 10);
                     break;
                 case EdgeStatus_Window.Out:
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 - 5, RectangularY + RectangularHeight, RectangularX + RectangularWidth / 2, RectangularY + RectangularHeight + 10);
-                    g.DrawLine(new Pen(Color.Blue, 2), RectangularX + RectangularWidth / 2 + 5, RectangularY + RectangularHeight, RectangularX + RectangularWidth / 2, RectangularY + RectangularHeight + 10);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth / 2 - 5, RectangularY + RectangularHeight, RectangularX + RectangularWidth / 2, RectangularY + RectangularHeight + 10);
+                    g.DrawLine(new Pen(Color.Blue, 1), RectangularX + RectangularWidth / 2 + 5, RectangularY + RectangularHeight, RectangularX + RectangularWidth / 2, RectangularY + RectangularHeight + 10);
                     break;
                 default:
                     break;
             }
             g.Dispose();
 
+        }
+
+        private void DrawCaptures()
+        {
+            DrawWindows();
+            DrawThresholds();
+            DrawEnvelopes();
+            chart1.ChartAreas[0].BackImage = "";
+            bmpName = "Capture" + DateTime.Now.ToString("HHmmss") + ".bmp";
+            chart1BackImage.Save(bmpName);
+            if (btn_CaptureDIsplay.BackColor == FestoBlue_Light)
+            {
+                chart1.ChartAreas[0].BackImage = bmpName;
+            }
         }
 
         private void DrawRectangular(double x1, double y1, double x2, double y2)
@@ -1141,7 +1244,10 @@ namespace Festo_R2U_Package_YJKP
             if (btn_CaptureDIsplay.BackColor == System.Drawing.SystemColors.Control)
             {
                 btn_CaptureDIsplay.BackColor = FestoBlue_Light;
-                DrawRectangular(19.7, 172.09, 20.88, 104.43);
+                if (chart1.Series.Count > 0)
+                {
+                    DrawCaptures();
+                }                
                 //chart1.ChartAreas[0].BackImage = bmpName;
             }
             else

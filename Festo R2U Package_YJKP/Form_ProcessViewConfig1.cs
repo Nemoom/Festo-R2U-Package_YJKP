@@ -191,17 +191,21 @@ namespace Festo_R2U_Package_YJKP
         private void btn_Submit_Click(object sender, EventArgs e)
         {
             WatchPath = textBox1.Text;
-            
-            MainForm.fileSystemWatcher1.Path = WatchPath;    
+
+            MainForm.fileSystemWatcher1.Path = WatchPath;
             MainForm.fileSystemWatcher1.EnableRaisingEvents = true;
 
             if (rbtn_byCount.Checked)
             {
                 FileControl = txt_Files.Text + " Files";
             }
-            else if (rbtn_byDays.Checked)
+            else if (rbtn_byDay.Checked)
             {
-                FileControl = txt_Days.Text + " Days";
+                FileControl = "Day";
+            }
+            else if (rbtn_byWeek.Checked)
+            {
+                FileControl = "Week";
             }
             else if (rbtn_byMonth.Checked)
             {
@@ -230,35 +234,45 @@ namespace Festo_R2U_Package_YJKP
 
             switch (FileControl)
             {
+
+                case "Day":
+                    rbtn_byDay.Checked = true;
+                    rbtn_byProgramName.Checked = false;
+                    rbtn_byWeek.Checked = false;
+                    rbtn_byMonth.Checked = false;
+                    rbtn_byCount.Checked = false;
+                    break;
+                case "Week":
+                    rbtn_byWeek.Checked = true;
+                    rbtn_byProgramName.Checked = false;
+                    rbtn_byDay.Checked = false;
+                    rbtn_byMonth.Checked = false;
+                    rbtn_byCount.Checked = false;
+                    break;
                 case "Month":
                     rbtn_byMonth.Checked = true;
                     rbtn_byProgramName.Checked = false;
-                    rbtn_byDays.Checked = false;
+                    rbtn_byDay.Checked = false;
+                    rbtn_byWeek.Checked = false;
                     rbtn_byCount.Checked = false;
                     break;
                 case "Program":
                     rbtn_byProgramName.Checked = true;
                     rbtn_byMonth.Checked = false;
-                    rbtn_byDays.Checked = false;
+                    rbtn_byDay.Checked = false;
+                    rbtn_byWeek.Checked = false;
                     rbtn_byCount.Checked = false;
                     break;                
                 default:
                     try
                     {
-                        if (FileControl.Split(' ')[1] == "Days")
-                        {
-                            txt_Days.Text = FileControl.Split(' ')[0];
-                            rbtn_byDays.Checked = true;
-                            rbtn_byMonth.Checked = false;
-                            rbtn_byProgramName.Checked = false;
-                            rbtn_byCount.Checked = false;
-                        }
-                        else if (FileControl.Split(' ')[1] == "Files")
+                        if (FileControl.Split(' ')[1] == "Files")
                         {
                             txt_Files.Text = FileControl.Split(' ')[0];
                             rbtn_byCount.Checked = true;
                             rbtn_byMonth.Checked = false;
-                            rbtn_byDays.Checked = false;
+                            rbtn_byWeek.Checked = false;
+                            rbtn_byDay.Checked = false;
                             rbtn_byProgramName.Checked = false;
                         }
                     }
@@ -272,12 +286,13 @@ namespace Festo_R2U_Package_YJKP
 
         private void rbtn_byDays_Click(object sender, EventArgs e)
         {
-            if (!rbtn_byDays.Checked)
+            if (!rbtn_byDay.Checked)
             {
-                rbtn_byDays.Checked = true;
+                rbtn_byDay.Checked = true;
                 rbtn_byMonth.Checked = false;
                 rbtn_byProgramName.Checked = false;
                 rbtn_byCount.Checked = false;
+                rbtn_byWeek.Checked = false;
             }
         }
 
@@ -287,8 +302,9 @@ namespace Festo_R2U_Package_YJKP
             {
                 rbtn_byMonth.Checked = true;
                 rbtn_byProgramName.Checked = false;
-                rbtn_byDays.Checked = false;
+                rbtn_byDay.Checked = false;
                 rbtn_byCount.Checked = false;
+                rbtn_byWeek.Checked = false;
             }
         }
 
@@ -298,8 +314,9 @@ namespace Festo_R2U_Package_YJKP
             {
                 rbtn_byProgramName.Checked = true;
                 rbtn_byMonth.Checked = false;
-                rbtn_byDays.Checked = false;
+                rbtn_byDay.Checked = false;
                 rbtn_byCount.Checked = false;
+                rbtn_byWeek.Checked = false;
             }
         }
 
@@ -309,8 +326,21 @@ namespace Festo_R2U_Package_YJKP
             {
                 rbtn_byCount.Checked = true;
                 rbtn_byMonth.Checked = false;
-                rbtn_byDays.Checked = false;
+                rbtn_byDay.Checked = false;
                 rbtn_byProgramName.Checked = false;
+                rbtn_byWeek.Checked = false;
+            }
+        }
+
+        private void rbtn_byWeek_Click(object sender, EventArgs e)
+        {
+            if (!rbtn_byWeek.Checked)
+            {
+                rbtn_byWeek.Checked = true;
+                rbtn_byMonth.Checked = false;
+                rbtn_byDay.Checked = false;
+                rbtn_byProgramName.Checked = false;
+                rbtn_byCount.Checked = false;
             }
         }
     }
