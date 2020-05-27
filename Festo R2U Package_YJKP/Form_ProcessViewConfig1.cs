@@ -215,6 +215,8 @@ namespace Festo_R2U_Package_YJKP
             {
                 FileControl = "Program";
             }
+
+            this.Close();
         }        
 
         private void textBox1_MouseDoubleClick(object sender, MouseEventArgs e)

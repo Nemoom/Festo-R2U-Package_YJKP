@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Customized));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -141,7 +141,7 @@
             // 
             this.txt_MaxY.Location = new System.Drawing.Point(2, 10);
             this.txt_MaxY.Name = "txt_MaxY";
-            this.txt_MaxY.Size = new System.Drawing.Size(69, 23);
+            this.txt_MaxY.Size = new System.Drawing.Size(69, 20);
             this.txt_MaxY.TabIndex = 7;
             this.txt_MaxY.Visible = false;
             this.txt_MaxY.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MaxY_KeyPress);
@@ -151,7 +151,7 @@
             this.txt_MinY.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.txt_MinY.Location = new System.Drawing.Point(2, 314);
             this.txt_MinY.Name = "txt_MinY";
-            this.txt_MinY.Size = new System.Drawing.Size(69, 23);
+            this.txt_MinY.Size = new System.Drawing.Size(69, 20);
             this.txt_MinY.TabIndex = 6;
             this.txt_MinY.Visible = false;
             this.txt_MinY.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MinY_KeyPress);
@@ -161,7 +161,7 @@
             this.txt_MaxX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_MaxX.Location = new System.Drawing.Point(415, 349);
             this.txt_MaxX.Name = "txt_MaxX";
-            this.txt_MaxX.Size = new System.Drawing.Size(69, 23);
+            this.txt_MaxX.Size = new System.Drawing.Size(69, 20);
             this.txt_MaxX.TabIndex = 5;
             this.txt_MaxX.Visible = false;
             this.txt_MaxX.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MaxX_KeyPress);
@@ -171,7 +171,7 @@
             this.txt_MinX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.txt_MinX.Location = new System.Drawing.Point(60, 349);
             this.txt_MinX.Name = "txt_MinX";
-            this.txt_MinX.Size = new System.Drawing.Size(69, 23);
+            this.txt_MinX.Size = new System.Drawing.Size(69, 20);
             this.txt_MinX.TabIndex = 4;
             this.txt_MinX.Visible = false;
             this.txt_MinX.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MinX_KeyPress);
@@ -189,15 +189,15 @@
             // 
             // chart1
             // 
-            chartArea2.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea2.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea2.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea2.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
+            chartArea1.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea1.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea1.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea1.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
             this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend2.Name = "Legend1";
-            this.chart1.Legends.Add(legend2);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(0, 0);
             this.chart1.Name = "chart1";
             this.chart1.Size = new System.Drawing.Size(493, 372);
@@ -353,8 +353,8 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.btn_CurrentCurve, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.btn_HIstoricalCurves, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -371,7 +371,7 @@
             this.btn_CurrentCurve.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btn_CurrentCurve.Location = new System.Drawing.Point(3, 3);
             this.btn_CurrentCurve.Name = "btn_CurrentCurve";
-            this.btn_CurrentCurve.Size = new System.Drawing.Size(643, 62);
+            this.btn_CurrentCurve.Size = new System.Drawing.Size(319, 62);
             this.btn_CurrentCurve.TabIndex = 0;
             this.btn_CurrentCurve.Text = "当前曲线";
             this.btn_CurrentCurve.UseVisualStyleBackColor = false;
@@ -381,9 +381,9 @@
             // btn_HIstoricalCurves
             // 
             this.btn_HIstoricalCurves.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_HIstoricalCurves.Location = new System.Drawing.Point(652, 3);
+            this.btn_HIstoricalCurves.Location = new System.Drawing.Point(328, 3);
             this.btn_HIstoricalCurves.Name = "btn_HIstoricalCurves";
-            this.btn_HIstoricalCurves.Size = new System.Drawing.Size(1, 62);
+            this.btn_HIstoricalCurves.Size = new System.Drawing.Size(319, 62);
             this.btn_HIstoricalCurves.TabIndex = 1;
             this.btn_HIstoricalCurves.Text = "历史曲线";
             this.btn_HIstoricalCurves.UseVisualStyleBackColor = true;
@@ -438,7 +438,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(25, 12);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(29, 17);
+            this.label4.Size = new System.Drawing.Size(23, 14);
             this.label4.TabIndex = 3;
             this.label4.Text = "OK:";
             // 
@@ -456,7 +456,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(155, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(28, 17);
+            this.label1.Size = new System.Drawing.Size(23, 14);
             this.label1.TabIndex = 0;
             this.label1.Text = "pcs";
             // 
@@ -465,7 +465,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(25, 45);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(30, 17);
+            this.label5.Size = new System.Drawing.Size(24, 14);
             this.label5.TabIndex = 4;
             this.label5.Text = "NG:";
             // 
@@ -492,7 +492,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(155, 45);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(28, 17);
+            this.label2.Size = new System.Drawing.Size(23, 14);
             this.label2.TabIndex = 1;
             this.label2.Text = "pcs";
             // 
@@ -501,7 +501,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(155, 78);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(28, 17);
+            this.label3.Size = new System.Drawing.Size(23, 14);
             this.label3.TabIndex = 2;
             this.label3.Text = "pcs";
             // 
@@ -510,7 +510,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(25, 78);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(49, 17);
+            this.label6.Size = new System.Drawing.Size(38, 14);
             this.label6.TabIndex = 5;
             this.label6.Text = "TOTAL:";
             // 
@@ -573,7 +573,7 @@
             // 
             // Form_Customized
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(868, 509);
             this.Controls.Add(this.splitContainer1);
