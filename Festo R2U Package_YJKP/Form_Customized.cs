@@ -216,6 +216,7 @@ namespace Festo_R2U_Package_YJKP
 
         Bitmap chart1BackImage;
 
+        #region 配置文件中读取的参数
         public string WatchPath
         {
             get
@@ -270,7 +271,8 @@ namespace Festo_R2U_Package_YJKP
                     return "";
                 }
             }
-        }
+        } 
+        #endregion
 
         private static void InitLog4Net()
         {
@@ -427,7 +429,6 @@ namespace Festo_R2U_Package_YJKP
                 switch (FileControl)
                 {
                     case "Day":
-
                         if (!Directory.Exists(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMMdd")))
                         {
                             Directory.CreateDirectory(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMMdd"));
@@ -441,14 +442,7 @@ namespace Festo_R2U_Package_YJKP
                             Directory.CreateDirectory(fif.Directory + "//" + fif.CreationTime.ToString("yyyy") + " W" + weekNum.ToString());
                         }
                         File.Move(e.FullPath, System.IO.Path.GetDirectoryName(e.FullPath) + "//" + fif.CreationTime.ToString("yyyy") + " W" + weekNum.ToString() + "//" + e.Name);
-
-                        if (!Directory.Exists(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMM")))
-                        {
-                            Directory.CreateDirectory(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMM"));
-                        }
-                        File.Move(e.FullPath, System.IO.Path.GetDirectoryName(e.FullPath) + "//" + fif.CreationTime.ToString("yyyyMM") + "//" + e.Name);
-                        break;
-                    
+                        break;                    
                     case "Month":
                         if (!Directory.Exists(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMM")))
                         {
@@ -486,7 +480,6 @@ namespace Festo_R2U_Package_YJKP
 
                                 FileInfo[] arrFi = di.GetFiles("*.log");
                                 SortAsFileCreationTime(ref arrFi);
-
 
                                 for (int i = 0; i < arrFi.Length; i++)
                                 {
@@ -935,17 +928,13 @@ namespace Festo_R2U_Package_YJKP
                 switch (CurLog.Recipes_Cur.mThreshold.Thresholds[i].EdgeStatus_Threshold)
                 {
                     case 1://Down
-
                         g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 - 3, StartY, (StartX + EndX) / 2, StartY + 5);
                         g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 + 3, StartY, (StartX + EndX) / 2, StartY + 5);
                         break;
                     case 0://up
                         g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 - 3, StartY, (StartX + EndX) / 2, StartY - 5);
-                        g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 + 3, StartY, (StartX + EndX) / 2, StartY - 5);
-       g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 - 5, StartY, (StartX + EndX) / 2, StartY + 10);
-                        g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 + 5, StartY, (StartX + EndX) / 2, StartY + 10);
-                        break;
-                  
+                        g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 + 3, StartY, (StartX + EndX) / 2, StartY - 5);     
+                        break;                  
                     default:
                         break;
                 }
@@ -1010,15 +999,10 @@ namespace Festo_R2U_Package_YJKP
             {
                 float StartX, StartY, EndX, EndY;
 
-  StartX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Position);
-  StartY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Force);
-  EndX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position);
-  EndY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force);
-
-  StartX = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Position);
-                StartY = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Force);
-                EndX = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position);
-                EndY = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force);
+                StartX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Position);
+                StartY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Force);
+                EndX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position);
+                EndY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force);
 
                 g.DrawLine(new Pen(Color.Blue, 1), StartX, StartY, EndX, EndY);
             }
@@ -1215,8 +1199,6 @@ namespace Festo_R2U_Package_YJKP
         }
         
         #endregion
-
-
 
         //显示Festo网页界面
         private void pictureBox1_Click(object sender, EventArgs e)
