@@ -427,6 +427,7 @@ namespace Festo_R2U_Package_YJKP
                 switch (FileControl)
                 {
                     case "Day":
+
                         if (!Directory.Exists(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMMdd")))
                         {
                             Directory.CreateDirectory(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMMdd"));
@@ -440,7 +441,14 @@ namespace Festo_R2U_Package_YJKP
                             Directory.CreateDirectory(fif.Directory + "//" + fif.CreationTime.ToString("yyyy") + " W" + weekNum.ToString());
                         }
                         File.Move(e.FullPath, System.IO.Path.GetDirectoryName(e.FullPath) + "//" + fif.CreationTime.ToString("yyyy") + " W" + weekNum.ToString() + "//" + e.Name);
+
+                        if (!Directory.Exists(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMM")))
+                        {
+                            Directory.CreateDirectory(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMM"));
+                        }
+                        File.Move(e.FullPath, System.IO.Path.GetDirectoryName(e.FullPath) + "//" + fif.CreationTime.ToString("yyyyMM") + "//" + e.Name);
                         break;
+                    
                     case "Month":
                         if (!Directory.Exists(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMM")))
                         {
@@ -479,6 +487,7 @@ namespace Festo_R2U_Package_YJKP
                                 FileInfo[] arrFi = di.GetFiles("*.log");
                                 SortAsFileCreationTime(ref arrFi);
 
+
                                 for (int i = 0; i < arrFi.Length; i++)
                                 {
                                     di_log = new DirectoryInfo(System.IO.Path.GetDirectoryName(e.FullPath) + "\\log");
@@ -513,6 +522,7 @@ namespace Festo_R2U_Package_YJKP
 
                                 }
                                 //DateTime OldFileCreateTime = arrFi[0].CreationTime;
+
                             }
                         }
                         catch (Exception)
@@ -925,13 +935,17 @@ namespace Festo_R2U_Package_YJKP
                 switch (CurLog.Recipes_Cur.mThreshold.Thresholds[i].EdgeStatus_Threshold)
                 {
                     case 1://Down
+
                         g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 - 3, StartY, (StartX + EndX) / 2, StartY + 5);
                         g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 + 3, StartY, (StartX + EndX) / 2, StartY + 5);
                         break;
                     case 0://up
                         g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 - 3, StartY, (StartX + EndX) / 2, StartY - 5);
                         g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 + 3, StartY, (StartX + EndX) / 2, StartY - 5);
+       g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 - 5, StartY, (StartX + EndX) / 2, StartY + 10);
+                        g.DrawLine(new Pen(Color.Blue, 1), (StartX + EndX) / 2 + 5, StartY, (StartX + EndX) / 2, StartY + 10);
                         break;
+                  
                     default:
                         break;
                 }
@@ -959,12 +973,14 @@ namespace Festo_R2U_Package_YJKP
                 switch (CurLog.Recipes_Cur.mThreshold.Thresholds[i].EdgeStatus_Threshold)
                 {
                     case 3://Right
+
                         g.DrawLine(new Pen(Color.Blue, 1), StartX, (StartY + EndY) / 2 - 3, StartX + 5, (StartY + EndY) / 2);
                         g.DrawLine(new Pen(Color.Blue, 1), StartX, (StartY + EndY) / 2 + 3, StartX + 5, (StartY + EndY) / 2);
                         break;
                     case 2://Left
                         g.DrawLine(new Pen(Color.Blue, 1), StartX, (StartY + EndY) / 2 - 3, StartX - 5, (StartY + EndY) / 2);
                         g.DrawLine(new Pen(Color.Blue, 1), StartX, (StartY + EndY) / 2 + 3, StartX - 5, (StartY + EndY) / 2);
+
                         break;
                     default:
                         break;
@@ -993,10 +1009,17 @@ namespace Festo_R2U_Package_YJKP
             for (int j = 1; j < CurLog.Recipes_Cur.mEnvelope.Envelopes[i].Count_Up; j++)
             {
                 float StartX, StartY, EndX, EndY;
-                StartX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Position);
-                StartY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Force);
-                EndX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position);
-                EndY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force);
+
+  StartX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Position);
+  StartY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Force);
+  EndX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position);
+  EndY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force);
+
+  StartX = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Position);
+                StartY = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Force);
+                EndX = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position);
+                EndY = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force);
+
                 g.DrawLine(new Pen(Color.Blue, 1), StartX, StartY, EndX, EndY);
             }
             for (int j = 1; j < CurLog.Recipes_Cur.mEnvelope.Envelopes[i].Count_Down; j++)
@@ -1190,8 +1213,10 @@ namespace Festo_R2U_Package_YJKP
             }
 
         }
-
+        
         #endregion
+
+
 
         //显示Festo网页界面
         private void pictureBox1_Click(object sender, EventArgs e)
