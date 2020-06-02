@@ -113,6 +113,26 @@ namespace Festo_R2U_Package_YJKP.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap 箭头右 {
+            get {
+                object obj = ResourceManager.GetObject("箭头右", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap 箭头左 {
+            get {
+                object obj = ResourceManager.GetObject("箭头左", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap 缩小画面__1_ {
             get {
                 object obj = ResourceManager.GetObject("缩小画面 (1)", resourceCulture);

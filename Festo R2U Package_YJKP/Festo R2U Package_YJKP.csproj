@@ -141,6 +141,8 @@
     <Content Include="Icon\曲线对比.png" />
     <Content Include="Icon\移动位置 %281%29.png" />
     <Content Include="Icon\移动位置.png" />
+    <None Include="Icon\箭头右.png" />
+    <None Include="Icon\箭头左.png" />
     <Content Include="Icon\缩小画面 %281%29.png" />
     <Content Include="Icon\缩小画面.png" />
     <None Include="Icon\解锁.png" />

@@ -124,6 +124,9 @@
   <data name="移动位置 (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\移动位置 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="解锁" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icon\解锁.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="历史曲线 (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\历史曲线 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -139,10 +142,13 @@
   <data name="适应屏幕 (1)" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\适应屏幕 (1).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="解锁" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icon\解锁.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="锁定" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\锁定.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="箭头右" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icon\箭头右.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="箭头左" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icon\箭头左.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

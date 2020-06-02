@@ -1481,6 +1481,103 @@ namespace Festo_R2U_Package_YJKP
                 }
             }
         }
+
+        private void chart2_Click(object sender, EventArgs e)
+        {
+            if (btn_Enlarge.BackColor == FestoBlue_Light)
+            {
+                chart2.ChartAreas[0].AxisX.ScaleView.Zoom(Math.Round(chart2.ChartAreas[0].AxisX.ScaleView.ViewMaximum - 0.9 * (chart2.ChartAreas[0].AxisX.ScaleView.ViewMaximum - chart2.ChartAreas[0].AxisX.ScaleView.ViewMinimum), 3),
+                                                      Math.Round(chart2.ChartAreas[0].AxisX.ScaleView.ViewMinimum + 0.9 * (chart2.ChartAreas[0].AxisX.ScaleView.ViewMaximum - chart2.ChartAreas[0].AxisX.ScaleView.ViewMinimum), 3));
+            }
+            else if (btn_Reduce.BackColor == FestoBlue_Light)
+            {
+                chart2.ChartAreas[0].AxisX.ScaleView.Size += 0.1;
+            }
+
+        }
+
+        private void chart2_MouseMove(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                HitTestResult hit = chart2.HitTest(e.X, e.Y);
+                if (hit.Series != null)
+                {
+                    var xValue = hit.Series.Points[hit.PointIndex].XValue;
+                    var yValue = hit.Series.Points[hit.PointIndex].YValues.First();
+                    lbl_Value.ForeColor = Color.Orange;
+                    lbl_Value.Text = string.Format("{0:F0}{1:F0}", "Position:" + xValue, "(mm),Force:" + yValue + "(N)");
+                }
+                else
+                {
+                    var area = chart2.ChartAreas[0];
+                    double xValue = area.AxisX.PixelPositionToValue(e.X);
+                    double yValue = area.AxisY.PixelPositionToValue(e.Y);
+                    lbl_Value.ForeColor = Color.Black;
+                    lbl_Value.Text = string.Format("{0:F0}{1:F0}", "Position:" + Math.Round(xValue, 2), "(mm),Force:" + Math.Round(yValue, 3) + "(N)");
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        void chart2_MouseWheel(object sender, MouseEventArgs e)
+        {
+            //按住Ctrl，缩放
+            if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+            {
+
+                if (chart2.ChartAreas[0].AxisX.ScaleView.Size.ToString() == "NaN")
+                {
+                    chart2.ChartAreas[0].AxisX.ScaleView.Size = 1;
+                }
+                else
+                {
+                    if (e.Delta < 0)
+                        chart2.ChartAreas[0].AxisX.ScaleView.Size += 4;
+                    else
+                    {
+                        try
+                        {
+                            if (chart2.ChartAreas[0].AxisX.ScaleView.Size > 4)
+                            {
+                                chart2.ChartAreas[0].AxisX.ScaleView.Size -= 4;
+                            }
+                            else
+                            {
+                                //MessageBox.Show("MIN");
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            chart2.ChartAreas[0].AxisX.ScaleView.Size = 0;
+                        }
+                    }
+                }
+
+            }
+            //不按Ctrl，滚动
+            else
+            {
+                if (e.Delta < 0)
+                {
+                    if (chart2.ChartAreas[0].AxisX.ScaleView.Position + chart2.ChartAreas[0].AxisX.ScaleView.Size < X_Max)
+                    {
+                        chart2.ChartAreas[0].AxisX.ScaleView.Position += 2;
+                    }
+                }
+                else
+                {
+                    if (chart2.ChartAreas[0].AxisX.ScaleView.Position > X_Min)
+                    {
+                        chart2.ChartAreas[0].AxisX.ScaleView.Position -= 2;
+                    }
+                }
+            }
+        }
+
         #endregion
 
         private void Form_Customized_Resize(object sender, EventArgs e)
@@ -1567,6 +1664,279 @@ namespace Festo_R2U_Package_YJKP
         private void Form_Customized_FormClosed(object sender, FormClosedEventArgs e)
         {
 
+        }
+
+        private void txt_LogPath_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                txt_LogPath.Text = folderBrowserDialog1.SelectedPath;                
+            }
+        }
+
+        private void btn_Open_Click(object sender, EventArgs e)
+        {
+            DirectoryInfo di = new DirectoryInfo(txt_LogPath.Text);
+            FileInfo[] arrFi = di.GetFiles("*.log");
+            for (int i = 0; i < arrFi.Length; i++)
+            {
+                txt_CurRecordName.Text = txt_LogPath.Text;
+                #region 解析Log文件
+                CurLog = new YJKP_Log();
+
+                //文件可能被重命名，无法提取信息
+                //CurLog.CurProgramName = e.Name.Split('_')[0];
+                //CurLog.CurResult = e.Name.Split('_')[e.Name.Split('_').Length - 1].Substring(0, e.Name.Split('_')[e.Name.Split('_').Length - 1].Length - 4);
+
+                lbl_Value.Text = "";//当前位置值清空
+                get_Points(txt_LogPath.Text);//解析Log日志
+
+                lbl_Result.Text = CurLog.CurResult;
+                if (CurLog.CurResult == "OK" || CurLog.CurResult == "Ok" || CurLog.CurResult == "ok")
+                {
+                    lbl_Result.BackColor = Color.ForestGreen;
+                    Count_OK = Count_OK + 1;
+                    Count_Total = Count_Total + 1;
+                }
+                else
+                {
+                    lbl_Result.BackColor = Color.Red;
+                    Count_NOK = Count_NOK + 1;
+                    Count_Total = Count_Total + 1;
+                }
+                lbl_CountNG.Text = Count_NOK.ToString();
+                lbl_CountOK.Text = Count_OK.ToString();
+                lbl_CountTotal.Text = Count_Total.ToString();
+
+                if (btn_BundlePlot.BackColor != FestoBlue_Light)//仅显示最近一条记录
+                {
+                    //清除历史曲线
+                    chart1.Series.Clear();
+                    //清除之前的最值
+                    X_Min = 100000;
+                    X_Max = 0;
+                    Y_Min = 100000;
+                    Y_Max = 0;
+                }
+
+                //有时记录了多条曲线，绘制部分曲线（例如下压过程中的曲线）
+                switch (ConcernedRecordIndex)
+                {
+                    case 1:
+                        DrawCurve(mPoints1);
+                        break;
+                    case 2:
+                        DrawCurve(mPoints2);
+                        break;
+                    case 3:
+                        DrawCurve(mPoints3);
+                        break;
+                    case 4:
+                        DrawCurve(mPoints4);
+                        break;
+                    case 5:
+                        DrawCurve(mPoints5);
+                        break;
+                    default:
+                        break;
+                }
+                chart1.ChartAreas[0].AxisX.Minimum = Math.Floor(X_Min);
+                chart1.ChartAreas[0].AxisX.Maximum = Math.Ceiling(X_Max);
+                chart1.ChartAreas[0].AxisY.Minimum = Math.Floor(Y_Min) < 0 ? Math.Floor(Y_Min) : 0;
+                chart1.ChartAreas[0].AxisY.Maximum = Math.Ceiling(Y_Max);
+                DrawCaptures();
+                #endregion
+            }
+        }
+
+        private void btn_AutoZoom2_Click(object sender, EventArgs e)
+        {
+            if (btn_AutoZoom2.BackColor == System.Drawing.SystemColors.Control)
+            {
+                btn_AutoZoom2.BackColor = FestoBlue_Light;
+                btn_Enlarge2.BackColor = System.Drawing.SystemColors.Control;
+                btn_Reduce2.BackColor = System.Drawing.SystemColors.Control;
+                btn_Move2.BackColor = System.Drawing.SystemColors.Control;                
+            }
+            else
+            {                
+                //已经是自动缩放模式，显示手动上下限设置的框
+                try
+                {
+                    txt_MinX_HIst.Text = chart2.ChartAreas[0].AxisX.Minimum.ToString();
+                    txt_MaxX_HIst.Text = chart2.ChartAreas[0].AxisX.Maximum.ToString();
+                    txt_MinY_Hist.Text = chart2.ChartAreas[0].AxisY.Minimum.ToString();
+                    txt_MaxY_Hist.Text = chart2.ChartAreas[0].AxisY.Maximum.ToString();
+                }
+                catch (Exception)
+                {
+
+                }
+                txt_MinX_HIst.Location = new Point(txt_MinX_HIst.Location.X, chart2.Size.Height - txt_MinX_HIst.Size.Height - 5);
+                txt_MaxX_HIst.Location = new Point(txt_MaxX_HIst.Location.X, chart2.Size.Height - txt_MinX_HIst.Size.Height - 5);
+                txt_MinX_HIst.Visible = true;
+                txt_MaxX_HIst.Visible = true;
+                txt_MinY_Hist.Visible = true;
+                txt_MaxY_Hist.Visible = true;
+            }
+            chart2.ChartAreas[0].AxisX.ScaleView.ZoomReset();
+            chart2.ChartAreas[0].AxisY.ScaleView.ZoomReset();
+            btn_HIstoricalCurves.Focus();
+        }
+
+        private void btn_Enlarge2_Click(object sender, EventArgs e)
+        {
+            if (btn_Reduce2.BackColor == System.Drawing.SystemColors.Control)
+            {
+                btn_Reduce2.BackColor = FestoBlue_Light;
+                btn_Enlarge2.BackColor = System.Drawing.SystemColors.Control;
+                btn_AutoZoom2.BackColor = System.Drawing.SystemColors.Control;
+                btn_Move2.BackColor = System.Drawing.SystemColors.Control;
+                txt_MinX_HIst.Visible = false;
+                txt_MaxX_HIst.Visible = false;
+                txt_MinY_Hist.Visible = false;
+                txt_MaxY_Hist.Visible = false;
+            }
+            else
+            {
+                //btn_Reduce2.BackColor = System.Drawing.SystemColors.Control;
+            }
+            btn_HIstoricalCurves.Focus();
+        }
+
+        private void btn_Reduce2_Click(object sender, EventArgs e)
+        {
+            if (btn_Reduce2.BackColor == System.Drawing.SystemColors.Control)
+            {
+                btn_Reduce2.BackColor = FestoBlue_Light;
+                btn_Enlarge2.BackColor = System.Drawing.SystemColors.Control;
+                btn_AutoZoom2.BackColor = System.Drawing.SystemColors.Control;
+                btn_Move2.BackColor = System.Drawing.SystemColors.Control;
+                txt_MinX_HIst.Visible = false;
+                txt_MaxX_HIst.Visible = false;
+                txt_MinY_Hist.Visible = false;
+                txt_MaxY_Hist.Visible = false;
+            }
+            else
+            {
+                //btn_Reduce2.BackColor = System.Drawing.SystemColors.Control;
+            }
+            btn_HIstoricalCurves.Focus();
+        }
+
+        private void btn_Move2_Click(object sender, EventArgs e)
+        {
+            if (btn_Reduce2.BackColor == System.Drawing.SystemColors.Control)
+            {
+                btn_Reduce2.BackColor = FestoBlue_Light;
+                btn_Enlarge2.BackColor = System.Drawing.SystemColors.Control;
+                btn_AutoZoom2.BackColor = System.Drawing.SystemColors.Control;
+                btn_Move2.BackColor = System.Drawing.SystemColors.Control;
+                txt_MinX_HIst.Visible = false;
+                txt_MaxX_HIst.Visible = false;
+                txt_MinY_Hist.Visible = false;
+                txt_MaxY_Hist.Visible = false;
+            }
+            else
+            {
+                //btn_Reduce2.BackColor = System.Drawing.SystemColors.Control;
+            }
+            btn_HIstoricalCurves.Focus();
+        }
+
+        private void btn_BundlePlot2_Click(object sender, EventArgs e)
+        {
+            if (btn_BundlePlot2.BackColor == System.Drawing.SystemColors.Control)
+            {
+                btn_BundlePlot2.BackColor = FestoBlue_Light;
+            }
+            else
+            {
+                btn_BundlePlot2.BackColor = System.Drawing.SystemColors.Control;
+            }
+            btn_HIstoricalCurves.Focus();
+        }
+
+        private void btn_CaptureDIsplay2_Click(object sender, EventArgs e)
+        {
+            if (btn_CaptureDIsplay2.BackColor == System.Drawing.SystemColors.Control)
+            {
+                btn_CaptureDIsplay2.BackColor = FestoBlue_Light;
+                if (chart2.Series.Count > 0)
+                {
+                    DrawCaptures();
+                }
+                //chart1.ChartAreas[0].BackImage = bmpName;
+            }
+            else
+            {
+                btn_CaptureDIsplay2.BackColor = System.Drawing.SystemColors.Control;
+                chart2.ChartAreas[0].BackImage = "";
+            }
+            btn_HIstoricalCurves.Focus();
+        }
+
+        private void btn_Lock2_Click(object sender, EventArgs e)
+        {
+            if (btn_Lock2.ImageIndex == 0)
+            {
+                btn_Lock2.ImageIndex = 1;//解锁
+                btn_AutoZoom2.Enabled = true;
+                btn_BundlePlot2.Enabled = true;
+                btn_CaptureDIsplay2.Enabled = true;
+                btn_Enlarge2.Enabled = true;
+                btn_Move2.Enabled = true;
+                btn_Reduce2.Enabled = true;
+                chart2.Click += new System.EventHandler(this.chart2_Click);
+                chart2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart2_MouseMove);
+                chart2.MouseWheel += new MouseEventHandler(chart2_MouseWheel);
+            }
+            else
+            {
+                btn_Lock.ImageIndex = 0;//锁定
+                btn_AutoZoom.Enabled = false;
+                btn_BundlePlot.Enabled = false;
+                btn_CaptureDIsplay.Enabled = false;
+                btn_Enlarge.Enabled = false;
+                btn_Move.Enabled = false;
+                btn_Reduce.Enabled = false;
+                chart1.Click -= new System.EventHandler(this.chart1_Click);
+                chart1.MouseMove -= new System.Windows.Forms.MouseEventHandler(this.chart1_MouseMove);
+                chart1.MouseWheel -= new MouseEventHandler(chart1_MouseWheel);
+                lbl_Value.Text = "";
+            }
+        }
+
+        private void txt_MaxX_HIst_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\r')
+            {
+                chart2.ChartAreas[0].AxisX.Maximum = Convert.ToDouble(txt_MaxX_HIst.Text);
+            }
+        }
+
+        private void txt_MaxY_Hist_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\r')
+            {
+                chart2.ChartAreas[0].AxisY.Maximum = Convert.ToDouble(txt_MaxY_Hist.Text);
+            }
+        }
+
+        private void txt_MinX_HIst_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\r')
+            {
+                chart2.ChartAreas[0].AxisX.Minimum = Convert.ToDouble(txt_MinX_HIst.Text);
+            }
+        }
+
+        private void txt_MinY_Hist_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\r')
+            {
+                chart2.ChartAreas[0].AxisY.Minimum = Convert.ToDouble(txt_MinY_Hist.Text);
+            }
         }
     }
 }
