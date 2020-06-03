@@ -32,6 +32,12 @@ namespace Festo_R2U_Package_YJKP
         double Y_Min = 100000;
         double Y_Max = 0;
 
+        double X_Min2 = 100000;     //历史曲线的查看
+        double X_Max2 = 0;          //历史曲线的查看
+        double Y_Min2 = 100000;     //历史曲线的查看
+        double Y_Max2 = 0;          //历史曲线的查看
+
+        FileInfo[] arrFi_CurPath;
         YJKP_Log CurLog = new YJKP_Log();
 
         #region Log结构
@@ -215,6 +221,7 @@ namespace Festo_R2U_Package_YJKP
         List<mPoint> mPoints5 = new List<mPoint>();
 
         Bitmap chart1BackImage;
+        Bitmap chart2BackImage;
 
         #region 配置文件中读取的参数
         public string WatchPath
@@ -401,19 +408,19 @@ namespace Festo_R2U_Package_YJKP
                 switch (ConcernedRecordIndex)
                 {
                     case 1:
-                        DrawCurve(mPoints1);
+                        DrawCurve(mPoints1, chart1);
                         break;
                     case 2:
-                        DrawCurve(mPoints2);
+                        DrawCurve(mPoints2, chart1);
                         break;
                     case 3:
-                        DrawCurve(mPoints3);
+                        DrawCurve(mPoints3, chart1);
                         break;
                     case 4:
-                        DrawCurve(mPoints4);
+                        DrawCurve(mPoints4, chart1);
                         break;
                     case 5:
-                        DrawCurve(mPoints5);
+                        DrawCurve(mPoints5, chart1);
                         break;
                     default:
                         break;
@@ -422,7 +429,7 @@ namespace Festo_R2U_Package_YJKP
                 chart1.ChartAreas[0].AxisX.Maximum = Math.Ceiling(X_Max);
                 chart1.ChartAreas[0].AxisY.Minimum = Math.Floor(Y_Min) < 0 ? Math.Floor(Y_Min) : 0;
                 chart1.ChartAreas[0].AxisY.Maximum = Math.Ceiling(Y_Max);
-                DrawCaptures();
+                DrawCaptures(chart1);
                 #endregion
                 #region 整理文件夹
                 FileInfo fif = new FileInfo(e.FullPath);
@@ -579,6 +586,7 @@ namespace Festo_R2U_Package_YJKP
                     mPoints4 = new List<mPoint>();
                     mPoints5 = new List<mPoint>();
                     chart1BackImage = new Bitmap(chart1.Width, chart1.Height);
+                    chart2BackImage = new Bitmap(chart2.Width, chart2.Height);
                     while (sReader.Peek() >= 0)
                     {
                         string mStr = sReader.ReadLine();
@@ -846,14 +854,14 @@ namespace Festo_R2U_Package_YJKP
             }
         }
 
-        private void DrawCurve(List<mPoint> PointsList)
+        private void DrawCurve(List<mPoint> PointsList, Chart mChart)
         {
             System.Windows.Forms.DataVisualization.Charting.Series mSeries = new System.Windows.Forms.DataVisualization.Charting.Series();
             mSeries.ChartArea = "ChartArea1";
             mSeries.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
             mSeries.IsVisibleInLegend = false;
             mSeries.Legend = "Legend1";
-            mSeries.Name = "Series" + (chart1.Series.Count + 1).ToString();
+            mSeries.Name = "Series" + (mChart.Series.Count + 1).ToString();
 
             for (int i = 0; i < PointsList.Count; i++)
             {
@@ -875,18 +883,18 @@ namespace Festo_R2U_Package_YJKP
                     Y_Min = PointsList[i].Force;
                 }
             }
-            if (chart1.Series.Count > MaxCurves)
+            if (mChart.Series.Count > MaxCurves)
             {
-                chart1.Series[chart1.Series.Count % MaxCurves] = mSeries;
+                mChart.Series[mChart.Series.Count % MaxCurves] = mSeries;
             }
             else
             {
-                chart1.Series.Add(mSeries);
+                mChart.Series.Add(mSeries);
             }
         }
 
         #region DrawCaptures
-        private void DrawThresholds()
+        private void DrawThresholds(Chart mChart)
         {
             if (CurLog.Recipes_Cur.mThreshold.b_Active)
             {
@@ -894,32 +902,36 @@ namespace Festo_R2U_Package_YJKP
                 {
                     if (CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Active)
                     {
-                        DrawThreshold(i);
+                        DrawThreshold(i,mChart);
                     }
                 }
             }
         }
 
-        private void DrawThreshold(int i)
+        private void DrawThreshold(int i, Chart mChart)
         {
             Graphics g = Graphics.FromImage(chart1BackImage);
+            if (mChart == chart2)
+            {
+                g = Graphics.FromImage(chart2BackImage);
+            }
             if (CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Mode)
             {
                 //force
                 float StartX, StartY, EndX, EndY;//
 
-                EndY = StartY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].Force);
+                EndY = StartY = (float)mChart.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].Force);
                 if (CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config)
                 {
                     //相对
-                    StartX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition + CurLog.Curves[ConcernedRecordIndex].Position_Start);
-                    EndX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition + CurLog.Curves[ConcernedRecordIndex].Position_Start);
+                    StartX = (float)mChart.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition + CurLog.Curves[ConcernedRecordIndex].Position_Start);
+                    EndX = (float)mChart.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition + CurLog.Curves[ConcernedRecordIndex].Position_Start);
                 }
                 else
                 {
                     //绝对
-                    StartX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition);
-                    EndX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition);
+                    StartX = (float)mChart.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinPosition);
+                    EndX = (float)mChart.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxPosition);
                 }
 
                 g.DrawLine(new Pen(Color.Blue, 1), StartX, StartY, EndX, EndY);
@@ -946,16 +958,16 @@ namespace Festo_R2U_Package_YJKP
                 if (CurLog.Recipes_Cur.mThreshold.Thresholds[i].b_Config)
                 {
                     //相对
-                    EndX = StartX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position + CurLog.Curves[ConcernedRecordIndex].Position_Start);
+                    EndX = StartX = (float)mChart.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position + CurLog.Curves[ConcernedRecordIndex].Position_Start);
                 }
                 else
                 {
                     //绝对
-                    EndX = StartX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position);
+                    EndX = StartX = (float)mChart.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].Position);
                 }
 
-                StartY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinForce);
-                EndY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxForce);
+                StartY = (float)mChart.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MinForce);
+                EndY = (float)mChart.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mThreshold.Thresholds[i].MaxForce);
                 g.DrawLine(new Pen(Color.Blue, 1), StartX, StartY, EndX, EndY);
                 g.DrawLine(new Pen(Color.Blue, 1), StartX - 3, StartY, StartX + 3, StartY);
                 g.DrawLine(new Pen(Color.Blue, 1), EndX - 3, EndY, EndX + 3, EndY);
@@ -978,7 +990,7 @@ namespace Festo_R2U_Package_YJKP
             g.Dispose();
         }
 
-        private void DrawEnvelopes()
+        private void DrawEnvelopes(Chart mChart)
         {
             if (CurLog.Recipes_Cur.mEnvelope.b_Active)
             {
@@ -986,39 +998,43 @@ namespace Festo_R2U_Package_YJKP
                 {
                     if (CurLog.Recipes_Cur.mEnvelope.Envelopes[i].b_Active)
                     {
-                        DrawEnvelope(i);
+                        DrawEnvelope(i, mChart);
                     }
                 }
             }
         }
 
-        private void DrawEnvelope(int i)
+        private void DrawEnvelope(int i, Chart mChart)
         {
             Graphics g = Graphics.FromImage(chart1BackImage);
+            if (mChart == chart2)
+            {
+                g = Graphics.FromImage(chart2BackImage);
+            }
             for (int j = 1; j < CurLog.Recipes_Cur.mEnvelope.Envelopes[i].Count_Up; j++)
             {
                 float StartX, StartY, EndX, EndY;
 
-                StartX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Position);
-                StartY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Force);
-                EndX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position);
-                EndY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force);
+                StartX = (float)mChart.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Position);
+                StartY = (float)mChart.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j - 1].Force);
+                EndX = (float)mChart.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Position);
+                EndY = (float)mChart.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_U[j].Force);
 
                 g.DrawLine(new Pen(Color.Blue, 1), StartX, StartY, EndX, EndY);
             }
             for (int j = 1; j < CurLog.Recipes_Cur.mEnvelope.Envelopes[i].Count_Down; j++)
             {
                 float StartX, StartY, EndX, EndY;
-                StartX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j - 1].Position);
-                StartY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j - 1].Force);
-                EndX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Position);
-                EndY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Force);
+                StartX = (float)mChart.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j - 1].Position);
+                StartY = (float)mChart.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j - 1].Force);
+                EndX = (float)mChart.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Position);
+                EndY = (float)mChart.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mEnvelope.Envelopes[i].EnvelopePoints_D[j].Force);
                 g.DrawLine(new Pen(Color.Blue, 1), StartX, StartY, EndX, EndY);
             }
             g.Dispose();
         }
 
-        private void DrawWindows()
+        private void DrawWindows(Chart mChart)
         {
             if (CurLog.Recipes_Cur.mWindow.b_Active)
             {
@@ -1026,38 +1042,42 @@ namespace Festo_R2U_Package_YJKP
                 {
                     if (CurLog.Recipes_Cur.mWindow.Windows[i].b_Active)
                     {
-                        DrawWindow(i);
+                        DrawWindow(i, mChart);
                     }
                 }
             }
         }
 
-        private void DrawWindow(int i)
+        private void DrawWindow(int i, Chart mChart)
         {
             //Methods a
-            //Graphics dc = chart1.CreateGraphics();
+            //Graphics dc = mChart.CreateGraphics();
             //Show();
             //Pen bluePen = new Pen(Color.Blue, 3);
             //dc.DrawRectangle(bluePen, 100, 100, 50, 50);
 
             //Methods b area.AxisX.PixelPositionToValue(e.X);
             Graphics g = Graphics.FromImage(chart1BackImage);
+            if (mChart == chart2)
+            {
+                g = Graphics.FromImage(chart2BackImage);
+            }
             float RectangularX, RectangularY, RectangularWidth, RectangularHeight;
 
             if (CurLog.Recipes_Cur.mWindow.Windows[i].b_Config)
             {
                 //相对
-                RectangularX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition + CurLog.Curves[ConcernedRecordIndex].Position_Start);
-                RectangularWidth = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition + CurLog.Curves[ConcernedRecordIndex].Position_Start) - RectangularX;
+                RectangularX = (float)mChart.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition + CurLog.Curves[ConcernedRecordIndex].Position_Start);
+                RectangularWidth = (float)mChart.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition + CurLog.Curves[ConcernedRecordIndex].Position_Start) - RectangularX;
             }
             else
             {
                 //绝对
-                RectangularX = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition);
-                RectangularWidth = (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition) - RectangularX;
+                RectangularX = (float)mChart.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MinPosition);
+                RectangularWidth = (float)mChart.ChartAreas[0].AxisX.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MaxPosition) - RectangularX;
             }
-            RectangularY = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MaxForce);
-            RectangularHeight = (float)chart1.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MinForce) - RectangularY;
+            RectangularY = (float)mChart.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MaxForce);
+            RectangularHeight = (float)mChart.ChartAreas[0].AxisY.ValueToPixelPosition(CurLog.Recipes_Cur.mWindow.Windows[i].MinForce) - RectangularY;
 
             g.DrawRectangle(new Pen(Color.Blue, 1), RectangularX, RectangularY, RectangularWidth, RectangularHeight);
             switch (CurLog.Recipes_Cur.mWindow.Windows[i].EdgeStatus_L)
@@ -1140,17 +1160,26 @@ namespace Festo_R2U_Package_YJKP
 
         }
 
-        private void DrawCaptures()
+        private void DrawCaptures(Chart mChart)
         {
-            DrawWindows();
-            DrawThresholds();
-            DrawEnvelopes();
-            chart1.ChartAreas[0].BackImage = "";
-            bmpName = "Capture" + DateTime.Now.ToString("HHmmss") + ".bmp";
-            chart1BackImage.Save(bmpName);
+            DrawWindows(mChart);
+            DrawThresholds(mChart);
+            DrawEnvelopes(mChart);
+            mChart.ChartAreas[0].BackImage = "";
+            if (mChart == chart2)
+            {
+                bmpName = "Capture2_" + DateTime.Now.ToString("HHmmss") + ".bmp";
+                chart1BackImage.Save(bmpName);
+            }
+            else
+            {
+                bmpName = "Capture1_" + DateTime.Now.ToString("HHmmss") + ".bmp";
+                chart1BackImage.Save(bmpName);
+            }
+            
             if (btn_CaptureDIsplay.BackColor == FestoBlue_Light)
             {
-                chart1.ChartAreas[0].BackImage = bmpName;
+                mChart.ChartAreas[0].BackImage = bmpName;
             }
         }
 
@@ -1372,7 +1401,7 @@ namespace Festo_R2U_Package_YJKP
                 btn_CaptureDIsplay.BackColor = FestoBlue_Light;
                 if (chart1.Series.Count > 0)
                 {
-                    DrawCaptures();
+                    DrawCaptures(chart1);
                 }
                 //chart1.ChartAreas[0].BackImage = bmpName;
             }
@@ -1676,76 +1705,91 @@ namespace Festo_R2U_Package_YJKP
 
         private void btn_Open_Click(object sender, EventArgs e)
         {
-            DirectoryInfo di = new DirectoryInfo(txt_LogPath.Text);
-            FileInfo[] arrFi = di.GetFiles("*.log");
-            for (int i = 0; i < arrFi.Length; i++)
+            if (txt_LogPath.Text.Replace(" ","")=="")
             {
-                txt_CurRecordName.Text = txt_LogPath.Text;
-                #region 解析Log文件
-                CurLog = new YJKP_Log();
-
-                //文件可能被重命名，无法提取信息
-                //CurLog.CurProgramName = e.Name.Split('_')[0];
-                //CurLog.CurResult = e.Name.Split('_')[e.Name.Split('_').Length - 1].Substring(0, e.Name.Split('_')[e.Name.Split('_').Length - 1].Length - 4);
-
-                lbl_Value.Text = "";//当前位置值清空
-                get_Points(txt_LogPath.Text);//解析Log日志
-
-                lbl_Result.Text = CurLog.CurResult;
-                if (CurLog.CurResult == "OK" || CurLog.CurResult == "Ok" || CurLog.CurResult == "ok")
+                MessageBox.Show("请先选择文件路径！");
+            }
+            else
+            {
+                DirectoryInfo di = new DirectoryInfo(txt_LogPath.Text);
+                arrFi_CurPath = di.GetFiles("*.log");
+                trackBar1.Minimum = 1;
+                trackBar1.Maximum = arrFi_CurPath.Length;
+                trackBar1.Value = 1;
+                int RecordCount;
+                //清除历史曲线
+                chart2.Series.Clear();
+                //清除之前的最值
+                X_Min2 = 100000;
+                X_Max2 = 0;
+                Y_Min2 = 100000;
+                Y_Max2 = 0;
+                if (btn_BundlePlot2.BackColor != FestoBlue_Light)//仅显示最近一条记录
                 {
-                    lbl_Result.BackColor = Color.ForestGreen;
-                    Count_OK = Count_OK + 1;
-                    Count_Total = Count_Total + 1;
+                    RecordCount = 1;
+                    lbl_CurRecordName.Text = arrFi_CurPath[0].Name;
+                    lbl_Last.Text = "";
+                    lbl_Next.Text = arrFi_CurPath[1].Name;
                 }
                 else
                 {
-                    lbl_Result.BackColor = Color.Red;
-                    Count_NOK = Count_NOK + 1;
-                    Count_Total = Count_Total + 1;
+                    RecordCount = arrFi_CurPath.Length;
+                    lbl_CurRecordName.Text = "";
+                    lbl_Last.Text = "";
+                    lbl_Next.Text = "";
                 }
-                lbl_CountNG.Text = Count_NOK.ToString();
-                lbl_CountOK.Text = Count_OK.ToString();
-                lbl_CountTotal.Text = Count_Total.ToString();
-
-                if (btn_BundlePlot.BackColor != FestoBlue_Light)//仅显示最近一条记录
+                for (int i = 0; i < RecordCount; i++)
                 {
-                    //清除历史曲线
-                    chart1.Series.Clear();
-                    //清除之前的最值
-                    X_Min = 100000;
-                    X_Max = 0;
-                    Y_Min = 100000;
-                    Y_Max = 0;
-                }
+                    #region 解析Log文件
+                    CurLog = new YJKP_Log();
 
-                //有时记录了多条曲线，绘制部分曲线（例如下压过程中的曲线）
-                switch (ConcernedRecordIndex)
-                {
-                    case 1:
-                        DrawCurve(mPoints1);
-                        break;
-                    case 2:
-                        DrawCurve(mPoints2);
-                        break;
-                    case 3:
-                        DrawCurve(mPoints3);
-                        break;
-                    case 4:
-                        DrawCurve(mPoints4);
-                        break;
-                    case 5:
-                        DrawCurve(mPoints5);
-                        break;
-                    default:
-                        break;
+                    //文件可能被重命名，无法提取信息
+                    //CurLog.CurProgramName = e.Name.Split('_')[0];
+                    //CurLog.CurResult = e.Name.Split('_')[e.Name.Split('_').Length - 1].Substring(0, e.Name.Split('_')[e.Name.Split('_').Length - 1].Length - 4);
+
+                    lbl_Value.Text = "";//当前位置值清空
+                    get_Points(arrFi_CurPath[i].FullName);//解析Log日志
+
+                    lbl_Result.Text = CurLog.CurResult;
+                    if (CurLog.CurResult == "OK" || CurLog.CurResult == "Ok" || CurLog.CurResult == "ok")
+                    {
+                        lbl_Result.BackColor = Color.ForestGreen;
+
+                    }
+                    else
+                    {
+                        lbl_Result.BackColor = Color.Red;
+
+                    }
+
+                    //有时记录了多条曲线，绘制部分曲线（例如下压过程中的曲线）
+                    switch (ConcernedRecordIndex)
+                    {
+                        case 1:
+                            DrawCurve(mPoints1, chart2);
+                            break;
+                        case 2:
+                            DrawCurve(mPoints2, chart2);
+                            break;
+                        case 3:
+                            DrawCurve(mPoints3, chart2);
+                            break;
+                        case 4:
+                            DrawCurve(mPoints4, chart2);
+                            break;
+                        case 5:
+                            DrawCurve(mPoints5, chart2);
+                            break;
+                        default:
+                            break;
+                    }
+                    chart2.ChartAreas[0].AxisX.Minimum = Math.Floor(X_Min2);
+                    chart2.ChartAreas[0].AxisX.Maximum = Math.Ceiling(X_Max2);
+                    chart2.ChartAreas[0].AxisY.Minimum = Math.Floor(Y_Min2) < 0 ? Math.Floor(Y_Min2) : 0;
+                    chart2.ChartAreas[0].AxisY.Maximum = Math.Ceiling(Y_Max2);
+                    DrawCaptures(chart2);
+                    #endregion
                 }
-                chart1.ChartAreas[0].AxisX.Minimum = Math.Floor(X_Min);
-                chart1.ChartAreas[0].AxisX.Maximum = Math.Ceiling(X_Max);
-                chart1.ChartAreas[0].AxisY.Minimum = Math.Floor(Y_Min) < 0 ? Math.Floor(Y_Min) : 0;
-                chart1.ChartAreas[0].AxisY.Maximum = Math.Ceiling(Y_Max);
-                DrawCaptures();
-                #endregion
             }
         }
 
@@ -1864,7 +1908,7 @@ namespace Festo_R2U_Package_YJKP
                 btn_CaptureDIsplay2.BackColor = FestoBlue_Light;
                 if (chart2.Series.Count > 0)
                 {
-                    DrawCaptures();
+                    DrawCaptures(chart2);
                 }
                 //chart1.ChartAreas[0].BackImage = bmpName;
             }
@@ -1937,6 +1981,11 @@ namespace Festo_R2U_Package_YJKP
             {
                 chart2.ChartAreas[0].AxisY.Minimum = Convert.ToDouble(txt_MinY_Hist.Text);
             }
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+
         }
     }
 }
