@@ -353,7 +353,9 @@ namespace Festo_R2U_Package_YJKP
             btn_AutoZoom_Click(sender, e);
             btn_CaptureDIsplay_Click(sender, e);
             btn_Lock_Click(sender, e);
-
+            chart2.Click += new System.EventHandler(this.chart2_Click);
+            chart2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart2_MouseMove);
+            chart2.MouseWheel += new MouseEventHandler(chart2_MouseWheel);
         }
 
         void fileSystemWatcher1_Changed(object sender, FileSystemEventArgs e)
@@ -863,34 +865,62 @@ namespace Festo_R2U_Package_YJKP
             mSeries.Legend = "Legend1";
             mSeries.Name = "Series" + (mChart.Series.Count + 1).ToString();
 
-            for (int i = 0; i < PointsList.Count; i++)
+            if (mChart==chart1)
             {
-                mSeries.Points.AddXY(PointsList[i].Position, PointsList[i].Force);
-                if (PointsList[i].Position > X_Max)
+                for (int i = 0; i < PointsList.Count; i++)
                 {
-                    X_Max = PointsList[i].Position;
+                    mSeries.Points.AddXY(PointsList[i].Position, PointsList[i].Force);
+                    if (PointsList[i].Position > X_Max)
+                    {
+                        X_Max = PointsList[i].Position;
+                    }
+                    if (PointsList[i].Position < X_Min)
+                    {
+                        X_Min = PointsList[i].Position;
+                    }
+                    if (PointsList[i].Force > Y_Max)
+                    {
+                        Y_Max = PointsList[i].Force;
+                    }
+                    if (PointsList[i].Force < Y_Min)
+                    {
+                        Y_Min = PointsList[i].Force;
+                    }
                 }
-                if (PointsList[i].Position < X_Min)
+                if (mChart.Series.Count > MaxCurves)
                 {
-                    X_Min = PointsList[i].Position;
+                    mChart.Series[mChart.Series.Count % MaxCurves] = mSeries;
                 }
-                if (PointsList[i].Force > Y_Max)
+                else
                 {
-                    Y_Max = PointsList[i].Force;
+                    mChart.Series.Add(mSeries);
                 }
-                if (PointsList[i].Force < Y_Min)
-                {
-                    Y_Min = PointsList[i].Force;
-                }
-            }
-            if (mChart.Series.Count > MaxCurves)
-            {
-                mChart.Series[mChart.Series.Count % MaxCurves] = mSeries;
             }
             else
             {
+                for (int i = 0; i < PointsList.Count; i++)
+                {
+                    mSeries.Points.AddXY(PointsList[i].Position, PointsList[i].Force);
+                    if (PointsList[i].Position > X_Max2)
+                    {
+                        X_Max2 = PointsList[i].Position;
+                    }
+                    if (PointsList[i].Position < X_Min2)
+                    {
+                        X_Min2 = PointsList[i].Position;
+                    }
+                    if (PointsList[i].Force > Y_Max2)
+                    {
+                        Y_Max2 = PointsList[i].Force;
+                    }
+                    if (PointsList[i].Force < Y_Min2)
+                    {
+                        Y_Min2 = PointsList[i].Force;
+                    }
+                }
                 mChart.Series.Add(mSeries);
             }
+           
         }
 
         #region DrawCaptures
@@ -1162,28 +1192,35 @@ namespace Festo_R2U_Package_YJKP
 
         private void DrawCaptures(Chart mChart)
         {
-            DrawWindows(mChart);
-            DrawThresholds(mChart);
-            DrawEnvelopes(mChart);
-            mChart.ChartAreas[0].BackImage = "";
-            if (mChart == chart2)
+            try
             {
-                bmpName = "Capture2_" + DateTime.Now.ToString("HHmmss") + ".bmp";
-                chart1BackImage.Save(bmpName);
+                DrawWindows(mChart);
+                DrawThresholds(mChart);
+                DrawEnvelopes(mChart);
+                mChart.ChartAreas[0].BackImage = "";
+                if (mChart == chart2)
+                {
+                    bmpName = "Capture2_" + DateTime.Now.ToString("HHmmss") + DateTime.Now.Millisecond.ToString() + ".bmp";
+                    chart1BackImage.Save(bmpName);
+                }
+                else
+                {
+                    bmpName = "Capture1_" + DateTime.Now.ToString("HHmmss") + DateTime.Now.Millisecond.ToString() + ".bmp";
+                    chart1BackImage.Save(bmpName);
+                }
+
+                if (btn_CaptureDIsplay.BackColor == FestoBlue_Light)
+                {
+                    mChart.ChartAreas[0].BackImage = bmpName;
+                }
             }
-            else
+            catch (Exception)
             {
-                bmpName = "Capture1_" + DateTime.Now.ToString("HHmmss") + ".bmp";
-                chart1BackImage.Save(bmpName);
-            }
-            
-            if (btn_CaptureDIsplay.BackColor == FestoBlue_Light)
-            {
-                mChart.ChartAreas[0].BackImage = bmpName;
+                
             }
         }
 
-        private void DrawRectangular(double x1, double y1, double x2, double y2)
+        private void DrawRectangular(double x1, double y1, double x2, double y2, Chart mChart)
         {
             //Methods a
             //Graphics dc = chart1.CreateGraphics();
@@ -1192,7 +1229,15 @@ namespace Festo_R2U_Package_YJKP
             //dc.DrawRectangle(bluePen, 100, 100, 50, 50);
 
             //Methods b area.AxisX.PixelPositionToValue(e.X);
-            Bitmap b = new Bitmap(chart1.Width, chart1.Height);
+            Bitmap b;
+            if (mChart == chart2)
+            {
+                b = new Bitmap(chart2.Width, chart2.Height);
+            }
+            else
+            {
+                b = new Bitmap(chart1.Width, chart1.Height);
+            }
             Graphics g = Graphics.FromImage(b);
             float RectangularX, RectangularY, RectangularWidth, RectangularHeight;
             if ((float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(x1) < (float)chart1.ChartAreas[0].AxisX.ValueToPixelPosition(x2))
@@ -1793,6 +1838,7 @@ namespace Festo_R2U_Package_YJKP
             }
         }
 
+        #region 简单控件
         private void btn_AutoZoom2_Click(object sender, EventArgs e)
         {
             if (btn_AutoZoom2.BackColor == System.Drawing.SystemColors.Control)
@@ -1800,10 +1846,10 @@ namespace Festo_R2U_Package_YJKP
                 btn_AutoZoom2.BackColor = FestoBlue_Light;
                 btn_Enlarge2.BackColor = System.Drawing.SystemColors.Control;
                 btn_Reduce2.BackColor = System.Drawing.SystemColors.Control;
-                btn_Move2.BackColor = System.Drawing.SystemColors.Control;                
+                btn_Move2.BackColor = System.Drawing.SystemColors.Control;
             }
             else
-            {                
+            {
                 //已经是自动缩放模式，显示手动上下限设置的框
                 try
                 {
@@ -1922,33 +1968,33 @@ namespace Festo_R2U_Package_YJKP
 
         private void btn_Lock2_Click(object sender, EventArgs e)
         {
-            if (btn_Lock2.ImageIndex == 0)
-            {
-                btn_Lock2.ImageIndex = 1;//解锁
-                btn_AutoZoom2.Enabled = true;
-                btn_BundlePlot2.Enabled = true;
-                btn_CaptureDIsplay2.Enabled = true;
-                btn_Enlarge2.Enabled = true;
-                btn_Move2.Enabled = true;
-                btn_Reduce2.Enabled = true;
-                chart2.Click += new System.EventHandler(this.chart2_Click);
-                chart2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart2_MouseMove);
-                chart2.MouseWheel += new MouseEventHandler(chart2_MouseWheel);
-            }
-            else
-            {
-                btn_Lock.ImageIndex = 0;//锁定
-                btn_AutoZoom.Enabled = false;
-                btn_BundlePlot.Enabled = false;
-                btn_CaptureDIsplay.Enabled = false;
-                btn_Enlarge.Enabled = false;
-                btn_Move.Enabled = false;
-                btn_Reduce.Enabled = false;
-                chart1.Click -= new System.EventHandler(this.chart1_Click);
-                chart1.MouseMove -= new System.Windows.Forms.MouseEventHandler(this.chart1_MouseMove);
-                chart1.MouseWheel -= new MouseEventHandler(chart1_MouseWheel);
-                lbl_Value.Text = "";
-            }
+            //if (btn_Lock2.ImageIndex == 0)
+            //{
+            //    btn_Lock2.ImageIndex = 1;//解锁
+            //    btn_AutoZoom2.Enabled = true;
+            //    btn_BundlePlot2.Enabled = true;
+            //    btn_CaptureDIsplay2.Enabled = true;
+            //    btn_Enlarge2.Enabled = true;
+            //    btn_Move2.Enabled = true;
+            //    btn_Reduce2.Enabled = true;
+            //    chart2.Click += new System.EventHandler(this.chart2_Click);
+            //    chart2.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart2_MouseMove);
+            //    chart2.MouseWheel += new MouseEventHandler(chart2_MouseWheel);
+            //}
+            //else
+            //{
+            //    btn_Lock.ImageIndex = 0;//锁定
+            //    btn_AutoZoom.Enabled = false;
+            //    btn_BundlePlot.Enabled = false;
+            //    btn_CaptureDIsplay.Enabled = false;
+            //    btn_Enlarge.Enabled = false;
+            //    btn_Move.Enabled = false;
+            //    btn_Reduce.Enabled = false;
+            //    chart1.Click -= new System.EventHandler(this.chart1_Click);
+            //    chart1.MouseMove -= new System.Windows.Forms.MouseEventHandler(this.chart1_MouseMove);
+            //    chart1.MouseWheel -= new MouseEventHandler(chart1_MouseWheel);
+            //    lbl_Value.Text = "";
+            //}
         }
 
         private void txt_MaxX_HIst_KeyPress(object sender, KeyPressEventArgs e)
@@ -1981,11 +2027,124 @@ namespace Festo_R2U_Package_YJKP
             {
                 chart2.ChartAreas[0].AxisY.Minimum = Convert.ToDouble(txt_MinY_Hist.Text);
             }
+        } 
+        #endregion
+
+        private void trackBar1_ValueChanged(object sender, EventArgs e)
+        {
+            if (btn_BundlePlot2.BackColor == FestoBlue_Light)
+            {
+                //醒目当前选中的曲线，更新lbl_next&lbl_last
+            }
+            else
+            {
+                //删除当前的曲线和背景评价框，显示新的一条
+                //清除历史曲线
+                chart2.Series.Clear();
+                //清除之前的最值
+                X_Min2 = 100000;
+                X_Max2 = 0;
+                Y_Min2 = 100000;
+                Y_Max2 = 0;
+
+                CurLog = new YJKP_Log();
+
+                //文件可能被重命名，无法提取信息
+                //CurLog.CurProgramName = e.Name.Split('_')[0];
+                //CurLog.CurResult = e.Name.Split('_')[e.Name.Split('_').Length - 1].Substring(0, e.Name.Split('_')[e.Name.Split('_').Length - 1].Length - 4);
+
+                lbl_Value.Text = "";//当前位置值清空
+                get_Points(arrFi_CurPath[trackBar1.Value -1].FullName);//解析Log日志
+
+                lbl_Result.Text = CurLog.CurResult;
+                if (CurLog.CurResult == "OK" || CurLog.CurResult == "Ok" || CurLog.CurResult == "ok")
+                {
+                    lbl_Result.BackColor = Color.ForestGreen;
+
+                }
+                else
+                {
+                    lbl_Result.BackColor = Color.Red;
+
+                }
+
+                //有时记录了多条曲线，绘制部分曲线（例如下压过程中的曲线）
+                switch (ConcernedRecordIndex)
+                {
+                    case 1:
+                        DrawCurve(mPoints1, chart2);
+                        break;
+                    case 2:
+                        DrawCurve(mPoints2, chart2);
+                        break;
+                    case 3:
+                        DrawCurve(mPoints3, chart2);
+                        break;
+                    case 4:
+                        DrawCurve(mPoints4, chart2);
+                        break;
+                    case 5:
+                        DrawCurve(mPoints5, chart2);
+                        break;
+                    default:
+                        break;
+                }
+                chart2.ChartAreas[0].AxisX.Minimum = Math.Floor(X_Min2);
+                chart2.ChartAreas[0].AxisX.Maximum = Math.Ceiling(X_Max2);
+                chart2.ChartAreas[0].AxisY.Minimum = Math.Floor(Y_Min2) < 0 ? Math.Floor(Y_Min2) : 0;
+                chart2.ChartAreas[0].AxisY.Maximum = Math.Ceiling(Y_Max2);
+                DrawCaptures(chart2);
+            }
+            if (trackBar1.Value == trackBar1.Minimum)
+            {
+                lbl_Last.Text = "";
+            }
+            else
+            {
+                lbl_Last.Text = arrFi_CurPath[trackBar1.Value - 2].Name;
+            }
+            lbl_CurRecordName.Text = arrFi_CurPath[trackBar1.Value - 1].Name;
+            if (trackBar1.Value==trackBar1.Maximum)
+            {
+                lbl_Next.Text = "";
+            }
+            else
+            {
+                lbl_Next.Text = arrFi_CurPath[trackBar1.Value].Name;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+
+            }
         }
 
-        private void trackBar1_Scroll(object sender, EventArgs e)
+        private void btn_Next_Click(object sender, EventArgs e)
         {
+            if (trackBar1.Value <= trackBar1.Maximum - 1)
+            {
+                trackBar1.Value++;
+            }
+            if (trackBar1.Value == trackBar1.Maximum)
+            {
+                btn_Next.Enabled = false;
+            }
+            else
+            {
+                btn_Next.Enabled = true;
+            }
+        }
 
+        private void btn_Back_Click(object sender, EventArgs e)
+        {
+            if (trackBar1.Value >= trackBar1.Minimum + 1)
+            {
+                trackBar1.Value--;
+            }
+            if (trackBar1.Value == trackBar1.Minimum)
+            {
+                btn_Back.Enabled = false;
+            }
+            else
+            {
+                btn_Back.Enabled = true;
+            }
         }
     }
 }

@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Customized));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel_HIST = new System.Windows.Forms.Panel();
@@ -46,7 +46,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.btn_Lock2 = new System.Windows.Forms.Button();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.btn_CaptureDIsplay2 = new System.Windows.Forms.Button();
             this.btn_BundlePlot2 = new System.Windows.Forms.Button();
@@ -54,7 +53,7 @@
             this.btn_Reduce2 = new System.Windows.Forms.Button();
             this.btn_Enlarge2 = new System.Windows.Forms.Button();
             this.btn_AutoZoom2 = new System.Windows.Forms.Button();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel_HistLastNext = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.lbl_CurRecordName = new System.Windows.Forms.Label();
@@ -112,7 +111,7 @@
             this.panel_HisCurves.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
             this.panel3.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel_HistLastNext.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.panel_HistPath.SuspendLayout();
@@ -174,7 +173,7 @@
             this.tableLayoutPanel_HIST.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel_HIST.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel_HIST.Controls.Add(this.panel_HisCurves, 0, 1);
-            this.tableLayoutPanel_HIST.Controls.Add(this.tableLayoutPanel2, 0, 2);
+            this.tableLayoutPanel_HIST.Controls.Add(this.tableLayoutPanel_HistLastNext, 0, 2);
             this.tableLayoutPanel_HIST.Controls.Add(this.panel_HistPath, 0, 0);
             this.tableLayoutPanel_HIST.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel_HIST.Location = new System.Drawing.Point(0, 0);
@@ -188,6 +187,7 @@
             // 
             // panel_HisCurves
             // 
+            this.panel_HisCurves.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel_HisCurves.Controls.Add(this.txt_MaxY_Hist);
             this.panel_HisCurves.Controls.Add(this.txt_MinY_Hist);
             this.panel_HisCurves.Controls.Add(this.txt_MaxX_HIst);
@@ -213,7 +213,7 @@
             // txt_MinY_Hist
             // 
             this.txt_MinY_Hist.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txt_MinY_Hist.Location = new System.Drawing.Point(2, 112);
+            this.txt_MinY_Hist.Location = new System.Drawing.Point(2, 110);
             this.txt_MinY_Hist.Name = "txt_MinY_Hist";
             this.txt_MinY_Hist.Size = new System.Drawing.Size(69, 23);
             this.txt_MinY_Hist.TabIndex = 6;
@@ -223,7 +223,7 @@
             // txt_MaxX_HIst
             // 
             this.txt_MaxX_HIst.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_MaxX_HIst.Location = new System.Drawing.Point(394, 147);
+            this.txt_MaxX_HIst.Location = new System.Drawing.Point(392, 145);
             this.txt_MaxX_HIst.Name = "txt_MaxX_HIst";
             this.txt_MaxX_HIst.Size = new System.Drawing.Size(69, 23);
             this.txt_MaxX_HIst.TabIndex = 5;
@@ -233,7 +233,7 @@
             // txt_MinX_HIst
             // 
             this.txt_MinX_HIst.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txt_MinX_HIst.Location = new System.Drawing.Point(60, 147);
+            this.txt_MinX_HIst.Location = new System.Drawing.Point(60, 145);
             this.txt_MinX_HIst.Name = "txt_MinX_HIst";
             this.txt_MinX_HIst.Size = new System.Drawing.Size(69, 23);
             this.txt_MinX_HIst.TabIndex = 4;
@@ -245,7 +245,7 @@
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.BackColor = System.Drawing.Color.White;
             this.label7.ForeColor = System.Drawing.Color.Orange;
-            this.label7.Location = new System.Drawing.Point(246, 3);
+            this.label7.Location = new System.Drawing.Point(244, 3);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(220, 17);
             this.label7.TabIndex = 3;
@@ -253,25 +253,24 @@
             // 
             // chart2
             // 
-            chartArea3.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea3.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea3.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea3.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea3.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea3);
+            chartArea1.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea1.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea1.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea1.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea1.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea1);
             this.chart2.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend3.Name = "Legend1";
-            this.chart2.Legends.Add(legend3);
+            legend1.Name = "Legend1";
+            this.chart2.Legends.Add(legend1);
             this.chart2.Location = new System.Drawing.Point(0, 0);
             this.chart2.Name = "chart2";
-            this.chart2.Size = new System.Drawing.Size(472, 208);
+            this.chart2.Size = new System.Drawing.Size(470, 206);
             this.chart2.TabIndex = 2;
             this.chart2.Text = "chart2";
             // 
             // panel3
             // 
             this.panel3.AutoScroll = true;
-            this.panel3.Controls.Add(this.btn_Lock2);
             this.panel3.Controls.Add(this.btn_CaptureDIsplay2);
             this.panel3.Controls.Add(this.btn_BundlePlot2);
             this.panel3.Controls.Add(this.btn_Move2);
@@ -279,23 +278,10 @@
             this.panel3.Controls.Add(this.btn_Enlarge2);
             this.panel3.Controls.Add(this.btn_AutoZoom2);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel3.Location = new System.Drawing.Point(472, 0);
+            this.panel3.Location = new System.Drawing.Point(470, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(51, 208);
+            this.panel3.Size = new System.Drawing.Size(51, 206);
             this.panel3.TabIndex = 1;
-            // 
-            // btn_Lock2
-            // 
-            this.btn_Lock2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btn_Lock2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btn_Lock2.ImageIndex = 1;
-            this.btn_Lock2.ImageList = this.imageList1;
-            this.btn_Lock2.Location = new System.Drawing.Point(0, 306);
-            this.btn_Lock2.Name = "btn_Lock2";
-            this.btn_Lock2.Size = new System.Drawing.Size(30, 32);
-            this.btn_Lock2.TabIndex = 6;
-            this.btn_Lock2.UseVisualStyleBackColor = true;
-            this.btn_Lock2.Click += new System.EventHandler(this.btn_Lock2_Click);
             // 
             // imageList1
             // 
@@ -377,27 +363,26 @@
             this.btn_AutoZoom2.UseVisualStyleBackColor = true;
             this.btn_AutoZoom2.Click += new System.EventHandler(this.btn_AutoZoom2_Click);
             // 
-            // tableLayoutPanel2
+            // tableLayoutPanel_HistLastNext
             // 
-            this.tableLayoutPanel2.ColumnCount = 5;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 2, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btn_Back, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.btn_Next, 3, 0);
-            this.tableLayoutPanel2.Controls.Add(this.lbl_Last, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.lbl_Next, 4, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 251);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 1;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(523, 39);
-            this.tableLayoutPanel2.TabIndex = 2;
+            this.tableLayoutPanel_HistLastNext.ColumnCount = 5;
+            this.tableLayoutPanel_HistLastNext.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12F));
+            this.tableLayoutPanel_HistLastNext.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.tableLayoutPanel_HistLastNext.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 76F));
+            this.tableLayoutPanel_HistLastNext.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.tableLayoutPanel_HistLastNext.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12F));
+            this.tableLayoutPanel_HistLastNext.Controls.Add(this.tableLayoutPanel3, 2, 0);
+            this.tableLayoutPanel_HistLastNext.Controls.Add(this.btn_Back, 1, 0);
+            this.tableLayoutPanel_HistLastNext.Controls.Add(this.btn_Next, 3, 0);
+            this.tableLayoutPanel_HistLastNext.Controls.Add(this.lbl_Last, 0, 0);
+            this.tableLayoutPanel_HistLastNext.Controls.Add(this.lbl_Next, 4, 0);
+            this.tableLayoutPanel_HistLastNext.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel_HistLastNext.Location = new System.Drawing.Point(3, 251);
+            this.tableLayoutPanel_HistLastNext.Name = "tableLayoutPanel_HistLastNext";
+            this.tableLayoutPanel_HistLastNext.RowCount = 1;
+            this.tableLayoutPanel_HistLastNext.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel_HistLastNext.Size = new System.Drawing.Size(523, 39);
+            this.tableLayoutPanel_HistLastNext.TabIndex = 2;
             // 
             // tableLayoutPanel3
             // 
@@ -406,13 +391,13 @@
             this.tableLayoutPanel3.Controls.Add(this.trackBar1, 0, 1);
             this.tableLayoutPanel3.Controls.Add(this.lbl_CurRecordName, 0, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(68, 0);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(90, 0);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(386, 39);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(342, 39);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // trackBar1
@@ -420,16 +405,16 @@
             this.trackBar1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trackBar1.Location = new System.Drawing.Point(3, 22);
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(380, 14);
+            this.trackBar1.Size = new System.Drawing.Size(336, 14);
             this.trackBar1.TabIndex = 0;
-            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // lbl_CurRecordName
             // 
             this.lbl_CurRecordName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbl_CurRecordName.Location = new System.Drawing.Point(3, 0);
             this.lbl_CurRecordName.Name = "lbl_CurRecordName";
-            this.lbl_CurRecordName.Size = new System.Drawing.Size(380, 19);
+            this.lbl_CurRecordName.Size = new System.Drawing.Size(336, 19);
             this.lbl_CurRecordName.TabIndex = 1;
             // 
             // btn_Back
@@ -437,37 +422,39 @@
             this.btn_Back.BackgroundImage = global::Festo_R2U_Package_YJKP.Properties.Resources.箭头左;
             this.btn_Back.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btn_Back.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_Back.Location = new System.Drawing.Point(35, 3);
+            this.btn_Back.Location = new System.Drawing.Point(57, 3);
             this.btn_Back.Name = "btn_Back";
             this.btn_Back.Size = new System.Drawing.Size(30, 33);
             this.btn_Back.TabIndex = 1;
             this.btn_Back.UseVisualStyleBackColor = true;
+            this.btn_Back.Click += new System.EventHandler(this.btn_Back_Click);
             // 
             // btn_Next
             // 
             this.btn_Next.BackgroundImage = global::Festo_R2U_Package_YJKP.Properties.Resources.箭头右;
             this.btn_Next.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.btn_Next.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btn_Next.Location = new System.Drawing.Point(457, 3);
+            this.btn_Next.Location = new System.Drawing.Point(435, 3);
             this.btn_Next.Name = "btn_Next";
-            this.btn_Next.Size = new System.Drawing.Size(28, 33);
+            this.btn_Next.Size = new System.Drawing.Size(30, 33);
             this.btn_Next.TabIndex = 2;
             this.btn_Next.UseVisualStyleBackColor = true;
+            this.btn_Next.Click += new System.EventHandler(this.btn_Next_Click);
             // 
             // lbl_Last
             // 
             this.lbl_Last.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbl_Last.Location = new System.Drawing.Point(3, 0);
             this.lbl_Last.Name = "lbl_Last";
-            this.lbl_Last.Size = new System.Drawing.Size(26, 39);
+            this.lbl_Last.Size = new System.Drawing.Size(48, 39);
             this.lbl_Last.TabIndex = 3;
             // 
             // lbl_Next
             // 
             this.lbl_Next.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lbl_Next.Location = new System.Drawing.Point(491, 0);
+            this.lbl_Next.Location = new System.Drawing.Point(471, 0);
             this.lbl_Next.Name = "lbl_Next";
-            this.lbl_Next.Size = new System.Drawing.Size(29, 39);
+            this.lbl_Next.Size = new System.Drawing.Size(49, 39);
             this.lbl_Next.TabIndex = 4;
             // 
             // panel_HistPath
@@ -485,8 +472,9 @@
             // 
             this.txt_LogPath.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txt_LogPath.Location = new System.Drawing.Point(78, 0);
+            this.txt_LogPath.Multiline = true;
             this.txt_LogPath.Name = "txt_LogPath";
-            this.txt_LogPath.Size = new System.Drawing.Size(370, 23);
+            this.txt_LogPath.Size = new System.Drawing.Size(370, 28);
             this.txt_LogPath.TabIndex = 2;
             this.txt_LogPath.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.txt_LogPath_MouseDoubleClick);
             // 
@@ -503,13 +491,13 @@
             // 
             // label9
             // 
-            this.label9.AutoSize = true;
             this.label9.Dock = System.Windows.Forms.DockStyle.Left;
             this.label9.Location = new System.Drawing.Point(0, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(78, 17);
+            this.label9.Size = new System.Drawing.Size(78, 28);
             this.label9.TabIndex = 0;
             this.label9.Text = "曲线路径：";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panel_CUR
             // 
@@ -578,15 +566,15 @@
             // 
             // chart1
             // 
-            chartArea4.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea4.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea4.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea4.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea4.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea4);
+            chartArea2.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea2.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea2.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea2.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
             this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend4.Name = "Legend1";
-            this.chart1.Legends.Add(legend4);
+            legend2.Name = "Legend1";
+            this.chart1.Legends.Add(legend2);
             this.chart1.Location = new System.Drawing.Point(0, 0);
             this.chart1.Name = "chart1";
             this.chart1.Size = new System.Drawing.Size(493, 372);
@@ -954,7 +942,7 @@
             this.panel_HisCurves.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
             this.panel3.ResumeLayout(false);
-            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel_HistLastNext.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
@@ -1029,14 +1017,13 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Button btn_Lock2;
         private System.Windows.Forms.Button btn_CaptureDIsplay2;
         private System.Windows.Forms.Button btn_BundlePlot2;
         private System.Windows.Forms.Button btn_Move2;
         private System.Windows.Forms.Button btn_Reduce2;
         private System.Windows.Forms.Button btn_Enlarge2;
         private System.Windows.Forms.Button btn_AutoZoom2;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel_HistLastNext;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Label lbl_CurRecordName;
