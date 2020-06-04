@@ -320,9 +320,12 @@ namespace Festo_R2U_Package_YJKP
                 MessageBox.Show("不存在的监控路径,请确认");
                 new Form_ProcessViewConfig1(this, CurLog.CurProgramName).Show();
             }
-
+            chart1.ChartAreas[0].BackImageWrapMode = ChartImageWrapMode.Scaled;
             chart1.ChartAreas[0].AxisX.Title = "Position[mm]";
             chart1.ChartAreas[0].AxisY.Title = "Force[N]";
+            chart2.ChartAreas[0].BackImageWrapMode = ChartImageWrapMode.Scaled;
+            chart2.ChartAreas[0].AxisX.Title = "Position[mm]";
+            chart2.ChartAreas[0].AxisY.Title = "Force[N]";
             //chart1.ChartAreas[0].AxisX.Minimum = 10;
             //chart1.ChartAreas[0].AxisX.Maximum = 22;
             //chart1.ChartAreas[0].AxisY.Minimum = -5;
@@ -1579,16 +1582,16 @@ namespace Festo_R2U_Package_YJKP
                 {
                     var xValue = hit.Series.Points[hit.PointIndex].XValue;
                     var yValue = hit.Series.Points[hit.PointIndex].YValues.First();
-                    lbl_Value.ForeColor = Color.Orange;
-                    lbl_Value.Text = string.Format("{0:F0}{1:F0}", "Position:" + xValue, "(mm),Force:" + yValue + "(N)");
+                    lbl_Value2.ForeColor = Color.Orange;
+                    lbl_Value2.Text = string.Format("{0:F0}{1:F0}", "Position:" + xValue, "(mm),Force:" + yValue + "(N)");
                 }
                 else
                 {
                     var area = chart2.ChartAreas[0];
                     double xValue = area.AxisX.PixelPositionToValue(e.X);
                     double yValue = area.AxisY.PixelPositionToValue(e.Y);
-                    lbl_Value.ForeColor = Color.Black;
-                    lbl_Value.Text = string.Format("{0:F0}{1:F0}", "Position:" + Math.Round(xValue, 2), "(mm),Force:" + Math.Round(yValue, 3) + "(N)");
+                    lbl_Value2.ForeColor = Color.Black;
+                    lbl_Value2.Text = string.Format("{0:F0}{1:F0}", "Position:" + Math.Round(xValue, 2), "(mm),Force:" + Math.Round(yValue, 3) + "(N)");
                 }
             }
             catch (Exception)
@@ -1792,7 +1795,7 @@ namespace Festo_R2U_Package_YJKP
                     //CurLog.CurProgramName = e.Name.Split('_')[0];
                     //CurLog.CurResult = e.Name.Split('_')[e.Name.Split('_').Length - 1].Substring(0, e.Name.Split('_')[e.Name.Split('_').Length - 1].Length - 4);
 
-                    lbl_Value.Text = "";//当前位置值清空
+                    lbl_Value2.Text = "";//当前位置值清空
                     get_Points(arrFi_CurPath[i].FullName);//解析Log日志
 
                     lbl_Result.Text = CurLog.CurResult;
@@ -2053,7 +2056,7 @@ namespace Festo_R2U_Package_YJKP
                 //CurLog.CurProgramName = e.Name.Split('_')[0];
                 //CurLog.CurResult = e.Name.Split('_')[e.Name.Split('_').Length - 1].Substring(0, e.Name.Split('_')[e.Name.Split('_').Length - 1].Length - 4);
 
-                lbl_Value.Text = "";//当前位置值清空
+                lbl_Value2.Text = "";//当前位置值清空
                 get_Points(arrFi_CurPath[trackBar1.Value -1].FullName);//解析Log日志
 
                 lbl_Result.Text = CurLog.CurResult;
