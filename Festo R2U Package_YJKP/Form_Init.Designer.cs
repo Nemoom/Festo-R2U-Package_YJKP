@@ -68,9 +68,9 @@
             this.label1.Location = new System.Drawing.Point(37, 36);
             this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(252, 29);
+            this.label1.Size = new System.Drawing.Size(177, 29);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Default Window Index:";
+            this.label1.Text = "默认窗体序号:";
             // 
             // label2
             // 
@@ -78,9 +78,9 @@
             this.label2.Location = new System.Drawing.Point(37, 87);
             this.label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(117, 29);
+            this.label2.Size = new System.Drawing.Size(225, 29);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Web Link:";
+            this.label2.Text = "YJKP配置页面网址:";
             // 
             // comboBox1
             // 
@@ -112,7 +112,7 @@
             this.btn_Submit.Name = "btn_Submit";
             this.btn_Submit.Size = new System.Drawing.Size(122, 42);
             this.btn_Submit.TabIndex = 4;
-            this.btn_Submit.Text = "Submit";
+            this.btn_Submit.Text = "提交";
             this.btn_Submit.UseVisualStyleBackColor = true;
             this.btn_Submit.Click += new System.EventHandler(this.btn_Submit_Click);
             // 
@@ -127,7 +127,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form_Init";
-            this.Text = "Form1";
+            this.Text = "初始化";
             this.Load += new System.EventHandler(this.Form_Init_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

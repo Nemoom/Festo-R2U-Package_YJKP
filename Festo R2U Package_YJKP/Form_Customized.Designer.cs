@@ -31,14 +31,32 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Customized));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Customized));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel_CUR = new System.Windows.Forms.Panel();
+            this.txt_MaxY = new System.Windows.Forms.TextBox();
+            this.txt_MinY = new System.Windows.Forms.TextBox();
+            this.txt_MaxX = new System.Windows.Forms.TextBox();
+            this.txt_MinX = new System.Windows.Forms.TextBox();
+            this.lbl_Value = new System.Windows.Forms.Label();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.panel_Tools = new System.Windows.Forms.Panel();
+            this.btn_Lock = new System.Windows.Forms.Button();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.btn_CaptureDIsplay = new System.Windows.Forms.Button();
+            this.btn_BundlePlot = new System.Windows.Forms.Button();
+            this.btn_Move = new System.Windows.Forms.Button();
+            this.btn_Reduce = new System.Windows.Forms.Button();
+            this.btn_Enlarge = new System.Windows.Forms.Button();
+            this.btn_AutoZoom = new System.Windows.Forms.Button();
+            this.tableLayoutPanel_ProcessView = new System.Windows.Forms.TableLayoutPanel();
             this.panel_HIST = new System.Windows.Forms.Panel();
             this.tableLayoutPanel_HIST = new System.Windows.Forms.TableLayoutPanel();
             this.panel_HisCurves = new System.Windows.Forms.Panel();
+            this.lbl_Value2 = new System.Windows.Forms.Label();
             this.txt_MaxY_Hist = new System.Windows.Forms.TextBox();
             this.txt_MinY_Hist = new System.Windows.Forms.TextBox();
             this.txt_MaxX_HIst = new System.Windows.Forms.TextBox();
@@ -46,7 +64,6 @@
             this.label7 = new System.Windows.Forms.Label();
             this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.btn_CaptureDIsplay2 = new System.Windows.Forms.Button();
             this.btn_BundlePlot2 = new System.Windows.Forms.Button();
             this.btn_Move2 = new System.Windows.Forms.Button();
@@ -65,22 +82,6 @@
             this.txt_LogPath = new System.Windows.Forms.TextBox();
             this.btn_Open = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
-            this.panel_CUR = new System.Windows.Forms.Panel();
-            this.txt_MaxY = new System.Windows.Forms.TextBox();
-            this.txt_MinY = new System.Windows.Forms.TextBox();
-            this.txt_MaxX = new System.Windows.Forms.TextBox();
-            this.txt_MinX = new System.Windows.Forms.TextBox();
-            this.lbl_Value = new System.Windows.Forms.Label();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.panel_Tools = new System.Windows.Forms.Panel();
-            this.btn_Lock = new System.Windows.Forms.Button();
-            this.btn_CaptureDIsplay = new System.Windows.Forms.Button();
-            this.btn_BundlePlot = new System.Windows.Forms.Button();
-            this.btn_Move = new System.Windows.Forms.Button();
-            this.btn_Reduce = new System.Windows.Forms.Button();
-            this.btn_Enlarge = new System.Windows.Forms.Button();
-            this.btn_AutoZoom = new System.Windows.Forms.Button();
-            this.tableLayoutPanel_ProcessView = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.btn_CurrentCurve = new System.Windows.Forms.Button();
             this.btn_HIstoricalCurves = new System.Windows.Forms.Button();
@@ -101,12 +102,14 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.fileSystemWatcher1 = new System.IO.FileSystemWatcher();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.lbl_Value2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panel_CUR.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+            this.panel_Tools.SuspendLayout();
             this.panel_HIST.SuspendLayout();
             this.tableLayoutPanel_HIST.SuspendLayout();
             this.panel_HisCurves.SuspendLayout();
@@ -116,9 +119,6 @@
             this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.panel_HistPath.SuspendLayout();
-            this.panel_CUR.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
-            this.panel_Tools.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
@@ -152,13 +152,219 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.panel_CUR);
             this.panel1.Controls.Add(this.panel_HIST);
+            this.panel1.Controls.Add(this.panel_CUR);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(650, 437);
             this.panel1.TabIndex = 1;
+            // 
+            // panel_CUR
+            // 
+            this.panel_CUR.Controls.Add(this.txt_MaxY);
+            this.panel_CUR.Controls.Add(this.txt_MinY);
+            this.panel_CUR.Controls.Add(this.txt_MaxX);
+            this.panel_CUR.Controls.Add(this.txt_MinX);
+            this.panel_CUR.Controls.Add(this.lbl_Value);
+            this.panel_CUR.Controls.Add(this.chart1);
+            this.panel_CUR.Controls.Add(this.panel_Tools);
+            this.panel_CUR.Controls.Add(this.tableLayoutPanel_ProcessView);
+            this.panel_CUR.Location = new System.Drawing.Point(81, 39);
+            this.panel_CUR.Name = "panel_CUR";
+            this.panel_CUR.Size = new System.Drawing.Size(544, 410);
+            this.panel_CUR.TabIndex = 0;
+            // 
+            // txt_MaxY
+            // 
+            this.txt_MaxY.Location = new System.Drawing.Point(2, 10);
+            this.txt_MaxY.Name = "txt_MaxY";
+            this.txt_MaxY.Size = new System.Drawing.Size(69, 23);
+            this.txt_MaxY.TabIndex = 7;
+            this.txt_MaxY.Visible = false;
+            this.txt_MaxY.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MaxY_KeyPress);
+            // 
+            // txt_MinY
+            // 
+            this.txt_MinY.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.txt_MinY.Location = new System.Drawing.Point(2, 314);
+            this.txt_MinY.Name = "txt_MinY";
+            this.txt_MinY.Size = new System.Drawing.Size(69, 23);
+            this.txt_MinY.TabIndex = 6;
+            this.txt_MinY.Visible = false;
+            this.txt_MinY.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MinY_KeyPress);
+            // 
+            // txt_MaxX
+            // 
+            this.txt_MaxX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt_MaxX.Location = new System.Drawing.Point(415, 349);
+            this.txt_MaxX.Name = "txt_MaxX";
+            this.txt_MaxX.Size = new System.Drawing.Size(69, 23);
+            this.txt_MaxX.TabIndex = 5;
+            this.txt_MaxX.Visible = false;
+            this.txt_MaxX.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MaxX_KeyPress);
+            // 
+            // txt_MinX
+            // 
+            this.txt_MinX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.txt_MinX.Location = new System.Drawing.Point(60, 349);
+            this.txt_MinX.Name = "txt_MinX";
+            this.txt_MinX.Size = new System.Drawing.Size(69, 23);
+            this.txt_MinX.TabIndex = 4;
+            this.txt_MinX.Visible = false;
+            this.txt_MinX.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MinX_KeyPress);
+            // 
+            // lbl_Value
+            // 
+            this.lbl_Value.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbl_Value.BackColor = System.Drawing.Color.White;
+            this.lbl_Value.ForeColor = System.Drawing.Color.Orange;
+            this.lbl_Value.Location = new System.Drawing.Point(267, 3);
+            this.lbl_Value.Name = "lbl_Value";
+            this.lbl_Value.Size = new System.Drawing.Size(220, 17);
+            this.lbl_Value.TabIndex = 3;
+            this.lbl_Value.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // chart1
+            // 
+            this.chart1.BackImageWrapMode = System.Windows.Forms.DataVisualization.Charting.ChartImageWrapMode.Scaled;
+            chartArea2.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea2.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea2.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea2.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
+            this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend2.Name = "Legend1";
+            this.chart1.Legends.Add(legend2);
+            this.chart1.Location = new System.Drawing.Point(0, 0);
+            this.chart1.Name = "chart1";
+            this.chart1.Size = new System.Drawing.Size(493, 372);
+            this.chart1.TabIndex = 2;
+            this.chart1.Text = "chart1";
+            // 
+            // panel_Tools
+            // 
+            this.panel_Tools.AutoScroll = true;
+            this.panel_Tools.Controls.Add(this.btn_Lock);
+            this.panel_Tools.Controls.Add(this.btn_CaptureDIsplay);
+            this.panel_Tools.Controls.Add(this.btn_BundlePlot);
+            this.panel_Tools.Controls.Add(this.btn_Move);
+            this.panel_Tools.Controls.Add(this.btn_Reduce);
+            this.panel_Tools.Controls.Add(this.btn_Enlarge);
+            this.panel_Tools.Controls.Add(this.btn_AutoZoom);
+            this.panel_Tools.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel_Tools.Location = new System.Drawing.Point(493, 0);
+            this.panel_Tools.Name = "panel_Tools";
+            this.panel_Tools.Size = new System.Drawing.Size(51, 372);
+            this.panel_Tools.TabIndex = 1;
+            // 
+            // btn_Lock
+            // 
+            this.btn_Lock.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_Lock.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btn_Lock.ImageIndex = 1;
+            this.btn_Lock.ImageList = this.imageList1;
+            this.btn_Lock.Location = new System.Drawing.Point(0, 340);
+            this.btn_Lock.Name = "btn_Lock";
+            this.btn_Lock.Size = new System.Drawing.Size(51, 32);
+            this.btn_Lock.TabIndex = 6;
+            this.btn_Lock.UseVisualStyleBackColor = true;
+            this.btn_Lock.Click += new System.EventHandler(this.btn_Lock_Click);
+            // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "锁定.png");
+            this.imageList1.Images.SetKeyName(1, "解锁.png");
+            // 
+            // btn_CaptureDIsplay
+            // 
+            this.btn_CaptureDIsplay.BackgroundImage = global::Festo_R2U_Package_YJKP.Properties.Resources.曲线对比__2_;
+            this.btn_CaptureDIsplay.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_CaptureDIsplay.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_CaptureDIsplay.Location = new System.Drawing.Point(0, 255);
+            this.btn_CaptureDIsplay.Name = "btn_CaptureDIsplay";
+            this.btn_CaptureDIsplay.Size = new System.Drawing.Size(51, 51);
+            this.btn_CaptureDIsplay.TabIndex = 5;
+            this.btn_CaptureDIsplay.UseVisualStyleBackColor = true;
+            this.btn_CaptureDIsplay.Click += new System.EventHandler(this.btn_CaptureDIsplay_Click);
+            // 
+            // btn_BundlePlot
+            // 
+            this.btn_BundlePlot.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_BundlePlot.BackgroundImage")));
+            this.btn_BundlePlot.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_BundlePlot.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_BundlePlot.Location = new System.Drawing.Point(0, 204);
+            this.btn_BundlePlot.Name = "btn_BundlePlot";
+            this.btn_BundlePlot.Size = new System.Drawing.Size(51, 51);
+            this.btn_BundlePlot.TabIndex = 4;
+            this.btn_BundlePlot.UseVisualStyleBackColor = true;
+            this.btn_BundlePlot.Click += new System.EventHandler(this.btn_BundlePlot_Click);
+            // 
+            // btn_Move
+            // 
+            this.btn_Move.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_Move.BackgroundImage")));
+            this.btn_Move.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_Move.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_Move.Location = new System.Drawing.Point(0, 153);
+            this.btn_Move.Name = "btn_Move";
+            this.btn_Move.Size = new System.Drawing.Size(51, 51);
+            this.btn_Move.TabIndex = 3;
+            this.btn_Move.UseVisualStyleBackColor = true;
+            this.btn_Move.Visible = false;
+            this.btn_Move.Click += new System.EventHandler(this.btn_Move_Click);
+            // 
+            // btn_Reduce
+            // 
+            this.btn_Reduce.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_Reduce.BackgroundImage")));
+            this.btn_Reduce.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_Reduce.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_Reduce.Location = new System.Drawing.Point(0, 102);
+            this.btn_Reduce.Name = "btn_Reduce";
+            this.btn_Reduce.Size = new System.Drawing.Size(51, 51);
+            this.btn_Reduce.TabIndex = 2;
+            this.btn_Reduce.UseVisualStyleBackColor = true;
+            this.btn_Reduce.Click += new System.EventHandler(this.btn_Reduce_Click);
+            // 
+            // btn_Enlarge
+            // 
+            this.btn_Enlarge.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_Enlarge.BackgroundImage")));
+            this.btn_Enlarge.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_Enlarge.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_Enlarge.Location = new System.Drawing.Point(0, 51);
+            this.btn_Enlarge.Name = "btn_Enlarge";
+            this.btn_Enlarge.Size = new System.Drawing.Size(51, 51);
+            this.btn_Enlarge.TabIndex = 1;
+            this.btn_Enlarge.UseVisualStyleBackColor = true;
+            this.btn_Enlarge.Click += new System.EventHandler(this.btn_Enlarge_Click);
+            // 
+            // btn_AutoZoom
+            // 
+            this.btn_AutoZoom.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_AutoZoom.BackgroundImage")));
+            this.btn_AutoZoom.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btn_AutoZoom.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_AutoZoom.Location = new System.Drawing.Point(0, 0);
+            this.btn_AutoZoom.Name = "btn_AutoZoom";
+            this.btn_AutoZoom.Size = new System.Drawing.Size(51, 51);
+            this.btn_AutoZoom.TabIndex = 0;
+            this.btn_AutoZoom.UseVisualStyleBackColor = true;
+            this.btn_AutoZoom.Click += new System.EventHandler(this.btn_AutoZoom_Click);
+            // 
+            // tableLayoutPanel_ProcessView
+            // 
+            this.tableLayoutPanel_ProcessView.ColumnCount = 2;
+            this.tableLayoutPanel_ProcessView.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel_ProcessView.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel_ProcessView.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.tableLayoutPanel_ProcessView.Location = new System.Drawing.Point(0, 372);
+            this.tableLayoutPanel_ProcessView.Name = "tableLayoutPanel_ProcessView";
+            this.tableLayoutPanel_ProcessView.RowCount = 1;
+            this.tableLayoutPanel_ProcessView.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel_ProcessView.Size = new System.Drawing.Size(544, 38);
+            this.tableLayoutPanel_ProcessView.TabIndex = 0;
+            this.tableLayoutPanel_ProcessView.Visible = false;
             // 
             // panel_HIST
             // 
@@ -202,6 +408,17 @@
             this.panel_HisCurves.Name = "panel_HisCurves";
             this.panel_HisCurves.Size = new System.Drawing.Size(523, 208);
             this.panel_HisCurves.TabIndex = 1;
+            // 
+            // lbl_Value2
+            // 
+            this.lbl_Value2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbl_Value2.BackColor = System.Drawing.Color.White;
+            this.lbl_Value2.ForeColor = System.Drawing.Color.Orange;
+            this.lbl_Value2.Location = new System.Drawing.Point(243, 8);
+            this.lbl_Value2.Name = "lbl_Value2";
+            this.lbl_Value2.Size = new System.Drawing.Size(220, 17);
+            this.lbl_Value2.TabIndex = 8;
+            this.lbl_Value2.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // txt_MaxY_Hist
             // 
@@ -255,15 +472,15 @@
             // 
             // chart2
             // 
-            chartArea2.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea2.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea2.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea2.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea2.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea2);
+            chartArea1.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea1.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea1.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea1.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea1.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea1);
             this.chart2.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend2.Name = "Legend1";
-            this.chart2.Legends.Add(legend2);
+            legend1.Name = "Legend1";
+            this.chart2.Legends.Add(legend1);
             this.chart2.Location = new System.Drawing.Point(0, 0);
             this.chart2.Name = "chart2";
             this.chart2.Size = new System.Drawing.Size(470, 206);
@@ -284,13 +501,6 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(51, 206);
             this.panel3.TabIndex = 1;
-            // 
-            // imageList1
-            // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "锁定.png");
-            this.imageList1.Images.SetKeyName(1, "解锁.png");
             // 
             // btn_CaptureDIsplay2
             // 
@@ -500,205 +710,6 @@
             this.label9.TabIndex = 0;
             this.label9.Text = "曲线路径：";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // panel_CUR
-            // 
-            this.panel_CUR.Controls.Add(this.txt_MaxY);
-            this.panel_CUR.Controls.Add(this.txt_MinY);
-            this.panel_CUR.Controls.Add(this.txt_MaxX);
-            this.panel_CUR.Controls.Add(this.txt_MinX);
-            this.panel_CUR.Controls.Add(this.lbl_Value);
-            this.panel_CUR.Controls.Add(this.chart1);
-            this.panel_CUR.Controls.Add(this.panel_Tools);
-            this.panel_CUR.Controls.Add(this.tableLayoutPanel_ProcessView);
-            this.panel_CUR.Location = new System.Drawing.Point(81, 39);
-            this.panel_CUR.Name = "panel_CUR";
-            this.panel_CUR.Size = new System.Drawing.Size(544, 410);
-            this.panel_CUR.TabIndex = 0;
-            // 
-            // txt_MaxY
-            // 
-            this.txt_MaxY.Location = new System.Drawing.Point(2, 10);
-            this.txt_MaxY.Name = "txt_MaxY";
-            this.txt_MaxY.Size = new System.Drawing.Size(69, 23);
-            this.txt_MaxY.TabIndex = 7;
-            this.txt_MaxY.Visible = false;
-            this.txt_MaxY.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MaxY_KeyPress);
-            // 
-            // txt_MinY
-            // 
-            this.txt_MinY.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txt_MinY.Location = new System.Drawing.Point(2, 314);
-            this.txt_MinY.Name = "txt_MinY";
-            this.txt_MinY.Size = new System.Drawing.Size(69, 23);
-            this.txt_MinY.TabIndex = 6;
-            this.txt_MinY.Visible = false;
-            this.txt_MinY.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MinY_KeyPress);
-            // 
-            // txt_MaxX
-            // 
-            this.txt_MaxX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_MaxX.Location = new System.Drawing.Point(415, 349);
-            this.txt_MaxX.Name = "txt_MaxX";
-            this.txt_MaxX.Size = new System.Drawing.Size(69, 23);
-            this.txt_MaxX.TabIndex = 5;
-            this.txt_MaxX.Visible = false;
-            this.txt_MaxX.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MaxX_KeyPress);
-            // 
-            // txt_MinX
-            // 
-            this.txt_MinX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txt_MinX.Location = new System.Drawing.Point(60, 349);
-            this.txt_MinX.Name = "txt_MinX";
-            this.txt_MinX.Size = new System.Drawing.Size(69, 23);
-            this.txt_MinX.TabIndex = 4;
-            this.txt_MinX.Visible = false;
-            this.txt_MinX.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_MinX_KeyPress);
-            // 
-            // lbl_Value
-            // 
-            this.lbl_Value.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbl_Value.BackColor = System.Drawing.Color.White;
-            this.lbl_Value.ForeColor = System.Drawing.Color.Orange;
-            this.lbl_Value.Location = new System.Drawing.Point(267, 3);
-            this.lbl_Value.Name = "lbl_Value";
-            this.lbl_Value.Size = new System.Drawing.Size(220, 17);
-            this.lbl_Value.TabIndex = 3;
-            this.lbl_Value.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // chart1
-            // 
-            this.chart1.BackImageWrapMode = System.Windows.Forms.DataVisualization.Charting.ChartImageWrapMode.Scaled;
-            chartArea1.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea1.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea1.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea1.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(0, 0);
-            this.chart1.Name = "chart1";
-            this.chart1.Size = new System.Drawing.Size(493, 372);
-            this.chart1.TabIndex = 2;
-            this.chart1.Text = "chart1";
-            // 
-            // panel_Tools
-            // 
-            this.panel_Tools.AutoScroll = true;
-            this.panel_Tools.Controls.Add(this.btn_Lock);
-            this.panel_Tools.Controls.Add(this.btn_CaptureDIsplay);
-            this.panel_Tools.Controls.Add(this.btn_BundlePlot);
-            this.panel_Tools.Controls.Add(this.btn_Move);
-            this.panel_Tools.Controls.Add(this.btn_Reduce);
-            this.panel_Tools.Controls.Add(this.btn_Enlarge);
-            this.panel_Tools.Controls.Add(this.btn_AutoZoom);
-            this.panel_Tools.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel_Tools.Location = new System.Drawing.Point(493, 0);
-            this.panel_Tools.Name = "panel_Tools";
-            this.panel_Tools.Size = new System.Drawing.Size(51, 372);
-            this.panel_Tools.TabIndex = 1;
-            // 
-            // btn_Lock
-            // 
-            this.btn_Lock.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btn_Lock.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btn_Lock.ImageIndex = 1;
-            this.btn_Lock.ImageList = this.imageList1;
-            this.btn_Lock.Location = new System.Drawing.Point(0, 340);
-            this.btn_Lock.Name = "btn_Lock";
-            this.btn_Lock.Size = new System.Drawing.Size(51, 32);
-            this.btn_Lock.TabIndex = 6;
-            this.btn_Lock.UseVisualStyleBackColor = true;
-            this.btn_Lock.Click += new System.EventHandler(this.btn_Lock_Click);
-            // 
-            // btn_CaptureDIsplay
-            // 
-            this.btn_CaptureDIsplay.BackgroundImage = global::Festo_R2U_Package_YJKP.Properties.Resources.曲线对比__2_;
-            this.btn_CaptureDIsplay.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btn_CaptureDIsplay.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_CaptureDIsplay.Location = new System.Drawing.Point(0, 255);
-            this.btn_CaptureDIsplay.Name = "btn_CaptureDIsplay";
-            this.btn_CaptureDIsplay.Size = new System.Drawing.Size(51, 51);
-            this.btn_CaptureDIsplay.TabIndex = 5;
-            this.btn_CaptureDIsplay.UseVisualStyleBackColor = true;
-            this.btn_CaptureDIsplay.Click += new System.EventHandler(this.btn_CaptureDIsplay_Click);
-            // 
-            // btn_BundlePlot
-            // 
-            this.btn_BundlePlot.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_BundlePlot.BackgroundImage")));
-            this.btn_BundlePlot.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btn_BundlePlot.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_BundlePlot.Location = new System.Drawing.Point(0, 204);
-            this.btn_BundlePlot.Name = "btn_BundlePlot";
-            this.btn_BundlePlot.Size = new System.Drawing.Size(51, 51);
-            this.btn_BundlePlot.TabIndex = 4;
-            this.btn_BundlePlot.UseVisualStyleBackColor = true;
-            this.btn_BundlePlot.Click += new System.EventHandler(this.btn_BundlePlot_Click);
-            // 
-            // btn_Move
-            // 
-            this.btn_Move.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_Move.BackgroundImage")));
-            this.btn_Move.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btn_Move.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_Move.Location = new System.Drawing.Point(0, 153);
-            this.btn_Move.Name = "btn_Move";
-            this.btn_Move.Size = new System.Drawing.Size(51, 51);
-            this.btn_Move.TabIndex = 3;
-            this.btn_Move.UseVisualStyleBackColor = true;
-            this.btn_Move.Visible = false;
-            this.btn_Move.Click += new System.EventHandler(this.btn_Move_Click);
-            // 
-            // btn_Reduce
-            // 
-            this.btn_Reduce.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_Reduce.BackgroundImage")));
-            this.btn_Reduce.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btn_Reduce.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_Reduce.Location = new System.Drawing.Point(0, 102);
-            this.btn_Reduce.Name = "btn_Reduce";
-            this.btn_Reduce.Size = new System.Drawing.Size(51, 51);
-            this.btn_Reduce.TabIndex = 2;
-            this.btn_Reduce.UseVisualStyleBackColor = true;
-            this.btn_Reduce.Click += new System.EventHandler(this.btn_Reduce_Click);
-            // 
-            // btn_Enlarge
-            // 
-            this.btn_Enlarge.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_Enlarge.BackgroundImage")));
-            this.btn_Enlarge.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btn_Enlarge.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_Enlarge.Location = new System.Drawing.Point(0, 51);
-            this.btn_Enlarge.Name = "btn_Enlarge";
-            this.btn_Enlarge.Size = new System.Drawing.Size(51, 51);
-            this.btn_Enlarge.TabIndex = 1;
-            this.btn_Enlarge.UseVisualStyleBackColor = true;
-            this.btn_Enlarge.Click += new System.EventHandler(this.btn_Enlarge_Click);
-            // 
-            // btn_AutoZoom
-            // 
-            this.btn_AutoZoom.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btn_AutoZoom.BackgroundImage")));
-            this.btn_AutoZoom.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btn_AutoZoom.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_AutoZoom.Location = new System.Drawing.Point(0, 0);
-            this.btn_AutoZoom.Name = "btn_AutoZoom";
-            this.btn_AutoZoom.Size = new System.Drawing.Size(51, 51);
-            this.btn_AutoZoom.TabIndex = 0;
-            this.btn_AutoZoom.UseVisualStyleBackColor = true;
-            this.btn_AutoZoom.Click += new System.EventHandler(this.btn_AutoZoom_Click);
-            // 
-            // tableLayoutPanel_ProcessView
-            // 
-            this.tableLayoutPanel_ProcessView.ColumnCount = 2;
-            this.tableLayoutPanel_ProcessView.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel_ProcessView.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel_ProcessView.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tableLayoutPanel_ProcessView.Location = new System.Drawing.Point(0, 372);
-            this.tableLayoutPanel_ProcessView.Name = "tableLayoutPanel_ProcessView";
-            this.tableLayoutPanel_ProcessView.RowCount = 1;
-            this.tableLayoutPanel_ProcessView.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel_ProcessView.Size = new System.Drawing.Size(544, 38);
-            this.tableLayoutPanel_ProcessView.TabIndex = 0;
-            this.tableLayoutPanel_ProcessView.Visible = false;
             // 
             // tableLayoutPanel1
             // 
@@ -921,17 +932,6 @@
             this.fileSystemWatcher1.EnableRaisingEvents = true;
             this.fileSystemWatcher1.SynchronizingObject = this;
             // 
-            // lbl_Value2
-            // 
-            this.lbl_Value2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbl_Value2.BackColor = System.Drawing.Color.White;
-            this.lbl_Value2.ForeColor = System.Drawing.Color.Orange;
-            this.lbl_Value2.Location = new System.Drawing.Point(243, 8);
-            this.lbl_Value2.Name = "lbl_Value2";
-            this.lbl_Value2.Size = new System.Drawing.Size(220, 17);
-            this.lbl_Value2.TabIndex = 8;
-            this.lbl_Value2.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
             // Form_Customized
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -950,6 +950,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.panel_CUR.ResumeLayout(false);
+            this.panel_CUR.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+            this.panel_Tools.ResumeLayout(false);
             this.panel_HIST.ResumeLayout(false);
             this.tableLayoutPanel_HIST.ResumeLayout(false);
             this.panel_HisCurves.ResumeLayout(false);
@@ -962,10 +966,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.panel_HistPath.ResumeLayout(false);
             this.panel_HistPath.PerformLayout();
-            this.panel_CUR.ResumeLayout(false);
-            this.panel_CUR.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
-            this.panel_Tools.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);

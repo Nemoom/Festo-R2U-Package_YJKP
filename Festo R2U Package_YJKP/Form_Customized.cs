@@ -1304,6 +1304,7 @@ namespace Festo_R2U_Package_YJKP
             panel_HIST.Location = panel1.Location;
             panel_HIST.Size = panel1.Size;
             panel_HIST.BringToFront();
+            txt_LogPath.Focus();
         }
         #endregion
 
@@ -1942,11 +1943,18 @@ namespace Festo_R2U_Package_YJKP
             if (btn_BundlePlot2.BackColor == System.Drawing.SystemColors.Control)
             {
                 btn_BundlePlot2.BackColor = FestoBlue_Light;
+                btn_Back.Enabled = false;
+                btn_Next.Enabled = false;
+                trackBar1.Enabled = false;
             }
             else
             {
                 btn_BundlePlot2.BackColor = System.Drawing.SystemColors.Control;
+                btn_Back.Enabled = true ;
+                btn_Next.Enabled = true;
+                trackBar1.Enabled = true;
             }
+            btn_Open_Click(sender, e);
             btn_HIstoricalCurves.Focus();
         }
 
