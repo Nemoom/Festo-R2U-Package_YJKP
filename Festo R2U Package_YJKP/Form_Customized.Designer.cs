@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea12 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend12 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea11 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend11 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Customized));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -218,25 +218,26 @@
             // 
             this.lbl_Value.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_Value.BackColor = System.Drawing.Color.White;
+            this.lbl_Value.Font = new System.Drawing.Font("MetaPlusLF", 10F);
             this.lbl_Value.ForeColor = System.Drawing.Color.Orange;
-            this.lbl_Value.Location = new System.Drawing.Point(267, 3);
+            this.lbl_Value.Location = new System.Drawing.Point(247, 6);
             this.lbl_Value.Name = "lbl_Value";
-            this.lbl_Value.Size = new System.Drawing.Size(220, 17);
+            this.lbl_Value.Size = new System.Drawing.Size(240, 25);
             this.lbl_Value.TabIndex = 3;
             this.lbl_Value.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // chart1
             // 
             this.chart1.BackImageWrapMode = System.Windows.Forms.DataVisualization.Charting.ChartImageWrapMode.Scaled;
-            chartArea2.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea2.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea2.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea2.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
+            chartArea12.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea12.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea12.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea12.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea12.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea12);
             this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend2.Name = "Legend1";
-            this.chart1.Legends.Add(legend2);
+            legend12.Name = "Legend1";
+            this.chart1.Legends.Add(legend12);
             this.chart1.Location = new System.Drawing.Point(0, 0);
             this.chart1.Name = "chart1";
             this.chart1.Size = new System.Drawing.Size(493, 372);
@@ -271,6 +272,7 @@
             this.btn_Lock.TabIndex = 6;
             this.btn_Lock.UseVisualStyleBackColor = true;
             this.btn_Lock.Click += new System.EventHandler(this.btn_Lock_Click);
+            this.btn_Lock.MouseEnter += new System.EventHandler(this.btn_Lock_MouseEnter);
             // 
             // imageList1
             // 
@@ -290,6 +292,7 @@
             this.btn_CaptureDIsplay.TabIndex = 5;
             this.btn_CaptureDIsplay.UseVisualStyleBackColor = true;
             this.btn_CaptureDIsplay.Click += new System.EventHandler(this.btn_CaptureDIsplay_Click);
+            this.btn_CaptureDIsplay.MouseEnter += new System.EventHandler(this.btn_CaptureDIsplay_MouseEnter);
             // 
             // btn_BundlePlot
             // 
@@ -302,6 +305,7 @@
             this.btn_BundlePlot.TabIndex = 4;
             this.btn_BundlePlot.UseVisualStyleBackColor = true;
             this.btn_BundlePlot.Click += new System.EventHandler(this.btn_BundlePlot_Click);
+            this.btn_BundlePlot.MouseEnter += new System.EventHandler(this.btn_BundlePlot_MouseEnter);
             // 
             // btn_Move
             // 
@@ -315,6 +319,7 @@
             this.btn_Move.UseVisualStyleBackColor = true;
             this.btn_Move.Visible = false;
             this.btn_Move.Click += new System.EventHandler(this.btn_Move_Click);
+            this.btn_Move.MouseEnter += new System.EventHandler(this.btn_Move_MouseEnter);
             // 
             // btn_Reduce
             // 
@@ -327,6 +332,7 @@
             this.btn_Reduce.TabIndex = 2;
             this.btn_Reduce.UseVisualStyleBackColor = true;
             this.btn_Reduce.Click += new System.EventHandler(this.btn_Reduce_Click);
+            this.btn_Reduce.MouseEnter += new System.EventHandler(this.btn_Reduce_MouseEnter);
             // 
             // btn_Enlarge
             // 
@@ -339,6 +345,7 @@
             this.btn_Enlarge.TabIndex = 1;
             this.btn_Enlarge.UseVisualStyleBackColor = true;
             this.btn_Enlarge.Click += new System.EventHandler(this.btn_Enlarge_Click);
+            this.btn_Enlarge.MouseEnter += new System.EventHandler(this.btn_Enlarge_MouseEnter);
             // 
             // btn_AutoZoom
             // 
@@ -351,6 +358,7 @@
             this.btn_AutoZoom.TabIndex = 0;
             this.btn_AutoZoom.UseVisualStyleBackColor = true;
             this.btn_AutoZoom.Click += new System.EventHandler(this.btn_AutoZoom_Click);
+            this.btn_AutoZoom.MouseEnter += new System.EventHandler(this.btn_AutoZoom_MouseEnter);
             // 
             // tableLayoutPanel_ProcessView
             // 
@@ -413,10 +421,11 @@
             // 
             this.lbl_Value2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_Value2.BackColor = System.Drawing.Color.White;
+            this.lbl_Value2.Font = new System.Drawing.Font("MetaPlusLF", 10F);
             this.lbl_Value2.ForeColor = System.Drawing.Color.Orange;
-            this.lbl_Value2.Location = new System.Drawing.Point(243, 8);
+            this.lbl_Value2.Location = new System.Drawing.Point(223, 8);
             this.lbl_Value2.Name = "lbl_Value2";
-            this.lbl_Value2.Size = new System.Drawing.Size(220, 17);
+            this.lbl_Value2.Size = new System.Drawing.Size(240, 25);
             this.lbl_Value2.TabIndex = 8;
             this.lbl_Value2.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
@@ -472,15 +481,15 @@
             // 
             // chart2
             // 
-            chartArea1.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea1.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea1.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
-            chartArea1.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea1.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea1);
+            chartArea11.AxisX.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea11.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea11.AxisY.MajorGrid.LineColor = System.Drawing.Color.LightGray;
+            chartArea11.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea11.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea11);
             this.chart2.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Name = "Legend1";
-            this.chart2.Legends.Add(legend1);
+            legend11.Name = "Legend1";
+            this.chart2.Legends.Add(legend11);
             this.chart2.Location = new System.Drawing.Point(0, 0);
             this.chart2.Name = "chart2";
             this.chart2.Size = new System.Drawing.Size(470, 206);
@@ -513,6 +522,7 @@
             this.btn_CaptureDIsplay2.TabIndex = 5;
             this.btn_CaptureDIsplay2.UseVisualStyleBackColor = true;
             this.btn_CaptureDIsplay2.Click += new System.EventHandler(this.btn_CaptureDIsplay2_Click);
+            this.btn_CaptureDIsplay2.MouseEnter += new System.EventHandler(this.btn_CaptureDIsplay2_MouseEnter);
             // 
             // btn_BundlePlot2
             // 
@@ -525,6 +535,7 @@
             this.btn_BundlePlot2.TabIndex = 4;
             this.btn_BundlePlot2.UseVisualStyleBackColor = true;
             this.btn_BundlePlot2.Click += new System.EventHandler(this.btn_BundlePlot2_Click);
+            this.btn_BundlePlot2.MouseEnter += new System.EventHandler(this.btn_BundlePlot2_MouseEnter);
             // 
             // btn_Move2
             // 
@@ -538,6 +549,7 @@
             this.btn_Move2.UseVisualStyleBackColor = true;
             this.btn_Move2.Visible = false;
             this.btn_Move2.Click += new System.EventHandler(this.btn_Move2_Click);
+            this.btn_Move2.MouseEnter += new System.EventHandler(this.btn_Move2_MouseEnter);
             // 
             // btn_Reduce2
             // 
@@ -550,6 +562,7 @@
             this.btn_Reduce2.TabIndex = 2;
             this.btn_Reduce2.UseVisualStyleBackColor = true;
             this.btn_Reduce2.Click += new System.EventHandler(this.btn_Reduce2_Click);
+            this.btn_Reduce2.MouseEnter += new System.EventHandler(this.btn_Reduce2_MouseEnter);
             // 
             // btn_Enlarge2
             // 
@@ -562,6 +575,7 @@
             this.btn_Enlarge2.TabIndex = 1;
             this.btn_Enlarge2.UseVisualStyleBackColor = true;
             this.btn_Enlarge2.Click += new System.EventHandler(this.btn_Enlarge2_Click);
+            this.btn_Enlarge2.MouseEnter += new System.EventHandler(this.btn_Enlarge2_MouseEnter);
             // 
             // btn_AutoZoom2
             // 
@@ -574,6 +588,7 @@
             this.btn_AutoZoom2.TabIndex = 0;
             this.btn_AutoZoom2.UseVisualStyleBackColor = true;
             this.btn_AutoZoom2.Click += new System.EventHandler(this.btn_AutoZoom2_Click);
+            this.btn_AutoZoom2.MouseEnter += new System.EventHandler(this.btn_AutoZoom2_MouseEnter);
             // 
             // tableLayoutPanel_HistLastNext
             // 
@@ -683,16 +698,18 @@
             // txt_LogPath
             // 
             this.txt_LogPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txt_LogPath.Location = new System.Drawing.Point(78, 0);
-            this.txt_LogPath.Multiline = true;
+            this.txt_LogPath.Font = new System.Drawing.Font("MetaPlusLF", 13F);
+            this.txt_LogPath.Location = new System.Drawing.Point(100, 0);
             this.txt_LogPath.Name = "txt_LogPath";
-            this.txt_LogPath.Size = new System.Drawing.Size(370, 28);
+            this.txt_LogPath.Size = new System.Drawing.Size(348, 32);
             this.txt_LogPath.TabIndex = 2;
             this.txt_LogPath.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.txt_LogPath_MouseDoubleClick);
+            this.txt_LogPath.MouseEnter += new System.EventHandler(this.txt_LogPath_MouseEnter);
             // 
             // btn_Open
             // 
             this.btn_Open.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btn_Open.Font = new System.Drawing.Font("MetaPlusLF", 12F);
             this.btn_Open.Location = new System.Drawing.Point(448, 0);
             this.btn_Open.Name = "btn_Open";
             this.btn_Open.Size = new System.Drawing.Size(75, 28);
@@ -704,11 +721,12 @@
             // label9
             // 
             this.label9.Dock = System.Windows.Forms.DockStyle.Left;
+            this.label9.Font = new System.Drawing.Font("MetaPlusLF", 12F);
             this.label9.Location = new System.Drawing.Point(0, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(78, 28);
+            this.label9.Size = new System.Drawing.Size(100, 28);
             this.label9.TabIndex = 0;
-            this.label9.Text = "曲线路径：";
+            this.label9.Text = "曲线路径:";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel1
@@ -730,6 +748,7 @@
             // 
             this.btn_CurrentCurve.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.btn_CurrentCurve.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_CurrentCurve.Font = new System.Drawing.Font("MetaPlusLF", 12F);
             this.btn_CurrentCurve.Location = new System.Drawing.Point(3, 3);
             this.btn_CurrentCurve.Name = "btn_CurrentCurve";
             this.btn_CurrentCurve.Size = new System.Drawing.Size(319, 62);
@@ -742,6 +761,7 @@
             // btn_HIstoricalCurves
             // 
             this.btn_HIstoricalCurves.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_HIstoricalCurves.Font = new System.Drawing.Font("MetaPlusLF", 12F);
             this.btn_HIstoricalCurves.Location = new System.Drawing.Point(328, 3);
             this.btn_HIstoricalCurves.Name = "btn_HIstoricalCurves";
             this.btn_HIstoricalCurves.Size = new System.Drawing.Size(319, 62);
@@ -791,87 +811,102 @@
             this.panel_Count.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_Count.Location = new System.Drawing.Point(0, 123);
             this.panel_Count.Name = "panel_Count";
-            this.panel_Count.Size = new System.Drawing.Size(206, 106);
+            this.panel_Count.Size = new System.Drawing.Size(206, 120);
             this.panel_Count.TabIndex = 10;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(25, 12);
+            this.label4.Font = new System.Drawing.Font("MetaPlusLF", 12F);
+            this.label4.Location = new System.Drawing.Point(26, 14);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(29, 17);
+            this.label4.Size = new System.Drawing.Size(40, 23);
             this.label4.TabIndex = 3;
             this.label4.Text = "OK:";
             // 
             // lbl_CountNG
             // 
-            this.lbl_CountNG.Location = new System.Drawing.Point(108, 45);
+            this.lbl_CountNG.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbl_CountNG.Font = new System.Drawing.Font("MetaPlusLF", 12F);
+            this.lbl_CountNG.Location = new System.Drawing.Point(86, 47);
             this.lbl_CountNG.Name = "lbl_CountNG";
-            this.lbl_CountNG.Size = new System.Drawing.Size(50, 17);
+            this.lbl_CountNG.Size = new System.Drawing.Size(70, 23);
             this.lbl_CountNG.TabIndex = 7;
             this.lbl_CountNG.Text = "0";
             this.lbl_CountNG.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(155, 12);
+            this.label1.Font = new System.Drawing.Font("MetaPlusLF", 12F);
+            this.label1.Location = new System.Drawing.Point(156, 14);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(28, 17);
+            this.label1.Size = new System.Drawing.Size(39, 23);
             this.label1.TabIndex = 0;
             this.label1.Text = "pcs";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(25, 45);
+            this.label5.Font = new System.Drawing.Font("MetaPlusLF", 12F);
+            this.label5.Location = new System.Drawing.Point(25, 47);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(30, 17);
+            this.label5.Size = new System.Drawing.Size(41, 23);
             this.label5.TabIndex = 4;
             this.label5.Text = "NG:";
             // 
             // lbl_CountOK
             // 
-            this.lbl_CountOK.Location = new System.Drawing.Point(108, 12);
+            this.lbl_CountOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbl_CountOK.Font = new System.Drawing.Font("MetaPlusLF", 12F);
+            this.lbl_CountOK.Location = new System.Drawing.Point(86, 14);
             this.lbl_CountOK.Name = "lbl_CountOK";
-            this.lbl_CountOK.Size = new System.Drawing.Size(50, 17);
+            this.lbl_CountOK.Size = new System.Drawing.Size(70, 23);
             this.lbl_CountOK.TabIndex = 6;
             this.lbl_CountOK.Text = "0";
             this.lbl_CountOK.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lbl_CountTotal
             // 
-            this.lbl_CountTotal.Location = new System.Drawing.Point(108, 78);
+            this.lbl_CountTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbl_CountTotal.Font = new System.Drawing.Font("MetaPlusLF", 12F);
+            this.lbl_CountTotal.Location = new System.Drawing.Point(86, 80);
             this.lbl_CountTotal.Name = "lbl_CountTotal";
-            this.lbl_CountTotal.Size = new System.Drawing.Size(50, 17);
+            this.lbl_CountTotal.Size = new System.Drawing.Size(70, 23);
             this.lbl_CountTotal.TabIndex = 8;
             this.lbl_CountTotal.Text = "0";
             this.lbl_CountTotal.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(155, 45);
+            this.label2.Font = new System.Drawing.Font("MetaPlusLF", 12F);
+            this.label2.Location = new System.Drawing.Point(156, 47);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(28, 17);
+            this.label2.Size = new System.Drawing.Size(39, 23);
             this.label2.TabIndex = 1;
             this.label2.Text = "pcs";
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(155, 78);
+            this.label3.Font = new System.Drawing.Font("MetaPlusLF", 12F);
+            this.label3.Location = new System.Drawing.Point(156, 80);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(28, 17);
+            this.label3.Size = new System.Drawing.Size(39, 23);
             this.label3.TabIndex = 2;
             this.label3.Text = "pcs";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(25, 78);
+            this.label6.Font = new System.Drawing.Font("MetaPlusLF", 12F);
+            this.label6.Location = new System.Drawing.Point(10, 80);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(49, 17);
+            this.label6.Size = new System.Drawing.Size(69, 23);
             this.label6.TabIndex = 5;
             this.label6.Text = "TOTAL:";
             // 

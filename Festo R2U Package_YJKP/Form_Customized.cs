@@ -11,6 +11,8 @@ using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Reflection;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Festo_R2U_Package_YJKP
 {
@@ -287,6 +289,73 @@ namespace Festo_R2U_Package_YJKP
             XmlConfigurator.ConfigureAndWatch(logCfg);
         }
 
+        #region title bar context menu
+        public const Int32 WM_SYSCOMMAND = 0x112;
+        public const Int32 MF_BYPOSITION = 0x400;
+        public const Int32 MYMENU1 = 1000;
+        public const Int32 MYMENU2 = 1001;
+        public const Int32 MYMENU3 = 1002;
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+        [DllImport("user32.dll")]
+        private static extern bool InsertMenu(IntPtr hMenu, Int32 wPosition, Int32 wFlags, Int32 wIDNewItem, string lpNewItem);
+
+        private void insertMenuItems()
+        {
+            IntPtr MenuHandle = GetSystemMenu(this.Handle, false);
+            InsertMenu(MenuHandle, 5, MF_BYPOSITION, MYMENU1, "打开初始化页面");
+            InsertMenu(MenuHandle, 6, MF_BYPOSITION, MYMENU2, "打开配置页面");
+            //InsertMenu(MenuHandle, 7, MF_BYPOSITION, MYMENU3, "更换视觉算法文件（重启软件后生效）");
+        }
+
+        //禁用关闭窗口
+        //// http://www.codeproject.com/KB/cs/DisableClose.aspx
+        //private const int CP_NOCLOSE_BUTTON = 0x200;
+        //protected override CreateParams CreateParams
+        //{
+        //    get
+        //    {
+        //        CreateParams myCp = base.CreateParams;
+        //        myCp.ClassStyle = myCp.ClassStyle | CP_NOCLOSE_BUTTON;
+        //        return myCp;
+        //    }
+        //}
+
+        private void openExeLocation()
+        {
+            string confDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var startInfo = new ProcessStartInfo("explorer.exe", confDir);
+            Process.Start(startInfo);
+        }    
+
+        protected override void WndProc(ref Message msg)
+        {
+            if (msg.Msg == WM_SYSCOMMAND)
+            {
+                switch (msg.WParam.ToInt32())
+                {
+                    case MYMENU1:
+                        Form_Init mForm_Init = new Form_Init();
+                        mForm_Init.Show();
+                        mForm_Init.BringToFront();
+                        return;
+                    case MYMENU2:
+                        Form_ProcessViewConfig1 mForm_ProcessViewConfig = new Form_ProcessViewConfig1(this, CurLog.CurProgramName);
+                        mForm_ProcessViewConfig.Show();
+                        mForm_ProcessViewConfig.BringToFront();
+                        return;
+                    //case MYMENU3:
+                    //    changeVppPathInConfig();
+                    //    return;
+                    default:
+                        break;
+                }
+            }
+            base.WndProc(ref msg);
+        }
+        #endregion
+
         private void Form_Customized_Load(object sender, EventArgs e)
         {
             DirectoryInfo folder = new DirectoryInfo(System.IO.Directory.GetCurrentDirectory());
@@ -301,6 +370,9 @@ namespace Festo_R2U_Package_YJKP
                 }
             }
             this.Text = this.Text + "   V" + Assembly.GetExecutingAssembly().GetName().Version + "";
+
+            insertMenuItems();
+
             btn_CurrentCurve_Click(sender, e);
             fileSystemWatcher1.IncludeSubdirectories = false;
             fileSystemWatcher1.Created += new FileSystemEventHandler(fileSystemWatcher1_Created);
@@ -438,103 +510,110 @@ namespace Festo_R2U_Package_YJKP
                 #endregion
                 #region 整理文件夹
                 FileInfo fif = new FileInfo(e.FullPath);
-                switch (FileControl)
+                try
                 {
-                    case "Day":
-                        if (!Directory.Exists(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMMdd")))
-                        {
-                            Directory.CreateDirectory(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMMdd"));
-                        }
-                        File.Move(e.FullPath, System.IO.Path.GetDirectoryName(e.FullPath) + "//" + fif.CreationTime.ToString("yyyyMMdd") + "//" + e.Name);
-                        break;
-                    case "Week":
-                        int weekNum = ((fif.CreationTime.DayOfYear - new DateTime(fif.CreationTime.Year, 1, 1).DayOfWeek - fif.CreationTime.DayOfWeek) / 7 + 2);
-                        if (!Directory.Exists(fif.Directory + "//" + fif.CreationTime.ToString("yyyy") + " W" + weekNum.ToString()))
-                        {
-                            Directory.CreateDirectory(fif.Directory + "//" + fif.CreationTime.ToString("yyyy") + " W" + weekNum.ToString());
-                        }
-                        File.Move(e.FullPath, System.IO.Path.GetDirectoryName(e.FullPath) + "//" + fif.CreationTime.ToString("yyyy") + " W" + weekNum.ToString() + "//" + e.Name);
-                        break;                    
-                    case "Month":
-                        if (!Directory.Exists(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMM")))
-                        {
-                            Directory.CreateDirectory(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMM"));
-                        }
-                        File.Move(e.FullPath, System.IO.Path.GetDirectoryName(e.FullPath) + "//" + fif.CreationTime.ToString("yyyyMM") + "//" + e.Name);
-                        break;
-                    case "Program":
-                        if (!Directory.Exists(fif.Directory + "\\" + CurLog.CurProgramName))
-                        {
-                            Directory.CreateDirectory(fif.Directory + "\\" + CurLog.CurProgramName);
-                        }
-                        File.Move(e.FullPath, System.IO.Path.GetDirectoryName(e.FullPath) + "\\" + CurLog.CurProgramName + "\\" + e.Name);
-                        break;
-                    default:
-                        try
-                        {
-                            //if (FileControl.Split(' ')[1] == "Days")
-                            //{
-                            //    DirectoryInfo di = new DirectoryInfo(System.IO.Path.GetDirectoryName(e.FullPath));
-
-                            //    FileInfo[] arrFi = di.GetFiles("*.log");
-                            //    SortAsFileCreationTime(ref arrFi);
-
-                            //    DateTime OldFileCreateTime = arrFi[0].CreationTime;
-                            //}
-                            if (FileControl.Split(' ')[1] == "Files")
+                    switch (FileControl)
+                    {
+                        case "Day":
+                            if (!Directory.Exists(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMMdd")))
                             {
-                                if (!Directory.Exists(fif.Directory + "\\log"))
+                                Directory.CreateDirectory(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMMdd"));
+                            }
+                            File.Move(e.FullPath, System.IO.Path.GetDirectoryName(e.FullPath) + "//" + fif.CreationTime.ToString("yyyyMMdd") + "//" + e.Name);
+                            break;
+                        case "Week":
+                            int weekNum = ((fif.CreationTime.DayOfYear - new DateTime(fif.CreationTime.Year, 1, 1).DayOfWeek - fif.CreationTime.DayOfWeek) / 7 + 2);
+                            if (!Directory.Exists(fif.Directory + "//" + fif.CreationTime.ToString("yyyy") + " W" + weekNum.ToString()))
+                            {
+                                Directory.CreateDirectory(fif.Directory + "//" + fif.CreationTime.ToString("yyyy") + " W" + weekNum.ToString());
+                            }
+                            File.Move(e.FullPath, System.IO.Path.GetDirectoryName(e.FullPath) + "//" + fif.CreationTime.ToString("yyyy") + " W" + weekNum.ToString() + "//" + e.Name);
+                            break;
+                        case "Month":
+                            if (!Directory.Exists(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMM")))
+                            {
+                                Directory.CreateDirectory(fif.Directory + "//" + fif.CreationTime.ToString("yyyyMM"));
+                            }
+                            File.Move(e.FullPath, System.IO.Path.GetDirectoryName(e.FullPath) + "//" + fif.CreationTime.ToString("yyyyMM") + "//" + e.Name);
+                            break;
+                        case "Program":
+                            if (!Directory.Exists(fif.Directory + "\\" + CurLog.CurProgramName))
+                            {
+                                Directory.CreateDirectory(fif.Directory + "\\" + CurLog.CurProgramName);
+                            }
+                            File.Move(e.FullPath, System.IO.Path.GetDirectoryName(e.FullPath) + "\\" + CurLog.CurProgramName + "\\" + e.Name);
+                            break;
+                        default:
+                            try
+                            {
+                                //if (FileControl.Split(' ')[1] == "Days")
+                                //{
+                                //    DirectoryInfo di = new DirectoryInfo(System.IO.Path.GetDirectoryName(e.FullPath));
+
+                                //    FileInfo[] arrFi = di.GetFiles("*.log");
+                                //    SortAsFileCreationTime(ref arrFi);
+
+                                //    DateTime OldFileCreateTime = arrFi[0].CreationTime;
+                                //}
+                                if (FileControl.Split(' ')[1] == "Files")
                                 {
-                                    Directory.CreateDirectory(fif.Directory + "\\log");
-                                }
-                                DirectoryInfo di = new DirectoryInfo(System.IO.Path.GetDirectoryName(e.FullPath));
-                                DirectoryInfo di_log = new DirectoryInfo(System.IO.Path.GetDirectoryName(e.FullPath) + "\\log");
-
-                                FileInfo[] arrFi = di.GetFiles("*.log");
-                                SortAsFileCreationTime(ref arrFi);
-
-                                for (int i = 0; i < arrFi.Length; i++)
-                                {
-                                    di_log = new DirectoryInfo(System.IO.Path.GetDirectoryName(e.FullPath) + "\\log");
-                                    if (di_log.GetFiles("*.log").Length < Convert.ToInt32(FileControl.Split(' ')[0]))
+                                    if (!Directory.Exists(fif.Directory + "\\log"))
                                     {
-                                        //move
-                                        try
-                                        {
-                                            File.Move(arrFi[i].FullName, System.IO.Path.GetDirectoryName(e.FullPath) + "\\log\\" + arrFi[i].Name);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            MessageBox.Show(ex.ToString());
-                                        }
+                                        Directory.CreateDirectory(fif.Directory + "\\log");
                                     }
-                                    else if (di_log.GetFiles("*.log").Length == Convert.ToInt32(FileControl.Split(' ')[0]))
+                                    DirectoryInfo di = new DirectoryInfo(System.IO.Path.GetDirectoryName(e.FullPath));
+                                    DirectoryInfo di_log = new DirectoryInfo(System.IO.Path.GetDirectoryName(e.FullPath) + "\\log");
+
+                                    FileInfo[] arrFi = di.GetFiles("*.log");
+                                    SortAsFileCreationTime(ref arrFi);
+
+                                    for (int i = 0; i < arrFi.Length; i++)
                                     {
-                                        //rename & new
-                                        try
+                                        di_log = new DirectoryInfo(System.IO.Path.GetDirectoryName(e.FullPath) + "\\log");
+                                        if (di_log.GetFiles("*.log").Length < Convert.ToInt32(FileControl.Split(' ')[0]))
                                         {
-                                            FileInfo[] arrFi_log = di_log.GetFiles("*.log");
-                                            SortAsFileCreationTime(ref arrFi_log);
-                                            di_log.MoveTo(System.IO.Path.GetDirectoryName(e.FullPath) + "\\log_" + arrFi_log[arrFi_log.Length - 1].CreationTime.ToString("yyyy-MM-dd-HH_mm_ss"));
-                                            Directory.CreateDirectory(fif.Directory + "\\log");
-                                            File.Move(arrFi[i].FullName, System.IO.Path.GetDirectoryName(e.FullPath) + "\\log\\" + arrFi[i].Name);
+                                            //move
+                                            try
+                                            {
+                                                File.Move(arrFi[i].FullName, System.IO.Path.GetDirectoryName(e.FullPath) + "\\log\\" + arrFi[i].Name);
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                MessageBox.Show(ex.ToString());
+                                            }
                                         }
-                                        catch (Exception ex)
+                                        else if (di_log.GetFiles("*.log").Length == Convert.ToInt32(FileControl.Split(' ')[0]))
                                         {
-                                            MessageBox.Show(ex.ToString());
+                                            //rename & new
+                                            try
+                                            {
+                                                FileInfo[] arrFi_log = di_log.GetFiles("*.log");
+                                                SortAsFileCreationTime(ref arrFi_log);
+                                                di_log.MoveTo(System.IO.Path.GetDirectoryName(e.FullPath) + "\\log_" + arrFi_log[arrFi_log.Length - 1].CreationTime.ToString("yyyy-MM-dd-HH_mm_ss"));
+                                                Directory.CreateDirectory(fif.Directory + "\\log");
+                                                File.Move(arrFi[i].FullName, System.IO.Path.GetDirectoryName(e.FullPath) + "\\log\\" + arrFi[i].Name);
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                MessageBox.Show(ex.ToString());
+                                            }
                                         }
+
                                     }
+                                    //DateTime OldFileCreateTime = arrFi[0].CreationTime;
 
                                 }
-                                //DateTime OldFileCreateTime = arrFi[0].CreationTime;
+                            }
+                            catch (Exception)
+                            {
 
                             }
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                        break;
+                            break;
+                    }
+                }
+                catch (Exception)
+                {
+                    
                 }
                 #endregion
             }
@@ -1197,6 +1276,14 @@ namespace Festo_R2U_Package_YJKP
         {
             try
             {
+                if (mChart == chart2)
+                {                    
+                    chart2BackImage = new Bitmap(chart2.Width, chart2.Height);
+                }
+                else
+                {
+                    chart1BackImage = new Bitmap(chart1.Width, chart1.Height);
+                }
                 DrawWindows(mChart);
                 DrawThresholds(mChart);
                 DrawEnvelopes(mChart);
@@ -1204,7 +1291,7 @@ namespace Festo_R2U_Package_YJKP
                 if (mChart == chart2)
                 {
                     bmpName = "Capture2_" + DateTime.Now.ToString("HHmmss") + DateTime.Now.Millisecond.ToString() + ".bmp";
-                    chart1BackImage.Save(bmpName);
+                    chart2BackImage.Save(bmpName);
                 }
                 else
                 {
@@ -1212,7 +1299,7 @@ namespace Festo_R2U_Package_YJKP
                     chart1BackImage.Save(bmpName);
                 }
 
-                if (btn_CaptureDIsplay.BackColor == FestoBlue_Light)
+                if ((btn_CaptureDIsplay.BackColor == FestoBlue_Light && mChart == chart1)||(btn_CaptureDIsplay2.BackColor == FestoBlue_Light && mChart == chart2))
                 {
                     mChart.ChartAreas[0].BackImage = bmpName;
                 }
@@ -1286,6 +1373,31 @@ namespace Festo_R2U_Package_YJKP
         #region 页面切换
         private void btn_CurrentCurve_Click(object sender, EventArgs e)
         {
+            try
+            {
+                DirectoryInfo folder = new DirectoryInfo(System.IO.Directory.GetCurrentDirectory());
+                //获取文件夹下所有的文件
+                FileInfo[] fileList = folder.GetFiles();
+                foreach (FileInfo file in fileList)
+                {
+                    //判断文件的扩展名是否为 .gif
+                    if (file.Extension == ".bmp")
+                    {
+                        try
+                        {
+                            file.Delete();  // 删除
+                        }
+                        catch (Exception)
+                        {
+                            
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
             btn_CurrentCurve.BackColor = FestoBlue_Light;
             //btn_CurrentCurve.FlatAppearance.BorderColor = FestoBlue;
             btn_HIstoricalCurves.BackColor = System.Drawing.SystemColors.Control;
@@ -1297,6 +1409,31 @@ namespace Festo_R2U_Package_YJKP
 
         private void btn_HIstoricalCurves_Click(object sender, EventArgs e)
         {
+            try
+            {
+                DirectoryInfo folder = new DirectoryInfo(System.IO.Directory.GetCurrentDirectory());
+                //获取文件夹下所有的文件
+                FileInfo[] fileList = folder.GetFiles();
+                foreach (FileInfo file in fileList)
+                {
+                    //判断文件的扩展名是否为 .gif
+                    if (file.Extension == ".bmp")
+                    {
+                        try
+                        {
+                            file.Delete();  // 删除
+                        }
+                        catch (Exception)
+                        {
+                            
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
             btn_HIstoricalCurves.BackColor = FestoBlue_Light;
             //btn_HIstoricalCurves.FlatAppearance.BorderColor = FestoBlue;
             btn_CurrentCurve.BackColor = System.Drawing.SystemColors.Control;
@@ -1447,6 +1584,7 @@ namespace Festo_R2U_Package_YJKP
         {
             if (btn_CaptureDIsplay.BackColor == System.Drawing.SystemColors.Control)
             {
+                chart1.ChartAreas[0].BackImage = "";
                 btn_CaptureDIsplay.BackColor = FestoBlue_Light;
                 if (chart1.Series.Count > 0)
                 {
@@ -1470,10 +1608,20 @@ namespace Festo_R2U_Package_YJKP
             {
                 chart1.ChartAreas[0].AxisX.ScaleView.Zoom(Math.Round(chart1.ChartAreas[0].AxisX.ScaleView.ViewMaximum - 0.9 * (chart1.ChartAreas[0].AxisX.ScaleView.ViewMaximum - chart1.ChartAreas[0].AxisX.ScaleView.ViewMinimum), 3),
                                                       Math.Round(chart1.ChartAreas[0].AxisX.ScaleView.ViewMinimum + 0.9 * (chart1.ChartAreas[0].AxisX.ScaleView.ViewMaximum - chart1.ChartAreas[0].AxisX.ScaleView.ViewMinimum), 3));
+                if (btn_CaptureDIsplay.BackColor != System.Drawing.SystemColors.Control)
+                {
+                    btn_CaptureDIsplay.BackColor = System.Drawing.SystemColors.Control;
+                    chart1.ChartAreas[0].BackImage = "";
+                }
             }
             else if (btn_Reduce.BackColor == FestoBlue_Light)
             {
                 chart1.ChartAreas[0].AxisX.ScaleView.Size += 0.1;
+                if (btn_CaptureDIsplay.BackColor != System.Drawing.SystemColors.Control)
+                {
+                    btn_CaptureDIsplay.BackColor = System.Drawing.SystemColors.Control;
+                    chart1.ChartAreas[0].BackImage = "";
+                }
             }
 
         }
@@ -1510,7 +1658,11 @@ namespace Festo_R2U_Package_YJKP
             //按住Ctrl，缩放
             if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
             {
-
+                if (btn_CaptureDIsplay.BackColor != System.Drawing.SystemColors.Control)
+                {
+                    btn_CaptureDIsplay.BackColor = System.Drawing.SystemColors.Control;
+                    chart1.ChartAreas[0].BackImage = "";
+                }
                 if (chart1.ChartAreas[0].AxisX.ScaleView.Size.ToString() == "NaN")
                 {
                     chart1.ChartAreas[0].AxisX.ScaleView.Size = 1;
@@ -1562,13 +1714,23 @@ namespace Festo_R2U_Package_YJKP
 
         private void chart2_Click(object sender, EventArgs e)
         {
-            if (btn_Enlarge.BackColor == FestoBlue_Light)
+            if (btn_Enlarge2.BackColor == FestoBlue_Light)
             {
+                if (btn_CaptureDIsplay2.BackColor == FestoBlue_Light)
+                {
+                    btn_CaptureDIsplay2.BackColor = System.Drawing.SystemColors.Control;
+                    chart2.ChartAreas[0].BackImage = "";
+                }
                 chart2.ChartAreas[0].AxisX.ScaleView.Zoom(Math.Round(chart2.ChartAreas[0].AxisX.ScaleView.ViewMaximum - 0.9 * (chart2.ChartAreas[0].AxisX.ScaleView.ViewMaximum - chart2.ChartAreas[0].AxisX.ScaleView.ViewMinimum), 3),
                                                       Math.Round(chart2.ChartAreas[0].AxisX.ScaleView.ViewMinimum + 0.9 * (chart2.ChartAreas[0].AxisX.ScaleView.ViewMaximum - chart2.ChartAreas[0].AxisX.ScaleView.ViewMinimum), 3));
             }
-            else if (btn_Reduce.BackColor == FestoBlue_Light)
+            else if (btn_Reduce2.BackColor == FestoBlue_Light)
             {
+                if (btn_CaptureDIsplay2.BackColor == FestoBlue_Light)
+                {
+                    btn_CaptureDIsplay2.BackColor = System.Drawing.SystemColors.Control;
+                    chart2.ChartAreas[0].BackImage = "";
+                }
                 chart2.ChartAreas[0].AxisX.ScaleView.Size += 0.1;
             }
 
@@ -1606,7 +1768,11 @@ namespace Festo_R2U_Package_YJKP
             //按住Ctrl，缩放
             if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
             {
-
+                if (btn_CaptureDIsplay2.BackColor == FestoBlue_Light)
+                {
+                    btn_CaptureDIsplay2.BackColor = System.Drawing.SystemColors.Control;
+                    chart2.ChartAreas[0].BackImage = "";
+                }
                 if (chart2.ChartAreas[0].AxisX.ScaleView.Size.ToString() == "NaN")
                 {
                     chart2.ChartAreas[0].AxisX.ScaleView.Size = 1;
@@ -1663,10 +1829,12 @@ namespace Festo_R2U_Package_YJKP
             if (btn_CurrentCurve.BackColor != System.Drawing.SystemColors.Control)
             {
                 btn_CurrentCurve_Click(sender, e);
+                DrawCaptures(chart1);
             }
             else
             {
                 btn_HIstoricalCurves_Click(sender, e);
+                DrawCaptures(chart2);
             }
         }
 
@@ -1748,7 +1916,8 @@ namespace Festo_R2U_Package_YJKP
         {
             if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
-                txt_LogPath.Text = folderBrowserDialog1.SelectedPath;                
+                txt_LogPath.Text = folderBrowserDialog1.SelectedPath;
+                btn_Open_Click(sender, e);
             }
         }
 
@@ -1757,6 +1926,11 @@ namespace Festo_R2U_Package_YJKP
             if (txt_LogPath.Text.Replace(" ","")=="")
             {
                 MessageBox.Show("请先选择文件路径！");
+                if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    txt_LogPath.Text = folderBrowserDialog1.SelectedPath;
+                    btn_Open_Click(sender, e);
+                }
             }
             else
             {
@@ -1786,6 +1960,11 @@ namespace Festo_R2U_Package_YJKP
                     lbl_CurRecordName.Text = "";
                     lbl_Last.Text = "";
                     lbl_Next.Text = "";
+                    if (btn_CaptureDIsplay2.BackColor == FestoBlue_Light)
+                    {
+                        btn_CaptureDIsplay2.BackColor = System.Drawing.SystemColors.Control;
+                        chart2.ChartAreas[0].BackImage = "";
+                    }
                 }
                 for (int i = 0; i < RecordCount; i++)
                 {
@@ -1839,6 +2018,18 @@ namespace Festo_R2U_Package_YJKP
                     DrawCaptures(chart2);
                     #endregion
                 }
+                if (btn_BundlePlot2.BackColor == FestoBlue_Light)
+                {                  
+                    btn_Back.Enabled = false;
+                    btn_Next.Enabled = false;
+                    trackBar1.Enabled = false;
+                }
+                else
+                {                   
+                    btn_Back.Enabled = true;
+                    btn_Next.Enabled = true;
+                    trackBar1.Enabled = true;
+                }
             }
         }
 
@@ -1880,10 +2071,10 @@ namespace Festo_R2U_Package_YJKP
 
         private void btn_Enlarge2_Click(object sender, EventArgs e)
         {
-            if (btn_Reduce2.BackColor == System.Drawing.SystemColors.Control)
+            if (btn_Enlarge2.BackColor == System.Drawing.SystemColors.Control)
             {
-                btn_Reduce2.BackColor = FestoBlue_Light;
-                btn_Enlarge2.BackColor = System.Drawing.SystemColors.Control;
+                btn_Enlarge2.BackColor = FestoBlue_Light;
+                btn_Reduce2.BackColor = System.Drawing.SystemColors.Control;
                 btn_AutoZoom2.BackColor = System.Drawing.SystemColors.Control;
                 btn_Move2.BackColor = System.Drawing.SystemColors.Control;
                 txt_MinX_HIst.Visible = false;
@@ -1962,6 +2153,7 @@ namespace Festo_R2U_Package_YJKP
         {
             if (btn_CaptureDIsplay2.BackColor == System.Drawing.SystemColors.Control)
             {
+                chart2.ChartAreas[0].BackImage = "";
                 btn_CaptureDIsplay2.BackColor = FestoBlue_Light;
                 if (chart2.Series.Count > 0)
                 {
@@ -2140,6 +2332,14 @@ namespace Festo_R2U_Package_YJKP
             {
                 btn_Next.Enabled = true;
             }
+            if (trackBar1.Value == trackBar1.Minimum)
+            {
+                btn_Back.Enabled = false;
+            }
+            else
+            {
+                btn_Back.Enabled = true;
+            }
         }
 
         private void btn_Back_Click(object sender, EventArgs e)
@@ -2156,6 +2356,113 @@ namespace Festo_R2U_Package_YJKP
             {
                 btn_Back.Enabled = true;
             }
+            if (trackBar1.Value == trackBar1.Maximum)
+            {
+                btn_Next.Enabled = false;
+            }
+            else
+            {
+                btn_Next.Enabled = true;
+            }
+        }
+
+        private void btn_AutoZoom_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip p = new ToolTip();
+            p.ShowAlways = true;
+            p.SetToolTip(btn_AutoZoom, "自适应");
+        }
+
+        private void btn_Enlarge_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip p = new ToolTip();
+            p.ShowAlways = true;
+            p.SetToolTip(btn_Enlarge, "放大");
+        }
+
+        private void btn_Reduce_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip p = new ToolTip();
+            p.ShowAlways = true;
+            p.SetToolTip(btn_Reduce, "缩小");
+        }
+
+        private void btn_Move_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip p = new ToolTip();
+            p.ShowAlways = true;
+            p.SetToolTip(btn_Move, "移动");
+        }
+
+        private void btn_BundlePlot_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip p = new ToolTip();
+            p.ShowAlways = true;
+            p.SetToolTip(btn_BundlePlot, "堆叠显示");
+        }
+
+        private void btn_CaptureDIsplay_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip p = new ToolTip();
+            p.ShowAlways = true;
+            p.SetToolTip(btn_CaptureDIsplay, "显示评价框");
+        }
+
+        private void btn_Lock_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip p = new ToolTip();
+            p.ShowAlways = true;
+            p.SetToolTip(btn_Lock, "锁定");
+        }
+
+        private void btn_AutoZoom2_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip p = new ToolTip();
+            p.ShowAlways = true;
+            p.SetToolTip(btn_AutoZoom2, "自适应");
+        }
+
+        private void btn_Enlarge2_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip p = new ToolTip();
+            p.ShowAlways = true;
+            p.SetToolTip(btn_Enlarge2, "放大");
+        }
+
+        private void btn_Reduce2_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip p = new ToolTip();
+            p.ShowAlways = true;
+            p.SetToolTip(btn_Reduce2, "缩小");
+        }
+
+        private void btn_Move2_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip p = new ToolTip();
+            p.ShowAlways = true;
+            p.SetToolTip(btn_Move2, "移动");
+        }
+
+        private void btn_BundlePlot2_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip p = new ToolTip();
+            p.ShowAlways = true;
+            p.SetToolTip(btn_BundlePlot2, "堆叠显示");
+        }
+
+        private void btn_CaptureDIsplay2_MouseEnter(object sender, EventArgs e)
+        {
+            ToolTip p = new ToolTip();
+            p.ShowAlways = true;
+            p.SetToolTip(btn_CaptureDIsplay2, "显示评价框");
+        }
+
+        private void txt_LogPath_MouseEnter(object sender, EventArgs e)
+        {
+            txt_LogPath.Select();
+            ToolTip p = new ToolTip();
+            p.ShowAlways = true;
+            p.SetToolTip(txt_LogPath, "双击选择路径 或 直接录入路径");
         }
     }
 }
